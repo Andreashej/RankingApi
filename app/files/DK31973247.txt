@@ -1,0 +1,112 @@
+Henriette Jefta Pedersen	F1	5.50	DK2008202284	Samba fra Tindsgarði
+Mathilde Brønden	F1	5.30	Is2008281124	Brana frá Pulu
+Berit Ertmann	F2	3.63	DK2010100702	Korpur fra Bjarup
+Bjarke Ottesen	F2	3.63	IS2008188027	Tindur frá Háholti
+Helle Rohde	F2	4.07	DK2010200456	Kanína fra Stald Balle
+Jan Horndrup Hansen	F2	5.77	DK2010100819	Aron fra Møllegaard
+Mai-Britt Almbjerg	F2	4.57	DK2004202322	Stjarna fra Klitrosen
+Mia K. Vissing	F2	2.40	DK2014100112	Sónn fra Frisendal
+Simone Sophie Steen Vedsted	F2	5.37	DK2011100706	Gáski fra Nordal
+Jan Horndrup Hansen	GDA	8.06	DK2010100819	Aron fra Møllegaard
+Liv Malskær	GDA	7.74	IS2011184157	Skarphéðinn frá Skálakoti
+Mai-Britt Almbjerg	GDA	7.71	DK2004202322	Stjarna fra Klitrosen
+Mathilde Brønden	GDA	7.78	Hetja fra Kirstineholm
+Mathilde Brønden	GDA	8.01	IS2012276181	Aradís frá Ketilsstöðum
+Mette Rousing Holm	GDA	8.05	DK2011200534	Fiðla fra Tölthestar
+Mia K. Vissing	GDA	7.29	DK2014100112	Sónn fra Frisendal
+Peter Frederiksen	GDA	8.25	DK2010100446	Jón fra Tyrevoldsdal
+Rebekka Sejr Ottesen	GDA	6.75	IS2008188027	Tindur frá Háholti
+Simone Sophie Steen Vedsted	GDA	7.63	DK2011100706	Gáski fra Nordal
+Anja Erbou Thormann	GDB	7.92	DK2010100591	Adam frá Oren
+Anne Steiner	GDB	7.85	DK2008102540	Depill fra Søborg
+Berit Ertmann	GDB	8.01	SE2013105842	Bráinn från SundsbergKval
+Borg Hanne	GDB	7.90	DK2011200843	Gunnlød fra Trudvang
+Emma Alnor	GDB	7.97	DK2011200189	Embla fra Eskildsminde
+Frederikke Kjærgaard Aabo	GDB	7.40	IS2009180613	Fengur frá Hemlu II
+Iben Merete Toftvang	GDB	8.24	DK2009200535	Björgvin fra Bakkebo
+Iben Sønderskov	GDB	7.82	Dk2010101131	Konungur fra Meldgaard
+Jan Horndrup Hansen	GDB	8.38	DK2001102145	Seifur fra Bispegården
+Karin Rahbek Jensen	GDB	7.91	DK2012100288	Segull fra Møllegaard
+Kirstine Østergaard	GDB	7.91	DK2010200163	Askja fra Egemose
+Line Sofie Henriksen	GDB	7.72	Is2008184958	Glóstjarni frá Efri-Þvera
+line søgaard	GDB	8.23	IS2005176184	Hugur frá Ketilsstöðum
+Line Søgård	GDB	8.03	DK2011100904	Trostan fra Midtgaard
+Lone Skriver Premate	GDB	7.97	Dk2009100996	Sólfari fra Solvang
+Mette Skovgaard Thorup	GDB	8.05	Dk2005105657	Sotari fra Stald Stuhr
+Mette Thomsen	GDB	7.74	IS2012284627	Abbadís frá Miðkoti
+Nina Berninger	GDB	7.70	DK2009100153	Egill fra Stutteri Berninger
+Regitze Henriksen	GDB	7.61	Gudrun fra Langtved
+Rie Ollendorff	GDB	7.62	DK2006104337	Leiftri fra Ballebækgård
+Rikke Hasager	GDB	8.35	DK2009200328	Ásta fra Hindbjerghus
+TIna Halkiær Olesen	GDB	7.99	DK2010101032	Leiftri fra Voerladegård
+Camille Bodilsen	GDC	7.82	Dk2011100162	Gustur fra Tornbjerg
+Raghad Ayoob Ahmad	GDC	7.80	DK2010100771	Gylfi fra Greversvad
+Rebecca Hesselbjerg Taulborg	GDC	7.74	DK2008207536	Kalla fra Valhalla
+Terese Sejr Ottesen	GDC	7.52	DK2013200228	Aría fra Bjarup
+Alberte Mossin	GDT	7.84	Dk2010200075	Syrtla fra Leerbæk
+Alberte Mossin	GDT	7.98	DK2010200546	Askja fra Ravnhøjgård
+Alva Bonde	GDT	7.78	Dk2012100692	Fenris fra Hjortkjær
+Amanda Frandsen	GDT	8.09	DK2010100243	Kramsi fra Vesterlyng
+Anna Katrine Schang Rasmussen	GDT	7.78	DK2010200293	Yssa fra Ludvigsbjerge
+Camilla Jensen	GDT	7.85	Dk2005207114	Sara fra Skovstrupholm
+Maja Nørgaard	GDT	7.84	DK2009200981	Blíða fra Valhalla
+Marie Kyed	GDT	7.73	DK2012100349	Spói fra Grønkær
+Selma Sandahl Kierkegaard	GDT	8.07	DK2012200016	Hind fra Haarbygaard
+Signe Kaave	GDT	8.07	IS2010235467	Stjörnudís frá Vestri-Leirárgörðum
+Sofie Hessel Lange	GDT	7.47	DK2009201081	Hafdís fra Bakket
+Siri Fog-Poulsen	GDV	8.07	DK2013100042	Andri fra Målbäck
+Caroline Djernis	GDY	7.95	Is1995165786	Biskup frá Saurbæ
+Emma Julie Juul Sørensen	GDY	8.03	IS2012101234	Fróði Fra Tvennu
+Camilla Bejstrup Nielsen	T1	6.00	DK2005105296	Feti fra Bøghegård
+Jan Horndrup Hansen	T1	6.20	DK2001102145	Seifur fra Bispegården
+line søgaard	T1	6.13	IS2005176184	Hugur frá Ketilsstöðum
+Henriette Jefta Pedersen	T2	6.03	DK2008202284	Samba fra Tindsgarði
+Amanda Frandsen	T3	5.73	DK2010100243	Kramsi fra Vesterlyng
+Bjørk Nordal	T3	5.40	IS2011158392	Otur frá Sjónarhóli
+Borg Hanne	T3	5.27	DK2011200843	Gunnlød fra Trudvang
+Iben Merete Toftvang	T3	6.20	DK2009200535	Björgvin fra Bakkebo
+Janni Jensen	T3	5.27	DK2011200282	Alfa fra Sysselhaven
+Karin Rahbek Jensen	T3	4.80	DK2012100288	Segull fra Møllegaard
+lisbet berke kierkegaard	T3	3.77	Is2005158370	Draupnir frá Dalsmynni
+Maja Blom Wennerwald Nielsen	T3	4.77	IS2013135565	Snar frá Vatnshömrum
+Mathilde Brønden	T3	5.13	Is2008281124	Brana frá Pulu
+Pernille Hurup Knudsen	T3	5.43	DK2011100413	Fönix fra Nr. Hytten
+Rikke Hasager	T3	6.03	DK2009200328	Ásta fra Hindbjerghus
+Signe Autzen	T3	4.70	DK2011200604	Eydís fra Voreslyst
+Vibeke Ringmann Kolsch	T3	5.37	IS2012186690	Ofsi frá Skeiðvöllum
+Viktoria V. Pedersen	T3	5.83	DK2009200349	Sæla fra Lipo
+Berit Ertmann	T4	5.00	DK2010100702	Korpur fra Bjarup
+Camilla Fredslund Kragh-Hansen	T4	4.80	DK2011100808	Víkingur fra Ørskov Vestergård
+Charlotte Sand Pedersen	T4	6.00	IS2010187807	Flaumur frá Blesastöðum 1A
+Frederikke Kjærgaard Aabo	T4	6.00	IS2009180613	Fengur frá Hemlu II
+Jan Horndrup Hansen	T4	6.30	DK2010100819	Aron fra Møllegaard
+Line Sofie Henriksen	T4	5.07	Is2008184958	Glóstjarni frá Efri-Þvera
+TIna Halkiær Olesen	T4	4.97	DK2010101032	Leiftri fra Voerladegård
+Tina Møller Jørgensen	T4	5.87	DK2011200215	Sólrún fra Kærgården
+Anne Thomsen	V1	0.00	DK2007104776	Haukur fra Dannevang
+Camilla Bejstrup Nielsen	V1	6.23	DK2005105296	Feti fra Bøghegård
+Camilla Fredslund Kragh-Hansen	V1	5.40	DK2011100808	Víkingur fra Ørskov Vestergård
+Iben Merete Toftvang	V1	6.43	DK2009200535	Björgvin fra Bakkebo
+Jan Horndrup Hansen	V1	6.23	DK2001102145	Seifur fra Bispegården
+Janni Jensen	V1	5.97	DK2011200282	Alfa fra Sysselhaven
+line søgaard	V1	5.60	IS2005176184	Hugur frá Ketilsstöðum
+Rikke Hasager	V1	6.07	DK2009200328	Ásta fra Hindbjerghus
+Alberte Mossin	V2	5.00	DK2010200546	Askja fra Ravnhøjgård
+Alva Bonde	V2	5.23	Dk2012100692	Fenris fra Hjortkjær
+Amanda Frandsen	V2	4.30	DK2010100243	Kramsi fra Vesterlyng
+Bjørk Nordal	V2	5.63	IS2011158392	Otur frá Sjónarhóli
+Borg Hanne	V2	5.57	DK2011200843	Gunnlød fra Trudvang
+Henriette Teglborg	V2	5.27	DK2011200669	Snerting fra Langtved
+Karin Rahbek Jensen	V2	5.23	DK2012100288	Segull fra Møllegaard
+line søgaard	V2	5.40	DK2009200657	Guðrún fra Langtved
+lisbet berke kierkegaard	V2	0.00	Is2005158370	Draupnir frá Dalsmynni
+Maja Blom Wennerwald Nielsen	V2	5.17	IS2013135565	Snar frá Vatnshömrum
+Pernille Hurup Knudsen	V2	5.77	DK2011100413	Fönix fra Nr. Hytten
+Signe Nissen	V2	5.13	Dk2012100726	Muni fra Hedensminde
+TIna Halkiær Olesen	V2	5.27	DK2010101032	Leiftri fra Voerladegård
+Tina Møller Jørgensen	V2	5.93	DK2011200215	Sólrún fra Kærgården
+Vibeke Ringmann Kolsch	V2	6.07	IS2012186690	Ofsi frá Skeiðvöllum
+Viktoria V. Pedersen	V2	6.00	DK2009200349	Sæla fra Lipo
+[END]
+
+

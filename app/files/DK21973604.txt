@@ -1,0 +1,311 @@
+Anne Sofie Nielsen	F1	6.43	DK2009100193	Ormur fra Nord
+Birgitte Simoni	F1	5.87	DK2006107673	Kiljan fra Katulabo
+Caroline Marcker Christiansen	F1	5.93	No2010105129	Dökkvi fra Kleiva
+Caroline Storch	F1	5.60	IS2008165890	Kapall frá Kommu
+Charlotte Cook	F1	5.77	IS2012282314	Katla frá Hamarsey
+Ditte Sommer	F1	3.80	DK2012200723	Heppni fra Udstruplund
+Ditte Vang-Pedersen	F1	5.77	IS2011238251	Dimmalimm frá Skógskoti
+Emma Hannover	F1	5.90	IS2009156955	Styrmir frá Skagaströnd
+Freja Brønnum	F1	5.23	DK2010200699	Kolfaxa fra Hestehaugen
+Jeanette Holst Gohn	F1	5.97	Dk2009100354	Viktor fra Kirstineholm
+Malte Cook Simonsen	F1	4.93	IS2011287807	Hervör frá Blesastöðum 1A
+Mathilde Mehlsen	F1	3.53	IS2009282464	Svana frá Halakoti
+Sarah Rosenberg Asmussen	F1	6.27	DE2005134188	Baldur vom Hrafnsholt
+Søren Witt	F1	6.30	DK2003105630	Gjafar fra Strø
+Tine Terkildsen	F1	6.17	IS2009286808	Salka frá Lækjarbotnum
+Alberte Kiel Mortensen	F2	3.50	DK2010100573	Baldur fra Løvemose
+Bente Wolder	F2	5.00	DK2004106927	Ás fra Dyrlundgård
+Carolina Denckert	F2	5.37	IS2007188907	Glaður frá Efsta-Dal II
+Jannike Fogh	F2	4.13	IS2009281965	Skutla frá Kvistum
+Lis Poulsen	F2	3.30	IS2010201050	Ráðgáta frá Skipaskaga
+Lisa Lykke Jensen	F2	3.33	Dk2005107044	Jarl fra Ladefogedgården
+Lotte Chlemdorff	F2	2.63	IS2004184555	Þeyr frá Þúfu í Landeyjum
+Michela Schwærter	F2	4.70	DK2009100865	Eitill fra Hejelte
+Petrine Jakobsen	F2	5.30	DK2007205034	Hedda fra Nord
+Rikke Luise Krarup Nielsen	F2	4.87	Dk2006107306	Matti fra Sofiedal
+Rikke Nielsen	F2	5.43	Dk2011100851	Strokkur fra Rævehøj
+Søren Witt	F2	5.50	DK2006103978	Adam fra Strø
+Charlotte Cook	P2	8.12	IS2011286916	Máney frá Feti
+Clara Håkonsson	P2	8.43	IS2004286692	Branda frá Holtsmúla 1
+Freja Brønnum	P2	11.20	DK2010200699	Kolfaxa fra Hestehaugen
+Henrik Gohn	P2	7.80	IS2010201043	Rakel frá Skipaskaga
+Jannike Fogh	P2	10.08	IS2009281965	Skutla frá Kvistum
+Jørgen Svendsen	P2	7.86	IS2010166206	Eðall frá Torfunesi
+Malte Cook Simonsen	P2	9.03	DK2012100747	Logi fra Bakkeholm
+Palma Sandlau Jacobsen	P2	8.68	DK2002105552	Vakur fra Gultentorp
+Sille Madsen	P2	9.28	DK2010200969	Ragna fra Gultentorp
+Søren Witt	P2	8.72	DK2003105630	Gjafar fra Strø
+Alberte Kiel Mortensen	PP1	0.92	DK2010100573	Baldur fra Løvemose
+Bente Wolder	PP1	5.50	DK2004106927	Ás fra Dyrlundgård
+Charlotte Cook	PP1	6.50	IS2011286916	Máney frá Feti
+Clara Håkonsson	PP1	3.09	IS2004286692	Branda frá Holtsmúla 1
+Emma Hannover	PP1	5.63	IS2009156955	Styrmir frá Skagaströnd
+Freja Brønnum	PP1	2.21	DK2010200699	Kolfaxa fra Hestehaugen
+Henrik Gohn	PP1	3.54	IS2010201043	Rakel frá Skipaskaga
+Jeanette Holst Gohn	PP1	0.42	Dk2009100354	Viktor fra Kirstineholm
+Jørgen Svendsen	PP1	4.17	IS2010166206	Eðall frá Torfunesi
+Malte Cook Simonsen	PP1	1.75	IS2011287807	Hervör frá Blesastöðum 1A
+Mathilde Mehlsen	PP1	1.71	IS2009282464	Svana frá Halakoti
+Petrine Jakobsen	PP1	3.00	DK2007205034	Hedda fra Nord
+Rikke Luise Krarup Nielsen	PP1	1.17	Dk2006107306	Matti fra Sofiedal
+Sarah Rosenberg Asmussen	PP1	3.29	DE2005134188	Baldur vom Hrafnsholt
+Sille Madsen	PP1	5.25	DK2010200969	Ragna fra Gultentorp
+Søren Witt	PP1	6.92	DK2003105630	Gjafar fra Strø
+Amalie Astrup Jacobi	T1	6.50	IS2011187806	Franklín frá Blesastöðum 1A
+Amalie Møller-San Pedro	T1	5.63	IS2009158600	Fengur frá Flugumýri
+Anna Albinus Skadhede	T1	6.10	IS2008258600	Olga frá Flugumýri
+Anne Sofie Nielsen	T1	6.50	IS2008287033	Nótt frá Ingólfshvoli
+Birgitte Simoni	T1	6.43	DK2006107673	Kiljan fra Katulabo
+Charlotte Cook	T1	6.13	IS2012282314	Katla frá Hamarsey
+Ditte Vang-Pedersen	T1	5.67	DK2011200055	Háfóta fra Elmehøj
+Jannike Fogh	T1	5.70	DK2011200336	Rauðhetta fra Bakkeholm
+Jens Erik Udsen	T1	6.37	IS2008182705	Hrappur frá Selfossi
+Jørgen Svendsen	T1	5.53	IS2008186917	Straumur frá Feti
+Laura Hannover	T1	6.63	IS2007155250	Fylkir frá Efri-Þverá
+Malte Cook Simonsen	T1	5.57	IS2011287807	Hervör frá Blesastöðum 1A
+Mathilde Mehlsen	T1	5.73	IS2009282464	Svana frá Halakoti
+Nikoline Jørgensen	T1	5.63	DK2008107522	Sindri fra Flødal
+Sanne Thiemke	T1	6.00	IS2008135726	Villi frá Breiðabólsstað
+Sara Arboe	T1	6.00	DK2011100301	Snarfari fra Søborg
+Stephanie Nielsen	T1	6.47	IS2005282279	Vala frá Sólvangi
+Victoria Sophie Lundsten-Wilkinson	T1	5.50	IS2011287281	Trygg frá Tóftum
+Alberte Kiel Mortensen	T2	6.77	DK2003106270	Pá fra Eyfjörd
+Caroline Marcker Christiansen	T2	6.33	No2010105129	Dökkvi fra Kleiva
+Caroline Storch	T2	6.43	IS2008165890	Kapall frá Kommu
+Cathrine Langkilde	T2	6.47	DK2007104650	Djass fra Engholm
+Ditte Søeborg	T2	5.90	DK2012100247	Gangster fra Sø-Dís
+Emma Hannover	T2	6.77	IS2009156955	Styrmir frá Skagaströnd
+Freja Brønnum	T2	4.20	DK2010200699	Kolfaxa fra Hestehaugen
+Jeanette Holst Gohn	T2	5.00	Dk2009100354	Viktor fra Kirstineholm
+Mathilde Mehlsen	T2	5.40	DK2005100326	Gylfi fra Sall
+Sara Arboe	T2	5.17	Dk2009200605	Hjördís fra Søtofte
+Tine Terkildsen	T2	6.37	IS2009286808	Salka frá Lækjarbotnum
+Victoria Sophie Lundsten-Wilkinson	T2	5.73	IS2010187810	Virgill frá Blesastöðum 1A
+Anne-Grete Rasmussen	T3	5.23	DK2008208219	Lóa fra Bakkeholm
+Birgitte Knuth Linnet	T3	3.93	DK2007201252	Sia fra Såne
+Birgitte Simoni	T3	5.27	Dk2007200860	Krista fra Nord
+Bjørg Krog	T3	4.33	DK2009100274	Skolli fra Hessellund
+Camilla Mehlsen	T3	5.27	IS2009182280	Sunnanvindur frá Sólvangi
+Carla Alpha Holm Vadum	T3	3.47	Dk2011200695	Aska fra Kringlan
+Christiane Zibrandtsen	T3	4.67	DK2008107089	Jarl fra Tindbæk
+Ditte Søeborg	T3	4.97	IS2009135058	Burkni frá Öxnholti
+Ditte Vang-Pedersen	T3	5.73	IS2011238251	Dimmalimm frá Skógskoti
+Ella Blach Falkenberg	T3	3.73	Dk2009100791	Vinur fra Sóleyja, Læsø
+Emma Astrid Lundsten-Wilkinson	T3	4.93	DK2002202363	Sveifla fra Rosenlund
+Freyja Valdimarsdottir	T3	4.57	DK2009200108	Gæfa fra Fogedgaarden
+Hannah Lina Andreasen	T3	5.17	IS2007156290	Kjói frá Steinnesi
+Iben Jensen	T3	5.60	DK2010200408	Eyja fra Harager
+Jette Wenckheim	T3	4.83	DK2006206729	Skuggalisa fra Katknøs
+Karin Denckert	T3	5.47	NO2008109019	Stormur fra Kringeland
+Katrine Kristiansen	T3	4.93	DK2006202894	Snilld fra Aalund
+Katrine Langvad	T3	5.57	DK2011100816	Ragnar fra Thorsvighus
+Kirsten Asmussen	T3	4.73	No2003112040	Laugi fra Tyse
+Liv Langvad	T3	5.50	DK2010201094	Pæja fra Thorsvighus
+Louise Højrup Rosenmeier	T3	5.77	DK2012200667	Stjörnuspá fra Vangen
+Marianne Høgh	T3	4.93	IS2012286905	Hrísla frá Feti
+Mathilde Bryding	T3	5.20	IS2003281961	Spes frá Kvistum
+Rie Kirketerp Christensen	T3	5.53	Dk2009100276	Týr fra Jespersgaarde
+Rie Spogard	T3	3.90	DK2003204120	Seyla fra Rue
+Stine Trier	T3	5.07	Dk2009100119	Gústi fra Fogedgaarden
+Anna Albinus Skadhede	T4	5.23	IS2003157677	Glymur frá Grófargili
+Anne-Grete Rasmussen	T4	4.40	DK2005205701	Soley fra Bakkeholm
+Charlotte Søgaard	T4	4.73	DK2012100088	Hektor fra Mosegård
+Ditte Sommer	T4	3.27	DK2012200723	Heppni fra Udstruplund
+Eva Nordahl Duval	T4	2.77	DK2009100008	Viðar fra Bredgaard
+Kirstine Nielsen	T4	4.23	Dk2008104516	Aron fra Overmarkslund
+Lise Krognos	T4	4.87	DE2009134796	Tjörn vom Eylershof
+Malte Cook Simonsen	T4	3.83	DK2012100747	Logi fra Bakkeholm
+Mathilde Mehlsen	T4	2.73	IS2010287545	Síða frá Kvíarhóli
+Mette Rio	T4	4.83	DK2008108504	Próður fra Guldbæk
+Nadia Ejderskov	T4	4.63	Dk2007101101	Brún fra Skarholt
+Pia Charlotte Toft	T4	4.63	Dk2008102162	Glóinn fra Bakki
+Sidsel Galskov	T4	4.80	DK2009200204	Eydís fra Stokkerupgård
+Sissel Holte Blauenfeldt Lebeck	T4	3.90	DK2004204544	Kula fra Bækkegården
+Tine Dahlberg	T4	4.77	DK2006104709	Hrafnfinnur fra Bakkeholm
+Trine Nørhave	T4	5.17	DK2003205963	Fina fra Rosenlund
+Vibeke Damkjær	T4	2.57	dk2006106210	Jór fra Nøddegården
+Alberte Kiel Mortensen	V1	5.93	DK2003106270	Pá fra Eyfjörd
+Amalie Astrup Jacobi	V1	6.53	IS2011187806	Franklín frá Blesastöðum 1A
+Amalie Møller-San Pedro	V1	6.00	IS2009158600	Fengur frá Flugumýri
+Anna Albinus Skadhede	V1	6.50	IS2008258600	Olga frá Flugumýri
+Anna Albinus Skadhede	V1	6.33	IS2003157677	Glymur frá Grófargili
+Anne Sofie Nielsen	V1	6.77	IS2008287033	Nótt frá Ingólfshvoli
+Birgitte Sandvik	V1	6.30	is2009182898	Funheitur frá Ragnheiðarstöðum
+Birgitte Simoni	V1	4.93	Dk2007200860	Krista fra Nord
+Cathrine Langkilde	V1	6.37	DK2007104650	Djass fra Engholm
+Charlotte Cook	V1	6.43	IS2013235092	Paradís frá Steinsholti
+Christiane Zibrandtsen	V1	5.23	DK2008107089	Jarl fra Tindbæk
+Clara Håkonsson	V1	6.07	DK2003103141	Kolfaxi fra Lilleheden
+Ditte Søeborg	V1	6.37	DK2012100247	Gangster fra Sø-Dís
+Ditte Vang-Pedersen	V1	6.50	DK2011200055	Háfóta fra Elmehøj
+Inge-Petrine Bæk	V1	6.97	IS2007284310	Ljóska frá Borgareyrum
+Jannike Fogh	V1	5.50	DK2011200336	Rauðhetta fra Bakkeholm
+Jens Erik Udsen	V1	6.53	IS2008182705	Hrappur frá Selfossi
+Jørgen Svendsen	V1	5.97	IS2008186917	Straumur frá Feti
+Louise Højrup Rosenmeier	V1	5.53	DK2012200667	Stjörnuspá fra Vangen
+Mathilde Mehlsen	V1	5.50	DK2005100326	Gylfi fra Sall
+Nadia Ejderskov	V1	5.00	Dk2007101101	Brún fra Skarholt
+Nikoline Jørgensen	V1	5.73	DK2008107522	Sindri fra Flødal
+Sanne Thiemke	V1	6.20	IS2008135726	Villi frá Breiðabólsstað
+Sara Arboe	V1	6.33	DK2011100301	Snarfari fra Søborg
+Sarah Rosenberg Asmussen	V1	6.63	DK2013200108	Fjóla fra Jór
+Stephanie Nielsen	V1	5.63	IS2005282279	Vala frá Sólvangi
+Vanessa d'Andrade Dreisig	V1	6.40	IS2008238296	Hrifla frá Sauðafelli
+Victoria Sophie Lundsten-Wilkinson	V1	5.97	IS2011287281	Trygg frá Tóftum
+Anne-Grete Rasmussen	V2	5.20	DK2008208219	Lóa fra Bakkeholm
+Birgitte Knuth Linnet	V2	4.87	DK2007201252	Sia fra Såne
+Bjørg Krog	V2	4.53	DK2009100274	Skolli fra Hessellund
+Camilla Mehlsen	V2	5.17	IS2009182280	Sunnanvindur frá Sólvangi
+Ella Blach Falkenberg	V2	4.90	Dk2009100791	Vinur fra Sóleyja, Læsø
+Eva Lundh	V2	5.20	DK2010100412	Sólvindur fra Bakkeholm
+Helle Skram de Fries	V2	5.47	Dk2009100946	Hektor fra Pilehøj
+Iben Jensen	V2	5.30	DK2010200408	Eyja fra Harager
+Jakúp Madsen	V2	5.00	DK2013100771	Helios fra Bøgegården
+Jette Wenckheim	V2	5.20	DK2006206729	Skuggalisa fra Katknøs
+Katrine Kristiansen	V2	5.10	DK2006202894	Snilld fra Aalund
+Katrine Langvad	V2	5.73	DK2011100816	Ragnar fra Thorsvighus
+Kirsten Asmussen	V2	4.77	No2003112040	Laugi fra Tyse
+Mathilde Mehlsen	V2	5.00	IS2010287545	Síða frá Kvíarhóli
+Mette Rio	V2	5.00	DK2008108504	Próður fra Guldbæk
+Rie Kirketerp Christensen	V2	5.40	Dk2009100276	Týr fra Jespersgaarde
+Sara Arboe	V2	5.40	Dk2009200605	Hjördís fra Søtofte
+Stine Trier	V2	5.60	Dk2009100119	Gústi fra Fogedgaarden
+Thilde-Sofie Thorsen	V2	5.33	DK2009100691	Spuni fra Rævehøj
+Tine Dahlberg	V2	5.20	DK2006104709	Hrafnfinnur fra Bakkeholm
+Vibeke Buus Kristensen	V2	5.20	DK2011100915	Glampi fra Nr. Tolstrup
+Victoria Sophie Lundsten-Wilkinson	V2	5.27	IS2010187810	Virgill frá Blesastöðum 1A
+[END]
+
+
+[JUDGES]
+Alexander Sgustav	F1	15
+Alexander Sgustav	F2	12
+Alexander Sgustav	PP1	17
+Alexander Sgustav	T1	19
+Alexander Sgustav	T2	13
+Alexander Sgustav	T3	28
+Alexander Sgustav	T4	17
+Alexander Sgustav	V1	28
+Alexander Sgustav	V2	26
+Bernt Serverinsen	F2	12
+Bernt Serverinsen	T1	19
+Bernt Serverinsen	V1	28
+Bernt Serverinsen	V2	26
+Heri Djurhuus Dahl	F1	15
+Heri Djurhuus Dahl	F2	12
+Heri Djurhuus Dahl	PP1	17
+Heri Djurhuus Dahl	T1	19
+Heri Djurhuus Dahl	T2	13
+Heri Djurhuus Dahl	T3	28
+Heri Djurhuus Dahl	T4	17
+Heri Djurhuus Dahl	V1	28
+Heri Djurhuus Dahl	V2	26
+Jens Krarup Nielsen	P2	10
+Jens Krarup Nielsen	PP1	17
+Jens Krarup Nielsen	T1	19
+Jens Krarup Nielsen	T2	13
+Jens Krarup Nielsen	T4	17
+Jens Krarup Nielsen	V1	28
+Karin Hassing	F1	15
+Karin Hassing	F2	12
+Karin Hassing	P2	10
+Karin Hassing	T1	19
+Karin Hassing	T2	13
+Karin Hassing	T3	28
+Karin Hassing	T4	17
+Karin Hassing	V1	28
+Karin Hassing	V2	26
+Katharina Konter	F1	15
+Katharina Konter	F2	12
+Katharina Konter	PP1	17
+Katharina Konter	T1	19
+Katharina Konter	T2	13
+Katharina Konter	T3	28
+Katharina Konter	T4	17
+Katharina Konter	V2	26
+Lisa Olovsson	F2	12
+Lisa Olovsson	P2	10
+Lisa Olovsson	PP1	17
+Lisa Olovsson	T1	19
+Lisa Olovsson	T2	13
+Lisa Olovsson	T3	28
+Lisa Olovsson	T4	17
+Lisa Olovsson	V1	28
+Lisa Olovsson	V2	26
+Lise Brouér	F1	15
+Lise Brouér	F2	12
+Lise Brouér	PP1	17
+Lise Brouér	T1	19
+Lise Brouér	T2	13
+Lise Brouér	T3	28
+Lise Brouér	T4	17
+Lise Brouér	V1	28
+Lise Brouér	V2	26
+Martin Heller	F1	15
+Martin Heller	F2	12
+Martin Heller	PP1	17
+Martin Heller	T1	19
+Martin Heller	T2	13
+Martin Heller	T3	28
+Martin Heller	T4	17
+Martin Heller	V1	28
+Martin Heller	V2	26
+Stefan Hackauf	F1	15
+Stefan Hackauf	F2	12
+Stefan Hackauf	P2	10
+Stefan Hackauf	T1	19
+Stefan Hackauf	T2	13
+Stefan Hackauf	T3	28
+Stefan Hackauf	T4	17
+Stefan Hackauf	V1	28
+Stefan Hackauf	V2	26
+Tidtagning Pas	P2	10
+[END]
+
+[JUDGES DAYS]
+Alexander Sgustav	2019-06-08
+Alexander Sgustav	2019-06-09
+Alexander Sgustav	2019-06-10
+Alexander Sgustav	2019-06-12
+Alexander Sgustav	2019-06-14
+Heri Djurhuus Dahl	2019-06-08
+Heri Djurhuus Dahl	2019-06-09
+Heri Djurhuus Dahl	2019-06-10
+Heri Djurhuus Dahl	2019-06-12
+Heri Djurhuus Dahl	2019-06-14
+Jens Krarup Nielsen	2019-06-08
+Jens Krarup Nielsen	2019-06-09
+Jens Krarup Nielsen	2019-06-10
+Jens Krarup Nielsen	2019-06-12
+Karin Hassing	2019-06-08
+Karin Hassing	2019-06-09
+Karin Hassing	2019-06-10
+Karin Hassing	2019-06-12
+Karin Hassing	2019-06-14
+Katharina Konter	2019-06-08
+Katharina Konter	2019-06-09
+Katharina Konter	2019-06-10
+Katharina Konter	2019-06-12
+Katharina Konter	2019-06-14
+Lisa Olovsson	2019-06-08
+Lisa Olovsson	2019-06-09
+Lisa Olovsson	2019-06-10
+Lisa Olovsson	2019-06-12
+Lisa Olovsson	2019-06-14
+Lise Brouér	2019-06-08
+Lise Brouér	2019-06-09
+Lise Brouér	2019-06-10
+Lise Brouér	2019-06-12
+Lise Brouér	2019-06-14
+Martin Heller	2019-06-08
+Martin Heller	2019-06-09
+Martin Heller	2019-06-10
+Martin Heller	2019-06-12
+Martin Heller	2019-06-14
+Stefan Hackauf	2019-06-08
+Stefan Hackauf	2019-06-09
+Stefan Hackauf	2019-06-10
+Stefan Hackauf	2019-06-12
+Stefan Hackauf	2019-06-14
+[END]
+

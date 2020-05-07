@@ -1,0 +1,93 @@
+Melanie Schmidt	F1	4.33	DK2006100667	Villandi fra Vestmose
+Ditte Byskov	F2	4.07	DK2011200852	Kátína fra Nygaard
+Ditte Schmidt	F2	2.93	DK2001104555	Draupnir fra Midgaard
+Susanne Ellemose	F2	0.00	DK2013100250	Sólfari fra Virkelyst
+Xenia Andersen	F2	3.23	DK2004107028	Abel fra Stutteri Borg
+Anna Johannesdottir Olesen	T1	5.93	IS2005188472	Hljómur frá Fellskoti
+Diana Faurskov Vilsgaard	T1	6.27	DK2011100271	Kóngur fra Engvang
+Ida Brunsgaard Pedersen	T1	5.17	DK2011200924	Emma fra Jespersgaarde
+Mathilde Hudlebusch Vestergaard	T1	5.50	IS1999188613	Kátur frá Dalsmynni
+Mette Koefoed	T1	6.30	DK2012200393	Rögg fra Katulabo
+Pernille Jacobsen	T1	5.90	DK2007207366	Örk fra Bjarup
+Viktoria V. Pedersen	T1	6.33	DK2009200349	Sæla fra Lipo
+Yvonne Kreutzfeldt	T1	5.77	IS2009187810	Erpur frá Blesastöðum 1A
+Amalie Winding	T2	6.20	DK2007101272	Mestur fra Næsset
+Klavs Friberg	T2	6.07	DK2008104997	Magnus fra Moselundgård
+Malene Simonsen	T2	5.63	DK2008206783	Púma fra Lundgaard
+Mia Caben Iversen	T2	6.03	DK2009200580	Fíla fra Skovly
+Anne-Mette Floor	T3	5.00	DE1997137455	Tryggvi von Midgard
+Christopher Kjær	T3	5.20	DK2008108093	Fáni fra Høgsbro
+Franciska Davidsen	T3	6.10	DK2012200705	Lukka fra Is-Ranch
+Gitte Vastrup Thomsen	T3	0.00	DK2004106340	Gleipnir fra Moselundgård
+Jeanette Birkekær Lauridsen	T3	4.97	DK2008207205	Hetja fra Hørslev
+Kirsten Mathiasen	T3	5.57	IS2012135502	Gjarfar frá Þingnesi
+Lars Thorsen	T3	4.77	DK2007204712	Engilfrið fra Lønne Klint
+Marianne Petersen	T3	6.33	DK2011100990	Gabríel fra Bode
+Stina Carlsson	T3	5.10	DK2009100742	Sindri fra Ærø
+Ulla Maria Hoberg	T3	5.27	IS2001184455	Hvítur frá Storu-Hildisey
+Xenia Andersen	T3	5.37	DK2005102030	Dinus fra Lærkegården
+Ane Sophia Møller Kjær	T4	4.67	DK2012200475	Bjóla fra Spang
+Anja Kristina Hinrup	T4	4.93	DK2009100361	Laki fra Granly
+Johan Brunsgaard Pedersen	T4	4.73	DK2010200198	Mánadís fra Rowan
+Melanie Schmidt	T4	4.77	DK2006100667	Villandi fra Vestmose
+Michelle Munkholm Andersen	T4	0.00	IS2011186903	Bógatýr frá Feti
+Susanne Ellemose	T4	4.50	DK2013100250	Sólfari fra Virkelyst
+Xenia Andersen	T4	4.30	DK2004107028	Abel fra Stutteri Borg
+Annelise Nissen	T5	3.87	DK1999105370	Jarl fra Langtved
+Birte Olesen	T5	5.27	NO2011208477	Mola fra Minde
+Ditte Schmidt	T5	4.60	DK2001104555	Draupnir fra Midgaard
+Joan Bitten Hansen	T5	4.43	DK2009100666	Skugga-Baldur fra Eskildsminde
+Kate Jacobsen	T5	4.43	DK2010200576	Fína fra Lyngstrup
+Kirsten Dalgaard Ostersen	T5	4.87	DK2012100706	Árangur fra Kolkjær
+Lilian Pedersen	T5	5.03	DK2013200215	Geira fra Lipo
+Martin Dalgaard Ostersen	T5	4.27	DK2004106784	Markús fra Vivildgaard
+Monique Davidsen	T5	4.53	DK2010100381	Funi fra Is-Ranch
+Pernille Bjerg Jørgensen	T5	4.80	DK2009201386	Fána fra Stald Stuhr
+Pernille Blok Karlsen	T5	4.10	DK2009101212	Vilji fra Lundgaard
+Sophie Nielsen	T5	5.00	DK2007208502	Gleiði fra Toftemosen
+Susanne Ellemose	T5	4.93	DK2010100104	Krummi fra Virkelyst
+Diana Faurskov Vilsgaard	V1	6.40	DK2011100271	Kóngur fra Engvang
+Ida Brunsgaard Pedersen	V1	5.07	DK2011200924	Emma fra Jespersgaarde
+Mette Koefoed	V1	6.13	DK2012200393	Rögg fra Katulabo
+Tilde Dall	V1	5.60	DK2012100599	Eyjólfur fra Eyfjörd
+Viktoria V. Pedersen	V1	6.20	DK2009200349	Sæla fra Lipo
+Amalie Winding	V2	5.67	DK2007101272	Mestur fra Næsset
+Ane Sophia Møller Kjær	V2	5.60	DK2012200475	Bjóla fra Spang
+Anja Kristina Hinrup	V2	5.73	DK2009100361	Laki fra Granly
+Anna Johannesdottir Olesen	V2	6.17	IS2005188472	Hljómur frá Fellskoti
+Anne-Mette Floor	V2	5.20	DE1997137455	Tryggvi von Midgard
+Birte Olesen	V2	5.50	NO2011208477	Mola fra Minde
+Christopher Kjær	V2	5.50	DK2008108093	Fáni fra Høgsbro
+Gitte Vastrup Thomsen	V2	5.47	DK2004106340	Gleipnir fra Moselundgård
+Jeanette Birkekær Lauridsen	V2	5.60	DK2008207205	Hetja fra Hørslev
+Kirsten Mathiasen	V2	5.63	IS2012135502	Gjarfar frá Þingnesi
+Klavs Friberg	V2	4.77	DK2008104997	Magnus fra Moselundgård
+Lars Thorsen	V2	5.07	DK2007204712	Engilfrið fra Lønne Klint
+Marianne Petersen	V2	5.70	DK2011100990	Gabríel fra Bode
+Mathilde Hudlebusch Vestergaard	V2	4.03	IS1999188613	Kátur frá Dalsmynni
+Mia Caben Iversen	V2	5.00	DK2009200580	Fíla fra Skovly
+Michelle Munkholm Andersen	V2	5.87	IS2011186903	Bógatýr frá Feti
+Ulla Maria Hoberg	V2	5.80	IS2001184455	Hvítur frá Storu-Hildisey
+Yvonne Kreutzfeldt	V2	5.73	IS2009187810	Erpur frá Blesastöðum 1A
+Cecilie Hou Geertsen	V3	5.60	DK2010200643	Svört fra Posselt
+Franciska Davidsen	V3	5.90	DK2012200705	Lukka fra Is-Ranch
+Gabrielle Ryg	V3	0.00	DK2008107447	Sölvi fra Ryg
+Ida Maria Tipsmark Christensen	V3	4.57	DK2013100325	Steini fra Gedehøjgård
+Jannie Skaaning Svane	V3	5.33	DK2011100484	Otur fra Højgaard
+Joan Bitten Hansen	V3	5.30	DK2009100666	Skugga-Baldur fra Eskildsminde
+Kate Jacobsen	V3	5.33	DK2010200576	Fína fra Lyngstrup
+Lilian Pedersen	V3	5.77	DK2013200215	Geira fra Lipo
+Marianne Petersen	V3	5.13	DK2004103596	Glossi fra sønderskovgård
+Martin Dalgaard Ostersen	V3	4.80	DK2004106784	Markús fra Vivildgaard
+Monique Davidsen	V3	5.40	DK2010100381	Funi fra Is-Ranch
+Nicoline Hestbæk	V3	5.23	DK2008102640	Gandur fra Rosenlund
+Pernille Bjerg Jørgensen	V3	5.23	DK2009201386	Fána fra Stald Stuhr
+Pernille Blok Karlsen	V3	4.17	DK2009101212	Vilji fra Lundgaard
+Sophie Nielsen	V3	5.17	DK2007208502	Gleiði fra Toftemosen
+Stina Carlsson	V3	5.07	DK2009100742	Sindri fra Ærø
+Susanne Ellemose	V3	5.23	DK2010100104	Krummi fra Virkelyst
+Xenia Andersen	V3	5.30	DK2005102030	Dinus fra Lærkegården
+Yvonne Kreutzfeldt	V3	5.67	IS2011101231	Kristall frá Tvennu
+[END]
+
+
