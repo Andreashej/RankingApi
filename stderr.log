@@ -1,0 +1,66 @@
+Traceback (most recent call last):
+  File "/home/andreas2/rankingapi/passenger_wsgi.py", line 9, in <module>
+    application = wsgi.passenger_wsgi.py
+AttributeError: module 'wsgi' has no attribute 'passenger_wsgi'
+Traceback (most recent call last):
+  File "/home/andreas2/rankingapi/passenger_wsgi.py", line 9, in <module>
+    application = wsgi.passenger_wsgi.py
+AttributeError: module 'wsgi' has no attribute 'passenger_wsgi'
+Traceback (most recent call last):
+  File "/home/andreas2/rankingapi/passenger_wsgi.py", line 9, in <module>
+    application = wsgi.passenger_wsgi.py
+AttributeError: module 'wsgi' has no attribute 'passenger_wsgi'
+Traceback (most recent call last):
+  File "/home/andreas2/rankingapi/passenger_wsgi.py", line 9, in <module>
+    application = wsgi.passenger_wsgi.py
+AttributeError: module 'wsgi' has no attribute 'passenger_wsgi'
+Traceback (most recent call last):
+  File "/home/andreas2/rankingapi/passenger_wsgi.py", line 9, in <module>
+    application = wsgi.passenger_wsgi.py
+AttributeError: module 'wsgi' has no attribute 'passenger_wsgi'
+Traceback (most recent call last):
+  File "/home/andreas2/rankingapi/passenger_wsgi.py", line 8, in <module>
+    wsgi = imp.load_source('wsgi', 'application.py')
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib64/python3.7/imp.py", line 171, in load_source
+    module = _load(spec)
+  File "<frozen importlib._bootstrap>", line 696, in _load
+  File "<frozen importlib._bootstrap>", line 677, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "application.py", line 1, in <module>
+    from app import create_app
+  File "/home/andreas2/rankingapi/app/__init__.py", line 1, in <module>
+    from flask import Flask, g
+ModuleNotFoundError: No module named 'flask'
+Traceback (most recent call last):
+  File "/home/andreas2/rankingapi/passenger_wsgi.py", line 8, in <module>
+    wsgi = imp.load_source('wsgi', 'application.py')
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib64/python3.7/imp.py", line 171, in load_source
+    module = _load(spec)
+  File "<frozen importlib._bootstrap>", line 696, in _load
+  File "<frozen importlib._bootstrap>", line 677, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "application.py", line 1, in <module>
+    from app import create_app
+  File "/home/andreas2/rankingapi/app/__init__.py", line 1, in <module>
+    from flask import Flask, g
+ModuleNotFoundError: No module named 'flask'
+Traceback (most recent call last):
+  File "/home/andreas2/rankingapi/passenger_wsgi.py", line 8, in <module>
+    wsgi = imp.load_source('wsgi', 'application.py')
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib64/python3.7/imp.py", line 171, in load_source
+    module = _load(spec)
+  File "<frozen importlib._bootstrap>", line 696, in _load
+  File "<frozen importlib._bootstrap>", line 677, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "application.py", line 1, in <module>
+    from app import create_app
+  File "/home/andreas2/rankingapi/app/__init__.py", line 1, in <module>
+    from flask import Flask, g
+ModuleNotFoundError: No module named 'flask'
+Traceback (most recent call last):
+  File "/home/andreas2/rankingapi/passenger_wsgi.py", line 9, in <module>
+    application = wsgi.passenger_wsgi.py
+AttributeError: module 'wsgi' has no attribute 'passenger_wsgi'

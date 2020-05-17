@@ -9,7 +9,7 @@ class UserSchema(ma.ModelSchema):
 
     _links = ma.Hyperlinks(
         {
-            "self": ma.URLFor("api.user", username="<id>")
+            "self": ma.URLFor("api.user", username="<id>"),
         }
     )
 
@@ -18,6 +18,10 @@ class RiderSchema(ma.ModelSchema):
         model = Rider
 
     results = ma.List(ma.Nested("ResultSchema", exclude=("rider",)))
+    number_of_results = fields.Integer()
+    fullname = fields.String()
+
+    testlist = fields.List(fields.String())
 
     _links = ma.Hyperlinks(
         {
@@ -30,7 +34,7 @@ class HorseSchema(ma.ModelSchema):
         model = Horse
     
     results = ma.List(ma.Nested("ResultSchema", exclude=("horse",)))
-
+        
     _links = ma.Hyperlinks(
         {
             "self": ma.URLFor("api.horse", horse_id="<id>")
@@ -59,6 +63,7 @@ class CompetitionSchema(ma.ModelSchema):
         model = Competition
 
     tests = ma.List(ma.Nested("TestSchema", exclude=("competition","results")))
+    include_in_ranking = ma.List(ma.Nested("RankingListSchema", only=("shortname","listname","results_valid_days",)))
     
     _links = ma.Hyperlinks(
         {
@@ -70,7 +75,7 @@ class TestSchema(ma.ModelSchema):
     class Meta:
         model = Test
 
-    # competition = ma.Nested("CompetitionSchema", exclude=("tests",))
+    competition = ma.Nested("CompetitionSchema", only=("name","last_date","first_date","id", "include_in_ranking"))
 
     _links = ma.Hyperlinks(
         {

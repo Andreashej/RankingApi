@@ -12,10 +12,28 @@ class Rider(db.Model):
     lastname = db.Column(db.String(250))
     results = db.relationship("Result", backref="rider", lazy="joined")
 
+
     @hybrid_property
     def fullname(self):
         return self.firstname + ' ' + self.lastname
 
+    @hybrid_property
+    def number_of_results(self):
+        return len(self.results)
+
+    @number_of_results.expression
+    def number_of_results(cls):
+        return db.session.query('results').filter_by(rider_id = cls.id).count()
+
+    @hybrid_property
+    def testlist(self):
+        t =[result.test.testcode for result in self.results]
+
+        return set(t)
+    
+    @testlist.expression
+    def testlist(cls):
+        return db.session.query('results.rider_id, results.test_id').filter_by(rider_id = cls.id).join('tests').distinct()
 
     def __init__(self, first, last):
         self.firstname = first

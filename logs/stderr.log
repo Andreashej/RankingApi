@@ -1,0 +1,1564 @@
+Traceback (most recent call last):
+  File "/home/andreas2/rankingapi/passenger_wsgi.py", line 9, in <module>
+    application = wsgi.passenger_wsgi.py
+AttributeError: module 'wsgi' has no attribute 'passenger_wsgi'
+Traceback (most recent call last):
+  File "/home/andreas2/rankingapi/passenger_wsgi.py", line 9, in <module>
+    application = wsgi.passenger_wsgi.py
+AttributeError: module 'wsgi' has no attribute 'passenger_wsgi'
+Traceback (most recent call last):
+  File "/home/andreas2/rankingapi/passenger_wsgi.py", line 9, in <module>
+    application = wsgi.passenger_wsgi.py
+AttributeError: module 'wsgi' has no attribute 'passenger_wsgi'
+Traceback (most recent call last):
+  File "/home/andreas2/rankingapi/passenger_wsgi.py", line 9, in <module>
+    application = wsgi.passenger_wsgi.py
+AttributeError: module 'wsgi' has no attribute 'passenger_wsgi'
+Traceback (most recent call last):
+  File "/home/andreas2/rankingapi/passenger_wsgi.py", line 9, in <module>
+    application = wsgi.passenger_wsgi.py
+AttributeError: module 'wsgi' has no attribute 'passenger_wsgi'
+Traceback (most recent call last):
+  File "/home/andreas2/rankingapi/passenger_wsgi.py", line 8, in <module>
+    wsgi = imp.load_source('wsgi', 'application.py')
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib64/python3.7/imp.py", line 171, in load_source
+    module = _load(spec)
+  File "<frozen importlib._bootstrap>", line 696, in _load
+  File "<frozen importlib._bootstrap>", line 677, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "application.py", line 1, in <module>
+    from app import create_app
+  File "/home/andreas2/rankingapi/app/__init__.py", line 1, in <module>
+    from flask import Flask, g
+ModuleNotFoundError: No module named 'flask'
+Traceback (most recent call last):
+  File "/home/andreas2/rankingapi/passenger_wsgi.py", line 8, in <module>
+    wsgi = imp.load_source('wsgi', 'application.py')
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib64/python3.7/imp.py", line 171, in load_source
+    module = _load(spec)
+  File "<frozen importlib._bootstrap>", line 696, in _load
+  File "<frozen importlib._bootstrap>", line 677, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "application.py", line 1, in <module>
+    from app import create_app
+  File "/home/andreas2/rankingapi/app/__init__.py", line 1, in <module>
+    from flask import Flask, g
+ModuleNotFoundError: No module named 'flask'
+Traceback (most recent call last):
+  File "/home/andreas2/rankingapi/passenger_wsgi.py", line 8, in <module>
+    wsgi = imp.load_source('wsgi', 'application.py')
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib64/python3.7/imp.py", line 171, in load_source
+    module = _load(spec)
+  File "<frozen importlib._bootstrap>", line 696, in _load
+  File "<frozen importlib._bootstrap>", line 677, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "application.py", line 1, in <module>
+    from app import create_app
+  File "/home/andreas2/rankingapi/app/__init__.py", line 1, in <module>
+    from flask import Flask, g
+ModuleNotFoundError: No module named 'flask'
+Traceback (most recent call last):
+  File "/home/andreas2/rankingapi/passenger_wsgi.py", line 9, in <module>
+    application = wsgi.passenger_wsgi.py
+AttributeError: module 'wsgi' has no attribute 'passenger_wsgi'
+[2020-05-13 22:07:12,047] ERROR in app: Exception on /api/rankings/DRL [GET]
+Traceback (most recent call last):
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/connections.py", line 583, in connect
+    **kwargs)
+  File "/opt/alt/python37/lib64/python3.7/socket.py", line 727, in create_connection
+    raise err
+  File "/opt/alt/python37/lib64/python3.7/socket.py", line 716, in create_connection
+    sock.connect(sa)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/base.py", line 2275, in _wrap_pool_connect
+    return fn()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 363, in connect
+    return _ConnectionFairy._checkout(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 760, in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 492, in checkout
+    rec = pool._do_get()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/impl.py", line 139, in _do_get
+    self._dec_overflow()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/langhelpers.py", line 68, in __exit__
+    compat.reraise(exc_type, exc_value, exc_tb)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/compat.py", line 153, in reraise
+    raise value
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/impl.py", line 136, in _do_get
+    return self._create_connection()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 308, in _create_connection
+    return _ConnectionRecord(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 437, in __init__
+    self.__connect(first_connect_check=True)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 639, in __connect
+    connection = pool._invoke_creator(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/strategies.py", line 114, in connect
+    return dialect.connect(*cargs, **cparams)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/default.py", line 453, in connect
+    return self.dbapi.connect(*cargs, **cparams)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/__init__.py", line 94, in Connect
+    return Connection(*args, **kwargs)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/connections.py", line 325, in __init__
+    self.connect()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/connections.py", line 630, in connect
+    raise exc
+pymysql.err.OperationalError: (2003, "Can't connect to MySQL server on 'cp02.azehosting.net' ([Errno 111] Connection refused)")
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/flask/app.py", line 1612, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/flask/app.py", line 1598, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/flask_restful/__init__.py", line 480, in wrapper
+    resp = resource(*args, **kwargs)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/flask/views.py", line 84, in view
+    return self.dispatch_request(*args, **kwargs)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/flask_restful/__init__.py", line 595, in dispatch_request
+    resp = meth(*args, **kwargs)
+  File "/home/andreas2/rankingapi/app/resources/Ranking.py", line 64, in get
+    ranking = RankingList.query.filter_by(shortname=listname).first()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3232, in first
+    ret = list(self[0:1])
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3018, in __getitem__
+    return list(res)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3334, in __iter__
+    return self._execute_and_instances(context)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3356, in _execute_and_instances
+    querycontext, self._connection_from_session, close_with_result=True
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3371, in _get_bind_args
+    mapper=self._bind_mapper(), clause=querycontext.statement, **kw
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3349, in _connection_from_session
+    conn = self.session.connection(**kw)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/session.py", line 1124, in connection
+    execution_options=execution_options,
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/session.py", line 1130, in _connection_for_bind
+    engine, execution_options
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/session.py", line 431, in _connection_for_bind
+    conn = bind._contextual_connect()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/base.py", line 2239, in _contextual_connect
+    self._wrap_pool_connect(self.pool.connect, None),
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/base.py", line 2279, in _wrap_pool_connect
+    e, dialect, self
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/base.py", line 1544, in _handle_dbapi_exception_noconnection
+    util.raise_from_cause(sqlalchemy_exception, exc_info)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/compat.py", line 398, in raise_from_cause
+    reraise(type(exception), exception, tb=exc_tb, cause=cause)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/compat.py", line 152, in reraise
+    raise value.with_traceback(tb)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/base.py", line 2275, in _wrap_pool_connect
+    return fn()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 363, in connect
+    return _ConnectionFairy._checkout(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 760, in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 492, in checkout
+    rec = pool._do_get()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/impl.py", line 139, in _do_get
+    self._dec_overflow()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/langhelpers.py", line 68, in __exit__
+    compat.reraise(exc_type, exc_value, exc_tb)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/compat.py", line 153, in reraise
+    raise value
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/impl.py", line 136, in _do_get
+    return self._create_connection()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 308, in _create_connection
+    return _ConnectionRecord(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 437, in __init__
+    self.__connect(first_connect_check=True)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 639, in __connect
+    connection = pool._invoke_creator(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/strategies.py", line 114, in connect
+    return dialect.connect(*cargs, **cparams)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/default.py", line 453, in connect
+    return self.dbapi.connect(*cargs, **cparams)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/__init__.py", line 94, in Connect
+    return Connection(*args, **kwargs)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/connections.py", line 325, in __init__
+    self.connect()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/connections.py", line 630, in connect
+    raise exc
+sqlalchemy.exc.OperationalError: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on 'cp02.azehosting.net' ([Errno 111] Connection refused)")
+(Background on this error at: http://sqlalche.me/e/e3q8)
+[2020-05-13 22:07:12,047] ERROR in app: Exception on /api/profile [GET]
+Traceback (most recent call last):
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/connections.py", line 583, in connect
+    **kwargs)
+  File "/opt/alt/python37/lib64/python3.7/socket.py", line 727, in create_connection
+    raise err
+  File "/opt/alt/python37/lib64/python3.7/socket.py", line 716, in create_connection
+    sock.connect(sa)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/base.py", line 2275, in _wrap_pool_connect
+    return fn()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 363, in connect
+    return _ConnectionFairy._checkout(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 760, in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 492, in checkout
+    rec = pool._do_get()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/impl.py", line 139, in _do_get
+    self._dec_overflow()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/langhelpers.py", line 68, in __exit__
+    compat.reraise(exc_type, exc_value, exc_tb)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/compat.py", line 153, in reraise
+    raise value
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/impl.py", line 136, in _do_get
+    return self._create_connection()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 308, in _create_connection
+    return _ConnectionRecord(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 437, in __init__
+    self.__connect(first_connect_check=True)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 639, in __connect
+    connection = pool._invoke_creator(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/strategies.py", line 114, in connect
+    return dialect.connect(*cargs, **cparams)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/default.py", line 453, in connect
+    return self.dbapi.connect(*cargs, **cparams)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/__init__.py", line 94, in Connect
+    return Connection(*args, **kwargs)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/connections.py", line 325, in __init__
+    self.connect()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/connections.py", line 630, in connect
+    raise exc
+pymysql.err.OperationalError: (2003, "Can't connect to MySQL server on 'cp02.azehosting.net' ([Errno 111] Connection refused)")
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/flask/app.py", line 1612, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/flask/app.py", line 1598, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/flask_restful/__init__.py", line 480, in wrapper
+    resp = resource(*args, **kwargs)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/flask_httpauth.py", line 147, in decorated
+    user = self.authenticate(auth, password)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/flask_httpauth.py", line 202, in authenticate
+    return self.verify_password_callback(username, client_password)
+  File "/home/andreas2/rankingapi/app/__init__.py", line 56, in verify_password
+    user = User.verify_auth_token(username_or_token)
+  File "/home/andreas2/rankingapi/app/models/UserModel.py", line 34, in verify_auth_token
+    user = User.query.get(data['id'])
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 959, in get
+    return self._get_impl(ident, loading.load_on_pk_identity)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 1069, in _get_impl
+    return db_load_fn(self, primary_key_identity)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/loading.py", line 282, in load_on_pk_identity
+    return q.one()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3292, in one
+    ret = self.one_or_none()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3261, in one_or_none
+    ret = list(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3334, in __iter__
+    return self._execute_and_instances(context)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3356, in _execute_and_instances
+    querycontext, self._connection_from_session, close_with_result=True
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3371, in _get_bind_args
+    mapper=self._bind_mapper(), clause=querycontext.statement, **kw
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3349, in _connection_from_session
+    conn = self.session.connection(**kw)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/session.py", line 1124, in connection
+    execution_options=execution_options,
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/session.py", line 1130, in _connection_for_bind
+    engine, execution_options
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/session.py", line 431, in _connection_for_bind
+    conn = bind._contextual_connect()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/base.py", line 2239, in _contextual_connect
+    self._wrap_pool_connect(self.pool.connect, None),
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/base.py", line 2279, in _wrap_pool_connect
+    e, dialect, self
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/base.py", line 1544, in _handle_dbapi_exception_noconnection
+    util.raise_from_cause(sqlalchemy_exception, exc_info)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/compat.py", line 398, in raise_from_cause
+    reraise(type(exception), exception, tb=exc_tb, cause=cause)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/compat.py", line 152, in reraise
+    raise value.with_traceback(tb)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/base.py", line 2275, in _wrap_pool_connect
+    return fn()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 363, in connect
+    return _ConnectionFairy._checkout(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 760, in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 492, in checkout
+    rec = pool._do_get()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/impl.py", line 139, in _do_get
+    self._dec_overflow()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/langhelpers.py", line 68, in __exit__
+    compat.reraise(exc_type, exc_value, exc_tb)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/compat.py", line 153, in reraise
+    raise value
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/impl.py", line 136, in _do_get
+    return self._create_connection()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 308, in _create_connection
+    return _ConnectionRecord(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 437, in __init__
+    self.__connect(first_connect_check=True)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 639, in __connect
+    connection = pool._invoke_creator(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/strategies.py", line 114, in connect
+    return dialect.connect(*cargs, **cparams)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/default.py", line 453, in connect
+    return self.dbapi.connect(*cargs, **cparams)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/__init__.py", line 94, in Connect
+    return Connection(*args, **kwargs)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/connections.py", line 325, in __init__
+    self.connect()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/connections.py", line 630, in connect
+    raise exc
+sqlalchemy.exc.OperationalError: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on 'cp02.azehosting.net' ([Errno 111] Connection refused)")
+(Background on this error at: http://sqlalche.me/e/e3q8)
+[2020-05-13 22:07:12,047] ERROR in app: Exception on /api/rankings [GET]
+Traceback (most recent call last):
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/connections.py", line 583, in connect
+    **kwargs)
+  File "/opt/alt/python37/lib64/python3.7/socket.py", line 727, in create_connection
+    raise err
+  File "/opt/alt/python37/lib64/python3.7/socket.py", line 716, in create_connection
+    sock.connect(sa)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/base.py", line 2275, in _wrap_pool_connect
+    return fn()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 363, in connect
+    return _ConnectionFairy._checkout(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 760, in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 492, in checkout
+    rec = pool._do_get()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/impl.py", line 139, in _do_get
+    self._dec_overflow()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/langhelpers.py", line 68, in __exit__
+    compat.reraise(exc_type, exc_value, exc_tb)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/compat.py", line 153, in reraise
+    raise value
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/impl.py", line 136, in _do_get
+    return self._create_connection()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 308, in _create_connection
+    return _ConnectionRecord(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 437, in __init__
+    self.__connect(first_connect_check=True)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 639, in __connect
+    connection = pool._invoke_creator(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/strategies.py", line 114, in connect
+    return dialect.connect(*cargs, **cparams)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/default.py", line 453, in connect
+    return self.dbapi.connect(*cargs, **cparams)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/__init__.py", line 94, in Connect
+    return Connection(*args, **kwargs)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/connections.py", line 325, in __init__
+    self.connect()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/connections.py", line 630, in connect
+    raise exc
+pymysql.err.OperationalError: (2003, "Can't connect to MySQL server on 'cp02.azehosting.net' ([Errno 111] Connection refused)")
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/flask/app.py", line 1612, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/flask/app.py", line 1598, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/flask_restful/__init__.py", line 480, in wrapper
+    resp = resource(*args, **kwargs)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/flask/views.py", line 84, in view
+    return self.dispatch_request(*args, **kwargs)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/flask_restful/__init__.py", line 595, in dispatch_request
+    resp = meth(*args, **kwargs)
+  File "/home/andreas2/rankingapi/app/resources/Ranking.py", line 25, in get
+    rankings = RankingList.query.all()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3178, in all
+    return list(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3334, in __iter__
+    return self._execute_and_instances(context)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3356, in _execute_and_instances
+    querycontext, self._connection_from_session, close_with_result=True
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3371, in _get_bind_args
+    mapper=self._bind_mapper(), clause=querycontext.statement, **kw
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3349, in _connection_from_session
+    conn = self.session.connection(**kw)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/session.py", line 1124, in connection
+    execution_options=execution_options,
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/session.py", line 1130, in _connection_for_bind
+    engine, execution_options
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/session.py", line 431, in _connection_for_bind
+    conn = bind._contextual_connect()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/base.py", line 2239, in _contextual_connect
+    self._wrap_pool_connect(self.pool.connect, None),
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/base.py", line 2279, in _wrap_pool_connect
+    e, dialect, self
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/base.py", line 1544, in _handle_dbapi_exception_noconnection
+    util.raise_from_cause(sqlalchemy_exception, exc_info)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/compat.py", line 398, in raise_from_cause
+    reraise(type(exception), exception, tb=exc_tb, cause=cause)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/compat.py", line 152, in reraise
+    raise value.with_traceback(tb)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/base.py", line 2275, in _wrap_pool_connect
+    return fn()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 363, in connect
+    return _ConnectionFairy._checkout(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 760, in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 492, in checkout
+    rec = pool._do_get()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/impl.py", line 139, in _do_get
+    self._dec_overflow()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/langhelpers.py", line 68, in __exit__
+    compat.reraise(exc_type, exc_value, exc_tb)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/compat.py", line 153, in reraise
+    raise value
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/impl.py", line 136, in _do_get
+    return self._create_connection()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 308, in _create_connection
+    return _ConnectionRecord(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 437, in __init__
+    self.__connect(first_connect_check=True)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 639, in __connect
+    connection = pool._invoke_creator(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/strategies.py", line 114, in connect
+    return dialect.connect(*cargs, **cparams)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/default.py", line 453, in connect
+    return self.dbapi.connect(*cargs, **cparams)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/__init__.py", line 94, in Connect
+    return Connection(*args, **kwargs)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/connections.py", line 325, in __init__
+    self.connect()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/connections.py", line 630, in connect
+    raise exc
+sqlalchemy.exc.OperationalError: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on 'cp02.azehosting.net' ([Errno 111] Connection refused)")
+(Background on this error at: http://sqlalche.me/e/e3q8)
+[2020-05-13 22:07:12,291] ERROR in app: Exception on /api/profile [GET]
+Traceback (most recent call last):
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/connections.py", line 583, in connect
+    **kwargs)
+  File "/opt/alt/python37/lib64/python3.7/socket.py", line 727, in create_connection
+    raise err
+  File "/opt/alt/python37/lib64/python3.7/socket.py", line 716, in create_connection
+    sock.connect(sa)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/base.py", line 2275, in _wrap_pool_connect
+    return fn()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 363, in connect
+    return _ConnectionFairy._checkout(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 760, in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 492, in checkout
+    rec = pool._do_get()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/impl.py", line 139, in _do_get
+    self._dec_overflow()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/langhelpers.py", line 68, in __exit__
+    compat.reraise(exc_type, exc_value, exc_tb)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/compat.py", line 153, in reraise
+    raise value
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/impl.py", line 136, in _do_get
+    return self._create_connection()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 308, in _create_connection
+    return _ConnectionRecord(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 437, in __init__
+    self.__connect(first_connect_check=True)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 639, in __connect
+    connection = pool._invoke_creator(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/strategies.py", line 114, in connect
+    return dialect.connect(*cargs, **cparams)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/default.py", line 453, in connect
+    return self.dbapi.connect(*cargs, **cparams)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/__init__.py", line 94, in Connect
+    return Connection(*args, **kwargs)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/connections.py", line 325, in __init__
+    self.connect()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/connections.py", line 630, in connect
+    raise exc
+pymysql.err.OperationalError: (2003, "Can't connect to MySQL server on 'cp02.azehosting.net' ([Errno 111] Connection refused)")
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/flask/app.py", line 1612, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/flask/app.py", line 1598, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/flask_restful/__init__.py", line 480, in wrapper
+    resp = resource(*args, **kwargs)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/flask_httpauth.py", line 147, in decorated
+    user = self.authenticate(auth, password)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/flask_httpauth.py", line 202, in authenticate
+    return self.verify_password_callback(username, client_password)
+  File "/home/andreas2/rankingapi/app/__init__.py", line 56, in verify_password
+    user = User.verify_auth_token(username_or_token)
+  File "/home/andreas2/rankingapi/app/models/UserModel.py", line 34, in verify_auth_token
+    user = User.query.get(data['id'])
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 959, in get
+    return self._get_impl(ident, loading.load_on_pk_identity)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 1069, in _get_impl
+    return db_load_fn(self, primary_key_identity)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/loading.py", line 282, in load_on_pk_identity
+    return q.one()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3292, in one
+    ret = self.one_or_none()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3261, in one_or_none
+    ret = list(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3334, in __iter__
+    return self._execute_and_instances(context)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3356, in _execute_and_instances
+    querycontext, self._connection_from_session, close_with_result=True
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3371, in _get_bind_args
+    mapper=self._bind_mapper(), clause=querycontext.statement, **kw
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3349, in _connection_from_session
+    conn = self.session.connection(**kw)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/session.py", line 1124, in connection
+    execution_options=execution_options,
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/session.py", line 1130, in _connection_for_bind
+    engine, execution_options
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/session.py", line 431, in _connection_for_bind
+    conn = bind._contextual_connect()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/base.py", line 2239, in _contextual_connect
+    self._wrap_pool_connect(self.pool.connect, None),
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/base.py", line 2279, in _wrap_pool_connect
+    e, dialect, self
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/base.py", line 1544, in _handle_dbapi_exception_noconnection
+    util.raise_from_cause(sqlalchemy_exception, exc_info)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/compat.py", line 398, in raise_from_cause
+    reraise(type(exception), exception, tb=exc_tb, cause=cause)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/compat.py", line 152, in reraise
+    raise value.with_traceback(tb)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/base.py", line 2275, in _wrap_pool_connect
+    return fn()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 363, in connect
+    return _ConnectionFairy._checkout(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 760, in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 492, in checkout
+    rec = pool._do_get()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/impl.py", line 139, in _do_get
+    self._dec_overflow()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/langhelpers.py", line 68, in __exit__
+    compat.reraise(exc_type, exc_value, exc_tb)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/compat.py", line 153, in reraise
+    raise value
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/impl.py", line 136, in _do_get
+    return self._create_connection()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 308, in _create_connection
+    return _ConnectionRecord(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 437, in __init__
+    self.__connect(first_connect_check=True)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 639, in __connect
+    connection = pool._invoke_creator(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/strategies.py", line 114, in connect
+    return dialect.connect(*cargs, **cparams)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/default.py", line 453, in connect
+    return self.dbapi.connect(*cargs, **cparams)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/__init__.py", line 94, in Connect
+    return Connection(*args, **kwargs)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/connections.py", line 325, in __init__
+    self.connect()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/connections.py", line 630, in connect
+    raise exc
+sqlalchemy.exc.OperationalError: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on 'cp02.azehosting.net' ([Errno 111] Connection refused)")
+(Background on this error at: http://sqlalche.me/e/e3q8)
+[2020-05-13 22:08:12,601] ERROR in app: Exception on /api/rankings/DRL [GET]
+Traceback (most recent call last):
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/connections.py", line 583, in connect
+    **kwargs)
+  File "/opt/alt/python37/lib64/python3.7/socket.py", line 727, in create_connection
+    raise err
+  File "/opt/alt/python37/lib64/python3.7/socket.py", line 716, in create_connection
+    sock.connect(sa)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/base.py", line 2275, in _wrap_pool_connect
+    return fn()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 363, in connect
+    return _ConnectionFairy._checkout(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 760, in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 492, in checkout
+    rec = pool._do_get()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/impl.py", line 139, in _do_get
+    self._dec_overflow()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/langhelpers.py", line 68, in __exit__
+    compat.reraise(exc_type, exc_value, exc_tb)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/compat.py", line 153, in reraise
+    raise value
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/impl.py", line 136, in _do_get
+    return self._create_connection()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 308, in _create_connection
+    return _ConnectionRecord(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 437, in __init__
+    self.__connect(first_connect_check=True)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 639, in __connect
+    connection = pool._invoke_creator(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/strategies.py", line 114, in connect
+    return dialect.connect(*cargs, **cparams)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/default.py", line 453, in connect
+    return self.dbapi.connect(*cargs, **cparams)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/__init__.py", line 94, in Connect
+    return Connection(*args, **kwargs)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/connections.py", line 325, in __init__
+    self.connect()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/connections.py", line 630, in connect
+    raise exc
+pymysql.err.OperationalError: (2003, "Can't connect to MySQL server on 'cp02.azehosting.net' ([Errno 111] Connection refused)")
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/flask/app.py", line 1612, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/flask/app.py", line 1598, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/flask_restful/__init__.py", line 480, in wrapper
+    resp = resource(*args, **kwargs)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/flask/views.py", line 84, in view
+    return self.dispatch_request(*args, **kwargs)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/flask_restful/__init__.py", line 595, in dispatch_request
+    resp = meth(*args, **kwargs)
+  File "/home/andreas2/rankingapi/app/resources/Ranking.py", line 64, in get
+    ranking = RankingList.query.filter_by(shortname=listname).first()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3232, in first
+    ret = list(self[0:1])
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3018, in __getitem__
+    return list(res)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3334, in __iter__
+    return self._execute_and_instances(context)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3356, in _execute_and_instances
+    querycontext, self._connection_from_session, close_with_result=True
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3371, in _get_bind_args
+    mapper=self._bind_mapper(), clause=querycontext.statement, **kw
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3349, in _connection_from_session
+    conn = self.session.connection(**kw)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/session.py", line 1124, in connection
+    execution_options=execution_options,
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/session.py", line 1130, in _connection_for_bind
+    engine, execution_options
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/session.py", line 431, in _connection_for_bind
+    conn = bind._contextual_connect()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/base.py", line 2239, in _contextual_connect
+    self._wrap_pool_connect(self.pool.connect, None),
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/base.py", line 2279, in _wrap_pool_connect
+    e, dialect, self
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/base.py", line 1544, in _handle_dbapi_exception_noconnection
+    util.raise_from_cause(sqlalchemy_exception, exc_info)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/compat.py", line 398, in raise_from_cause
+    reraise(type(exception), exception, tb=exc_tb, cause=cause)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/compat.py", line 152, in reraise
+    raise value.with_traceback(tb)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/base.py", line 2275, in _wrap_pool_connect
+    return fn()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 363, in connect
+    return _ConnectionFairy._checkout(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 760, in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 492, in checkout
+    rec = pool._do_get()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/impl.py", line 139, in _do_get
+    self._dec_overflow()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/langhelpers.py", line 68, in __exit__
+    compat.reraise(exc_type, exc_value, exc_tb)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/compat.py", line 153, in reraise
+    raise value
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/impl.py", line 136, in _do_get
+    return self._create_connection()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 308, in _create_connection
+    return _ConnectionRecord(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 437, in __init__
+    self.__connect(first_connect_check=True)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 639, in __connect
+    connection = pool._invoke_creator(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/strategies.py", line 114, in connect
+    return dialect.connect(*cargs, **cparams)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/default.py", line 453, in connect
+    return self.dbapi.connect(*cargs, **cparams)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/__init__.py", line 94, in Connect
+    return Connection(*args, **kwargs)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/connections.py", line 325, in __init__
+    self.connect()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/connections.py", line 630, in connect
+    raise exc
+sqlalchemy.exc.OperationalError: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on 'cp02.azehosting.net' ([Errno 111] Connection refused)")
+(Background on this error at: http://sqlalche.me/e/e3q8)
+[2020-05-13 22:08:12,602] ERROR in app: Exception on /api/profile [GET]
+Traceback (most recent call last):
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/connections.py", line 583, in connect
+    **kwargs)
+  File "/opt/alt/python37/lib64/python3.7/socket.py", line 727, in create_connection
+    raise err
+  File "/opt/alt/python37/lib64/python3.7/socket.py", line 716, in create_connection
+    sock.connect(sa)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/base.py", line 2275, in _wrap_pool_connect
+    return fn()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 363, in connect
+    return _ConnectionFairy._checkout(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 760, in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 492, in checkout
+    rec = pool._do_get()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/impl.py", line 139, in _do_get
+    self._dec_overflow()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/langhelpers.py", line 68, in __exit__
+    compat.reraise(exc_type, exc_value, exc_tb)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/compat.py", line 153, in reraise
+    raise value
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/impl.py", line 136, in _do_get
+    return self._create_connection()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 308, in _create_connection
+    return _ConnectionRecord(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 437, in __init__
+    self.__connect(first_connect_check=True)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 639, in __connect
+    connection = pool._invoke_creator(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/strategies.py", line 114, in connect
+    return dialect.connect(*cargs, **cparams)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/default.py", line 453, in connect
+    return self.dbapi.connect(*cargs, **cparams)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/__init__.py", line 94, in Connect
+    return Connection(*args, **kwargs)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/connections.py", line 325, in __init__
+    self.connect()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/connections.py", line 630, in connect
+    raise exc
+pymysql.err.OperationalError: (2003, "Can't connect to MySQL server on 'cp02.azehosting.net' ([Errno 111] Connection refused)")
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/flask/app.py", line 1612, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/flask/app.py", line 1598, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/flask_restful/__init__.py", line 480, in wrapper
+    resp = resource(*args, **kwargs)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/flask_httpauth.py", line 147, in decorated
+    user = self.authenticate(auth, password)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/flask_httpauth.py", line 202, in authenticate
+    return self.verify_password_callback(username, client_password)
+  File "/home/andreas2/rankingapi/app/__init__.py", line 59, in verify_password
+    user = User.query.filter_by(username = username_or_token).first()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3232, in first
+    ret = list(self[0:1])
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3018, in __getitem__
+    return list(res)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3334, in __iter__
+    return self._execute_and_instances(context)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3356, in _execute_and_instances
+    querycontext, self._connection_from_session, close_with_result=True
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3371, in _get_bind_args
+    mapper=self._bind_mapper(), clause=querycontext.statement, **kw
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3349, in _connection_from_session
+    conn = self.session.connection(**kw)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/session.py", line 1124, in connection
+    execution_options=execution_options,
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/session.py", line 1130, in _connection_for_bind
+    engine, execution_options
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/session.py", line 431, in _connection_for_bind
+    conn = bind._contextual_connect()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/base.py", line 2239, in _contextual_connect
+    self._wrap_pool_connect(self.pool.connect, None),
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/base.py", line 2279, in _wrap_pool_connect
+    e, dialect, self
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/base.py", line 1544, in _handle_dbapi_exception_noconnection
+    util.raise_from_cause(sqlalchemy_exception, exc_info)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/compat.py", line 398, in raise_from_cause
+    reraise(type(exception), exception, tb=exc_tb, cause=cause)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/compat.py", line 152, in reraise
+    raise value.with_traceback(tb)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/base.py", line 2275, in _wrap_pool_connect
+    return fn()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 363, in connect
+    return _ConnectionFairy._checkout(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 760, in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 492, in checkout
+    rec = pool._do_get()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/impl.py", line 139, in _do_get
+    self._dec_overflow()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/langhelpers.py", line 68, in __exit__
+    compat.reraise(exc_type, exc_value, exc_tb)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/compat.py", line 153, in reraise
+    raise value
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/impl.py", line 136, in _do_get
+    return self._create_connection()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 308, in _create_connection
+    return _ConnectionRecord(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 437, in __init__
+    self.__connect(first_connect_check=True)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 639, in __connect
+    connection = pool._invoke_creator(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/strategies.py", line 114, in connect
+    return dialect.connect(*cargs, **cparams)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/default.py", line 453, in connect
+    return self.dbapi.connect(*cargs, **cparams)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/__init__.py", line 94, in Connect
+    return Connection(*args, **kwargs)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/connections.py", line 325, in __init__
+    self.connect()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/connections.py", line 630, in connect
+    raise exc
+sqlalchemy.exc.OperationalError: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on 'cp02.azehosting.net' ([Errno 111] Connection refused)")
+(Background on this error at: http://sqlalche.me/e/e3q8)
+[2020-05-13 22:08:12,626] ERROR in app: Exception on /api/rankings [GET]
+Traceback (most recent call last):
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/connections.py", line 583, in connect
+    **kwargs)
+  File "/opt/alt/python37/lib64/python3.7/socket.py", line 727, in create_connection
+    raise err
+  File "/opt/alt/python37/lib64/python3.7/socket.py", line 716, in create_connection
+    sock.connect(sa)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/base.py", line 2275, in _wrap_pool_connect
+    return fn()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 363, in connect
+    return _ConnectionFairy._checkout(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 760, in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 492, in checkout
+    rec = pool._do_get()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/impl.py", line 139, in _do_get
+    self._dec_overflow()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/langhelpers.py", line 68, in __exit__
+    compat.reraise(exc_type, exc_value, exc_tb)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/compat.py", line 153, in reraise
+    raise value
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/impl.py", line 136, in _do_get
+    return self._create_connection()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 308, in _create_connection
+    return _ConnectionRecord(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 437, in __init__
+    self.__connect(first_connect_check=True)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 639, in __connect
+    connection = pool._invoke_creator(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/strategies.py", line 114, in connect
+    return dialect.connect(*cargs, **cparams)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/default.py", line 453, in connect
+    return self.dbapi.connect(*cargs, **cparams)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/__init__.py", line 94, in Connect
+    return Connection(*args, **kwargs)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/connections.py", line 325, in __init__
+    self.connect()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/connections.py", line 630, in connect
+    raise exc
+pymysql.err.OperationalError: (2003, "Can't connect to MySQL server on 'cp02.azehosting.net' ([Errno 111] Connection refused)")
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/flask/app.py", line 1612, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/flask/app.py", line 1598, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/flask_restful/__init__.py", line 480, in wrapper
+    resp = resource(*args, **kwargs)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/flask/views.py", line 84, in view
+    return self.dispatch_request(*args, **kwargs)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/flask_restful/__init__.py", line 595, in dispatch_request
+    resp = meth(*args, **kwargs)
+  File "/home/andreas2/rankingapi/app/resources/Ranking.py", line 25, in get
+    rankings = RankingList.query.all()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3178, in all
+    return list(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3334, in __iter__
+    return self._execute_and_instances(context)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3356, in _execute_and_instances
+    querycontext, self._connection_from_session, close_with_result=True
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3371, in _get_bind_args
+    mapper=self._bind_mapper(), clause=querycontext.statement, **kw
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3349, in _connection_from_session
+    conn = self.session.connection(**kw)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/session.py", line 1124, in connection
+    execution_options=execution_options,
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/session.py", line 1130, in _connection_for_bind
+    engine, execution_options
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/session.py", line 431, in _connection_for_bind
+    conn = bind._contextual_connect()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/base.py", line 2239, in _contextual_connect
+    self._wrap_pool_connect(self.pool.connect, None),
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/base.py", line 2279, in _wrap_pool_connect
+    e, dialect, self
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/base.py", line 1544, in _handle_dbapi_exception_noconnection
+    util.raise_from_cause(sqlalchemy_exception, exc_info)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/compat.py", line 398, in raise_from_cause
+    reraise(type(exception), exception, tb=exc_tb, cause=cause)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/compat.py", line 152, in reraise
+    raise value.with_traceback(tb)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/base.py", line 2275, in _wrap_pool_connect
+    return fn()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 363, in connect
+    return _ConnectionFairy._checkout(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 760, in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 492, in checkout
+    rec = pool._do_get()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/impl.py", line 139, in _do_get
+    self._dec_overflow()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/langhelpers.py", line 68, in __exit__
+    compat.reraise(exc_type, exc_value, exc_tb)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/compat.py", line 153, in reraise
+    raise value
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/impl.py", line 136, in _do_get
+    return self._create_connection()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 308, in _create_connection
+    return _ConnectionRecord(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 437, in __init__
+    self.__connect(first_connect_check=True)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 639, in __connect
+    connection = pool._invoke_creator(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/strategies.py", line 114, in connect
+    return dialect.connect(*cargs, **cparams)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/default.py", line 453, in connect
+    return self.dbapi.connect(*cargs, **cparams)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/__init__.py", line 94, in Connect
+    return Connection(*args, **kwargs)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/connections.py", line 325, in __init__
+    self.connect()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/connections.py", line 630, in connect
+    raise exc
+sqlalchemy.exc.OperationalError: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on 'cp02.azehosting.net' ([Errno 111] Connection refused)")
+(Background on this error at: http://sqlalche.me/e/e3q8)
+[2020-05-13 22:08:12,624] ERROR in app: Exception on /api/profile [GET]
+Traceback (most recent call last):
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/connections.py", line 583, in connect
+    **kwargs)
+  File "/opt/alt/python37/lib64/python3.7/socket.py", line 727, in create_connection
+    raise err
+  File "/opt/alt/python37/lib64/python3.7/socket.py", line 716, in create_connection
+    sock.connect(sa)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/base.py", line 2275, in _wrap_pool_connect
+    return fn()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 363, in connect
+    return _ConnectionFairy._checkout(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 760, in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 492, in checkout
+    rec = pool._do_get()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/impl.py", line 139, in _do_get
+    self._dec_overflow()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/langhelpers.py", line 68, in __exit__
+    compat.reraise(exc_type, exc_value, exc_tb)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/compat.py", line 153, in reraise
+    raise value
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/impl.py", line 136, in _do_get
+    return self._create_connection()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 308, in _create_connection
+    return _ConnectionRecord(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 437, in __init__
+    self.__connect(first_connect_check=True)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 639, in __connect
+    connection = pool._invoke_creator(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/strategies.py", line 114, in connect
+    return dialect.connect(*cargs, **cparams)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/default.py", line 453, in connect
+    return self.dbapi.connect(*cargs, **cparams)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/__init__.py", line 94, in Connect
+    return Connection(*args, **kwargs)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/connections.py", line 325, in __init__
+    self.connect()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/connections.py", line 630, in connect
+    raise exc
+pymysql.err.OperationalError: (2003, "Can't connect to MySQL server on 'cp02.azehosting.net' ([Errno 111] Connection refused)")
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/flask/app.py", line 1612, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/flask/app.py", line 1598, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/flask_restful/__init__.py", line 480, in wrapper
+    resp = resource(*args, **kwargs)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/flask_httpauth.py", line 147, in decorated
+    user = self.authenticate(auth, password)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/flask_httpauth.py", line 202, in authenticate
+    return self.verify_password_callback(username, client_password)
+  File "/home/andreas2/rankingapi/app/__init__.py", line 59, in verify_password
+    user = User.query.filter_by(username = username_or_token).first()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3232, in first
+    ret = list(self[0:1])
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3018, in __getitem__
+    return list(res)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3334, in __iter__
+    return self._execute_and_instances(context)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3356, in _execute_and_instances
+    querycontext, self._connection_from_session, close_with_result=True
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3371, in _get_bind_args
+    mapper=self._bind_mapper(), clause=querycontext.statement, **kw
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3349, in _connection_from_session
+    conn = self.session.connection(**kw)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/session.py", line 1124, in connection
+    execution_options=execution_options,
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/session.py", line 1130, in _connection_for_bind
+    engine, execution_options
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/session.py", line 431, in _connection_for_bind
+    conn = bind._contextual_connect()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/base.py", line 2239, in _contextual_connect
+    self._wrap_pool_connect(self.pool.connect, None),
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/base.py", line 2279, in _wrap_pool_connect
+    e, dialect, self
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/base.py", line 1544, in _handle_dbapi_exception_noconnection
+    util.raise_from_cause(sqlalchemy_exception, exc_info)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/compat.py", line 398, in raise_from_cause
+    reraise(type(exception), exception, tb=exc_tb, cause=cause)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/compat.py", line 152, in reraise
+    raise value.with_traceback(tb)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/base.py", line 2275, in _wrap_pool_connect
+    return fn()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 363, in connect
+    return _ConnectionFairy._checkout(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 760, in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 492, in checkout
+    rec = pool._do_get()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/impl.py", line 139, in _do_get
+    self._dec_overflow()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/langhelpers.py", line 68, in __exit__
+    compat.reraise(exc_type, exc_value, exc_tb)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/compat.py", line 153, in reraise
+    raise value
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/impl.py", line 136, in _do_get
+    return self._create_connection()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 308, in _create_connection
+    return _ConnectionRecord(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 437, in __init__
+    self.__connect(first_connect_check=True)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 639, in __connect
+    connection = pool._invoke_creator(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/strategies.py", line 114, in connect
+    return dialect.connect(*cargs, **cparams)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/default.py", line 453, in connect
+    return self.dbapi.connect(*cargs, **cparams)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/__init__.py", line 94, in Connect
+    return Connection(*args, **kwargs)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/connections.py", line 325, in __init__
+    self.connect()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/connections.py", line 630, in connect
+    raise exc
+sqlalchemy.exc.OperationalError: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on 'cp02.azehosting.net' ([Errno 111] Connection refused)")
+(Background on this error at: http://sqlalche.me/e/e3q8)
+[2020-05-13 22:09:15,540] ERROR in app: Exception on /api/rankings [GET]
+Traceback (most recent call last):
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/connections.py", line 583, in connect
+    **kwargs)
+  File "/opt/alt/python37/lib64/python3.7/socket.py", line 727, in create_connection
+    raise err
+  File "/opt/alt/python37/lib64/python3.7/socket.py", line 716, in create_connection
+    sock.connect(sa)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/base.py", line 2275, in _wrap_pool_connect
+    return fn()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 363, in connect
+    return _ConnectionFairy._checkout(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 760, in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 492, in checkout
+    rec = pool._do_get()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/impl.py", line 139, in _do_get
+    self._dec_overflow()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/langhelpers.py", line 68, in __exit__
+    compat.reraise(exc_type, exc_value, exc_tb)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/compat.py", line 153, in reraise
+    raise value
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/impl.py", line 136, in _do_get
+    return self._create_connection()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 308, in _create_connection
+    return _ConnectionRecord(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 437, in __init__
+    self.__connect(first_connect_check=True)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 639, in __connect
+    connection = pool._invoke_creator(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/strategies.py", line 114, in connect
+    return dialect.connect(*cargs, **cparams)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/default.py", line 453, in connect
+    return self.dbapi.connect(*cargs, **cparams)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/__init__.py", line 94, in Connect
+    return Connection(*args, **kwargs)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/connections.py", line 325, in __init__
+    self.connect()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/connections.py", line 630, in connect
+    raise exc
+pymysql.err.OperationalError: (2003, "Can't connect to MySQL server on 'cp02.azehosting.net' ([Errno 111] Connection refused)")
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/flask/app.py", line 1612, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/flask/app.py", line 1598, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/flask_restful/__init__.py", line 480, in wrapper
+    resp = resource(*args, **kwargs)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/flask/views.py", line 84, in view
+    return self.dispatch_request(*args, **kwargs)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/flask_restful/__init__.py", line 595, in dispatch_request
+    resp = meth(*args, **kwargs)
+  File "/home/andreas2/rankingapi/app/resources/Ranking.py", line 25, in get
+    rankings = RankingList.query.all()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3178, in all
+    return list(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3334, in __iter__
+    return self._execute_and_instances(context)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3356, in _execute_and_instances
+    querycontext, self._connection_from_session, close_with_result=True
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3371, in _get_bind_args
+    mapper=self._bind_mapper(), clause=querycontext.statement, **kw
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3349, in _connection_from_session
+    conn = self.session.connection(**kw)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/session.py", line 1124, in connection
+    execution_options=execution_options,
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/session.py", line 1130, in _connection_for_bind
+    engine, execution_options
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/session.py", line 431, in _connection_for_bind
+    conn = bind._contextual_connect()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/base.py", line 2239, in _contextual_connect
+    self._wrap_pool_connect(self.pool.connect, None),
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/base.py", line 2279, in _wrap_pool_connect
+    e, dialect, self
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/base.py", line 1544, in _handle_dbapi_exception_noconnection
+    util.raise_from_cause(sqlalchemy_exception, exc_info)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/compat.py", line 398, in raise_from_cause
+    reraise(type(exception), exception, tb=exc_tb, cause=cause)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/compat.py", line 152, in reraise
+    raise value.with_traceback(tb)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/base.py", line 2275, in _wrap_pool_connect
+    return fn()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 363, in connect
+    return _ConnectionFairy._checkout(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 760, in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 492, in checkout
+    rec = pool._do_get()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/impl.py", line 139, in _do_get
+    self._dec_overflow()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/langhelpers.py", line 68, in __exit__
+    compat.reraise(exc_type, exc_value, exc_tb)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/compat.py", line 153, in reraise
+    raise value
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/impl.py", line 136, in _do_get
+    return self._create_connection()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 308, in _create_connection
+    return _ConnectionRecord(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 437, in __init__
+    self.__connect(first_connect_check=True)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 639, in __connect
+    connection = pool._invoke_creator(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/strategies.py", line 114, in connect
+    return dialect.connect(*cargs, **cparams)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/default.py", line 453, in connect
+    return self.dbapi.connect(*cargs, **cparams)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/__init__.py", line 94, in Connect
+    return Connection(*args, **kwargs)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/connections.py", line 325, in __init__
+    self.connect()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/connections.py", line 630, in connect
+    raise exc
+sqlalchemy.exc.OperationalError: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on 'cp02.azehosting.net' ([Errno 111] Connection refused)")
+(Background on this error at: http://sqlalche.me/e/e3q8)
+[2020-05-13 22:09:15,541] ERROR in app: Exception on /api/profile [GET]
+Traceback (most recent call last):
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/connections.py", line 583, in connect
+    **kwargs)
+  File "/opt/alt/python37/lib64/python3.7/socket.py", line 727, in create_connection
+    raise err
+  File "/opt/alt/python37/lib64/python3.7/socket.py", line 716, in create_connection
+    sock.connect(sa)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/base.py", line 2275, in _wrap_pool_connect
+    return fn()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 363, in connect
+    return _ConnectionFairy._checkout(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 760, in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 492, in checkout
+    rec = pool._do_get()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/impl.py", line 139, in _do_get
+    self._dec_overflow()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/langhelpers.py", line 68, in __exit__
+    compat.reraise(exc_type, exc_value, exc_tb)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/compat.py", line 153, in reraise
+    raise value
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/impl.py", line 136, in _do_get
+    return self._create_connection()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 308, in _create_connection
+    return _ConnectionRecord(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 437, in __init__
+    self.__connect(first_connect_check=True)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 639, in __connect
+    connection = pool._invoke_creator(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/strategies.py", line 114, in connect
+    return dialect.connect(*cargs, **cparams)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/default.py", line 453, in connect
+    return self.dbapi.connect(*cargs, **cparams)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/__init__.py", line 94, in Connect
+    return Connection(*args, **kwargs)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/connections.py", line 325, in __init__
+    self.connect()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/connections.py", line 630, in connect
+    raise exc
+pymysql.err.OperationalError: (2003, "Can't connect to MySQL server on 'cp02.azehosting.net' ([Errno 111] Connection refused)")
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/flask/app.py", line 1612, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/flask/app.py", line 1598, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/flask_restful/__init__.py", line 480, in wrapper
+    resp = resource(*args, **kwargs)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/flask_httpauth.py", line 147, in decorated
+    user = self.authenticate(auth, password)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/flask_httpauth.py", line 202, in authenticate
+    return self.verify_password_callback(username, client_password)
+  File "/home/andreas2/rankingapi/app/__init__.py", line 59, in verify_password
+    user = User.query.filter_by(username = username_or_token).first()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3232, in first
+    ret = list(self[0:1])
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3018, in __getitem__
+    return list(res)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3334, in __iter__
+    return self._execute_and_instances(context)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3356, in _execute_and_instances
+    querycontext, self._connection_from_session, close_with_result=True
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3371, in _get_bind_args
+    mapper=self._bind_mapper(), clause=querycontext.statement, **kw
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3349, in _connection_from_session
+    conn = self.session.connection(**kw)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/session.py", line 1124, in connection
+    execution_options=execution_options,
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/session.py", line 1130, in _connection_for_bind
+    engine, execution_options
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/session.py", line 431, in _connection_for_bind
+    conn = bind._contextual_connect()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/base.py", line 2239, in _contextual_connect
+    self._wrap_pool_connect(self.pool.connect, None),
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/base.py", line 2279, in _wrap_pool_connect
+    e, dialect, self
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/base.py", line 1544, in _handle_dbapi_exception_noconnection
+    util.raise_from_cause(sqlalchemy_exception, exc_info)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/compat.py", line 398, in raise_from_cause
+    reraise(type(exception), exception, tb=exc_tb, cause=cause)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/compat.py", line 152, in reraise
+    raise value.with_traceback(tb)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/base.py", line 2275, in _wrap_pool_connect
+    return fn()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 363, in connect
+    return _ConnectionFairy._checkout(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 760, in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 492, in checkout
+    rec = pool._do_get()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/impl.py", line 139, in _do_get
+    self._dec_overflow()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/langhelpers.py", line 68, in __exit__
+    compat.reraise(exc_type, exc_value, exc_tb)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/compat.py", line 153, in reraise
+    raise value
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/impl.py", line 136, in _do_get
+    return self._create_connection()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 308, in _create_connection
+    return _ConnectionRecord(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 437, in __init__
+    self.__connect(first_connect_check=True)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 639, in __connect
+    connection = pool._invoke_creator(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/strategies.py", line 114, in connect
+    return dialect.connect(*cargs, **cparams)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/default.py", line 453, in connect
+    return self.dbapi.connect(*cargs, **cparams)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/__init__.py", line 94, in Connect
+    return Connection(*args, **kwargs)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/connections.py", line 325, in __init__
+    self.connect()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/connections.py", line 630, in connect
+    raise exc
+sqlalchemy.exc.OperationalError: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on 'cp02.azehosting.net' ([Errno 111] Connection refused)")
+(Background on this error at: http://sqlalche.me/e/e3q8)
+[2020-05-13 22:09:15,545] ERROR in app: Exception on /api/profile [GET]
+Traceback (most recent call last):
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/connections.py", line 583, in connect
+    **kwargs)
+  File "/opt/alt/python37/lib64/python3.7/socket.py", line 727, in create_connection
+    raise err
+  File "/opt/alt/python37/lib64/python3.7/socket.py", line 716, in create_connection
+    sock.connect(sa)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/base.py", line 2275, in _wrap_pool_connect
+    return fn()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 363, in connect
+    return _ConnectionFairy._checkout(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 760, in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 492, in checkout
+    rec = pool._do_get()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/impl.py", line 139, in _do_get
+    self._dec_overflow()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/langhelpers.py", line 68, in __exit__
+    compat.reraise(exc_type, exc_value, exc_tb)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/compat.py", line 153, in reraise
+    raise value
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/impl.py", line 136, in _do_get
+    return self._create_connection()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 308, in _create_connection
+    return _ConnectionRecord(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 437, in __init__
+    self.__connect(first_connect_check=True)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 639, in __connect
+    connection = pool._invoke_creator(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/strategies.py", line 114, in connect
+    return dialect.connect(*cargs, **cparams)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/default.py", line 453, in connect
+    return self.dbapi.connect(*cargs, **cparams)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/__init__.py", line 94, in Connect
+    return Connection(*args, **kwargs)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/connections.py", line 325, in __init__
+    self.connect()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/connections.py", line 630, in connect
+    raise exc
+pymysql.err.OperationalError: (2003, "Can't connect to MySQL server on 'cp02.azehosting.net' ([Errno 111] Connection refused)")
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/flask/app.py", line 1612, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/flask/app.py", line 1598, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/flask_restful/__init__.py", line 480, in wrapper
+    resp = resource(*args, **kwargs)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/flask_httpauth.py", line 147, in decorated
+    user = self.authenticate(auth, password)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/flask_httpauth.py", line 202, in authenticate
+    return self.verify_password_callback(username, client_password)
+  File "/home/andreas2/rankingapi/app/__init__.py", line 59, in verify_password
+    user = User.query.filter_by(username = username_or_token).first()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3232, in first
+    ret = list(self[0:1])
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3018, in __getitem__
+    return list(res)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3334, in __iter__
+    return self._execute_and_instances(context)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3356, in _execute_and_instances
+    querycontext, self._connection_from_session, close_with_result=True
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3371, in _get_bind_args
+    mapper=self._bind_mapper(), clause=querycontext.statement, **kw
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3349, in _connection_from_session
+    conn = self.session.connection(**kw)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/session.py", line 1124, in connection
+    execution_options=execution_options,
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/session.py", line 1130, in _connection_for_bind
+    engine, execution_options
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/session.py", line 431, in _connection_for_bind
+    conn = bind._contextual_connect()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/base.py", line 2239, in _contextual_connect
+    self._wrap_pool_connect(self.pool.connect, None),
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/base.py", line 2279, in _wrap_pool_connect
+    e, dialect, self
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/base.py", line 1544, in _handle_dbapi_exception_noconnection
+    util.raise_from_cause(sqlalchemy_exception, exc_info)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/compat.py", line 398, in raise_from_cause
+    reraise(type(exception), exception, tb=exc_tb, cause=cause)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/compat.py", line 152, in reraise
+    raise value.with_traceback(tb)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/base.py", line 2275, in _wrap_pool_connect
+    return fn()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 363, in connect
+    return _ConnectionFairy._checkout(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 760, in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 492, in checkout
+    rec = pool._do_get()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/impl.py", line 139, in _do_get
+    self._dec_overflow()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/langhelpers.py", line 68, in __exit__
+    compat.reraise(exc_type, exc_value, exc_tb)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/compat.py", line 153, in reraise
+    raise value
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/impl.py", line 136, in _do_get
+    return self._create_connection()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 308, in _create_connection
+    return _ConnectionRecord(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 437, in __init__
+    self.__connect(first_connect_check=True)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 639, in __connect
+    connection = pool._invoke_creator(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/strategies.py", line 114, in connect
+    return dialect.connect(*cargs, **cparams)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/default.py", line 453, in connect
+    return self.dbapi.connect(*cargs, **cparams)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/__init__.py", line 94, in Connect
+    return Connection(*args, **kwargs)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/connections.py", line 325, in __init__
+    self.connect()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/connections.py", line 630, in connect
+    raise exc
+sqlalchemy.exc.OperationalError: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on 'cp02.azehosting.net' ([Errno 111] Connection refused)")
+(Background on this error at: http://sqlalche.me/e/e3q8)
+[2020-05-13 22:09:15,561] ERROR in app: Exception on /api/rankings/DRL [GET]
+Traceback (most recent call last):
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/connections.py", line 583, in connect
+    **kwargs)
+  File "/opt/alt/python37/lib64/python3.7/socket.py", line 727, in create_connection
+    raise err
+  File "/opt/alt/python37/lib64/python3.7/socket.py", line 716, in create_connection
+    sock.connect(sa)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/base.py", line 2275, in _wrap_pool_connect
+    return fn()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 363, in connect
+    return _ConnectionFairy._checkout(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 760, in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 492, in checkout
+    rec = pool._do_get()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/impl.py", line 139, in _do_get
+    self._dec_overflow()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/langhelpers.py", line 68, in __exit__
+    compat.reraise(exc_type, exc_value, exc_tb)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/compat.py", line 153, in reraise
+    raise value
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/impl.py", line 136, in _do_get
+    return self._create_connection()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 308, in _create_connection
+    return _ConnectionRecord(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 437, in __init__
+    self.__connect(first_connect_check=True)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 639, in __connect
+    connection = pool._invoke_creator(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/strategies.py", line 114, in connect
+    return dialect.connect(*cargs, **cparams)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/default.py", line 453, in connect
+    return self.dbapi.connect(*cargs, **cparams)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/__init__.py", line 94, in Connect
+    return Connection(*args, **kwargs)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/connections.py", line 325, in __init__
+    self.connect()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/connections.py", line 630, in connect
+    raise exc
+pymysql.err.OperationalError: (2003, "Can't connect to MySQL server on 'cp02.azehosting.net' ([Errno 111] Connection refused)")
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/flask/app.py", line 1612, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/flask/app.py", line 1598, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/flask_restful/__init__.py", line 480, in wrapper
+    resp = resource(*args, **kwargs)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/flask/views.py", line 84, in view
+    return self.dispatch_request(*args, **kwargs)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/flask_restful/__init__.py", line 595, in dispatch_request
+    resp = meth(*args, **kwargs)
+  File "/home/andreas2/rankingapi/app/resources/Ranking.py", line 64, in get
+    ranking = RankingList.query.filter_by(shortname=listname).first()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3232, in first
+    ret = list(self[0:1])
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3018, in __getitem__
+    return list(res)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3334, in __iter__
+    return self._execute_and_instances(context)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3356, in _execute_and_instances
+    querycontext, self._connection_from_session, close_with_result=True
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3371, in _get_bind_args
+    mapper=self._bind_mapper(), clause=querycontext.statement, **kw
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/query.py", line 3349, in _connection_from_session
+    conn = self.session.connection(**kw)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/session.py", line 1124, in connection
+    execution_options=execution_options,
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/session.py", line 1130, in _connection_for_bind
+    engine, execution_options
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/orm/session.py", line 431, in _connection_for_bind
+    conn = bind._contextual_connect()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/base.py", line 2239, in _contextual_connect
+    self._wrap_pool_connect(self.pool.connect, None),
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/base.py", line 2279, in _wrap_pool_connect
+    e, dialect, self
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/base.py", line 1544, in _handle_dbapi_exception_noconnection
+    util.raise_from_cause(sqlalchemy_exception, exc_info)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/compat.py", line 398, in raise_from_cause
+    reraise(type(exception), exception, tb=exc_tb, cause=cause)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/compat.py", line 152, in reraise
+    raise value.with_traceback(tb)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/base.py", line 2275, in _wrap_pool_connect
+    return fn()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 363, in connect
+    return _ConnectionFairy._checkout(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 760, in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 492, in checkout
+    rec = pool._do_get()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/impl.py", line 139, in _do_get
+    self._dec_overflow()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/langhelpers.py", line 68, in __exit__
+    compat.reraise(exc_type, exc_value, exc_tb)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/util/compat.py", line 153, in reraise
+    raise value
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/impl.py", line 136, in _do_get
+    return self._create_connection()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 308, in _create_connection
+    return _ConnectionRecord(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 437, in __init__
+    self.__connect(first_connect_check=True)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/pool/base.py", line 639, in __connect
+    connection = pool._invoke_creator(self)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/strategies.py", line 114, in connect
+    return dialect.connect(*cargs, **cparams)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/sqlalchemy/engine/default.py", line 453, in connect
+    return self.dbapi.connect(*cargs, **cparams)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/__init__.py", line 94, in Connect
+    return Connection(*args, **kwargs)
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/connections.py", line 325, in __init__
+    self.connect()
+  File "/home/andreas2/virtualenv/rankingapi/3.7/lib/python3.7/site-packages/pymysql/connections.py", line 630, in connect
+    raise exc
+sqlalchemy.exc.OperationalError: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on 'cp02.azehosting.net' ([Errno 111] Connection refused)")
+(Background on this error at: http://sqlalche.me/e/e3q8)

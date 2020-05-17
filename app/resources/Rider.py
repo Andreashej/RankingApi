@@ -1,9 +1,16 @@
 from flask_restful import Resource, reqparse, current_app, request, url_for
 from app import db, auth
-from app.models import Rider, RiderSchema
+from app.models import Rider, RiderSchema, Result, Test, ResultSchema, Competition, TestSchema
+
+from sqlalchemy import and_
 
 riders_schema = RiderSchema(many=True, exclude=("results",))
-rider_schema = RiderSchema()
+rider_schema = RiderSchema(exclude=("results",))
+
+results_schema = ResultSchema(many=True, exclude=("rider",))
+result_schema = ResultSchema(exclude=("rider",))
+
+tests_schema = TestSchema(many=True, exclude=("results",))
 
 class RidersResource(Resource):
     def __init__(self):
@@ -66,7 +73,8 @@ class RiderResource(Resource):
         if not rider:
             return {'status': 'NOT FOUND'}, 404
         
-        rider = rider_schema.dump(rider).data   
+        rider = rider_schema.dump(rider).data
+
         return {'status': 'OK', 'data': rider}
     
     @auth.login_required
@@ -84,6 +92,7 @@ class RiderResource(Resource):
             rider.lastname = args['lname']
         
         rider = rider_schema.dump(rider).data
+        rider['results'] = {}
         
         return {'status': 'OK', 'data': rider}
 
@@ -97,3 +106,22 @@ class RiderResource(Resource):
         except:
             return {'status': 'ERROR'}, 500
         return {'status': 'OK'}, 204
+
+class RiderResultResource(Resource):
+    def __init__(self):
+        pass
+
+    def get(self, rider_id, testcode):
+        results_for_test = Result.query.filter_by(rider_id = rider_id).join(Result.test).filter(Test.testcode == testcode).join(Test.competition).order_by(Competition.last_date.desc()).all()
+        best = Result.query.filter_by(rider_id = rider_id).join(Result.test).filter(Test.testcode == testcode).order_by(Result.mark.desc()).limit(1).first()
+
+        if len(results_for_test) == 0:
+            return { 'status': 'NOT FOUND', 'message': 'The rider has no results in this test'}, 404
+
+        return {
+            'status': 'OK',
+            'data':{
+                'history': results_schema.dump(results_for_test).data,
+                'best': result_schema.dump(best).data
+            }
+        }
