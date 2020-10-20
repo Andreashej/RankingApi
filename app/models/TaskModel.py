@@ -10,7 +10,8 @@ class Task(db.Model):
     id = db.Column(db.String(36), primary_key=True)
     name = db.Column(db.String(128), index=True)
     description = db.Column(db.String(128))
-    competition_id = db.Column(db.Integer, db.ForeignKey('competitions.id'))
+    competition_id = db.Column(db.Integer, db.ForeignKey('competitions.id'), default=None)
+    rankinglist_test_id = db.Column(db.Integer, db.ForeignKey('rankinglist_tests.id'), default=None)
     complete = db.Column(db.Boolean, default=False)
 
     def get_rq_job(self):

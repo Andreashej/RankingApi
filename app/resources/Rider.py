@@ -1,6 +1,7 @@
 from flask_restful import Resource, reqparse, current_app, request, url_for
-from app import db, auth
-from app.models import Rider, RiderSchema, Result, Test, ResultSchema, Competition, TestSchema
+from app import db
+from app import auth
+from app.models import Rider, Result, Test, Competition, RiderSchema, ResultSchema, TestSchema
 
 from sqlalchemy import and_
 
@@ -22,7 +23,7 @@ class RidersResource(Resource):
         page = request.args.get('page', 1, type=int)
 
         riders = Rider.query.paginate(page, current_app.config['RIDERS_PER_PAGE'],False)
-        riders_json = riders_schema.dump(riders.items).data
+        riders_json = riders_schema.dump(riders.items)
 
         wrapper = {
             "_links": {
@@ -48,7 +49,7 @@ class RidersResource(Resource):
         except:
             return {'status': 'ERROR'}, 500
 
-        rider = rider_schema.dump(rider).data
+        rider = rider_schema.dump(rider)
 
         return {'status': 'OK', 'data': rider}, 200
     
@@ -73,7 +74,7 @@ class RiderResource(Resource):
         if not rider:
             return {'status': 'NOT FOUND'}, 404
         
-        rider = rider_schema.dump(rider).data
+        rider = rider_schema.dump(rider)
 
         return {'status': 'OK', 'data': rider}
     
@@ -91,7 +92,7 @@ class RiderResource(Resource):
         if args['lname'] is not None:
             rider.lastname = args['lname']
         
-        rider = rider_schema.dump(rider).data
+        rider = rider_schema.dump(rider)
         rider['results'] = {}
         
         return {'status': 'OK', 'data': rider}
@@ -112,8 +113,9 @@ class RiderResultResource(Resource):
         pass
 
     def get(self, rider_id, testcode):
-        results_for_test = Result.query.filter_by(rider_id = rider_id).join(Result.test).filter(Test.testcode == testcode).join(Test.competition).order_by(Competition.last_date.desc()).all()
-        best = Result.query.filter_by(rider_id = rider_id).join(Result.test).filter(Test.testcode == testcode).order_by(Result.mark.desc()).limit(1).first()
+        rider = Rider.query.get(rider_id)
+        results_for_test = rider.get_results(testcode, limit=request.args.get('limit'))
+        best = rider.get_best_result(testcode)
 
         if len(results_for_test) == 0:
             return { 'status': 'NOT FOUND', 'message': 'The rider has no results in this test'}, 404
@@ -121,7 +123,7 @@ class RiderResultResource(Resource):
         return {
             'status': 'OK',
             'data':{
-                'history': results_schema.dump(results_for_test).data,
-                'best': result_schema.dump(best).data
+                'history': results_schema.dump(results_for_test),
+                'best': result_schema.dump(best)
             }
         }

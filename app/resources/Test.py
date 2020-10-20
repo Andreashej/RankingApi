@@ -1,7 +1,8 @@
 from flask_restful import Resource, reqparse
-from app import db, auth
+from app import db
+from app import auth
 
-from app.models import Test, TestSchema, Competition
+from app.models import Test, Competition, TestSchema
 
 test_schema = TestSchema()
 tests_schema = TestSchema(many=True)
@@ -14,7 +15,7 @@ class TestsResource(Resource):
     
     def get(self):
         tests = Test.query.all()
-        tests = tests_schema.dump(tests).data
+        tests = tests_schema.dump(tests)
 
         return {'status': 'OK', 'data': tests}, 200
     
@@ -34,7 +35,7 @@ class TestsResource(Resource):
         except:
             return {'status': 'ERROR'}, 500
         
-        test = test_schema.dump(test).data
+        test = test_schema.dump(test)
         return {'status': 'OK', 'data': test},200
     
     @auth.login_required
@@ -57,7 +58,7 @@ class TestResource(Resource):
         if test is None:
             return {'status': 'NOT FOUND'}, 404
         
-        test = test_schema.dump(test).data
+        test = test_schema.dump(test)
 
         return {'status': 'OK', 'data': test}
 

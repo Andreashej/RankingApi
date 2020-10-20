@@ -2,8 +2,9 @@ import datetime
 
 from flask_restful import Resource, reqparse
 from flask import request
-from app import db, cache, auth
-from app.models import Competition, CompetitionSchema, RankingList,RankingListTest
+from app import db
+from app import cache, auth
+from app.models import Competition, RankingList, RankingListTest, CompetitionSchema
 
 competitions_schema = CompetitionSchema(many=True)
 competition_schema = CompetitionSchema()
@@ -19,7 +20,7 @@ class CompetitionsResource(Resource):
     
     def get(self):
         competitions = Competition.query.all()
-        competitions = competitions_schema.dump(competitions).data
+        competitions = competitions_schema.dump(competitions)
 
         return {'status': 'OK', 'data': competitions}, 200
 
@@ -40,7 +41,7 @@ class CompetitionsResource(Resource):
         except:
             return {'status': 'ERROR'}, 500
 
-        competition = competition_schema.dump(competition).data
+        competition = competition_schema.dump(competition)
 
         cache.delete_memoized(RankingListTest.get_ranking)
         
@@ -71,7 +72,7 @@ class CompetitionResource(Resource):
         if competition is None:
             return {'status': 'NOT FOUND'}, 404
 
-        competition = competition_schema.dump(competition).data
+        competition = competition_schema.dump(competition)
 
         return {'status': 'OK', 'data': competition}
     
@@ -106,7 +107,7 @@ class CompetitionResource(Resource):
         except:
             return {'status': 'ERROR'},500
 
-        competition = competition_schema.dump(competition).data
+        competition = competition_schema.dump(competition)
         
         cache.delete_memoized(RankingListTest.get_ranking)
         

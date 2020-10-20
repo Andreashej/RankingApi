@@ -7,5 +7,6 @@ from .HorseModel import Horse
 from .TaskModel import Task
 from .RankingListTestModel import RankingListTest
 from .UserModel import User
+from .RankingResultsCache import RankingResultsCache
 
-from .schemas import RiderSchema, HorseSchema, ResultSchema, CompetitionSchema, TestSchema, RankingListSchema, RankingListTestSchema, TaskSchema, UserSchema
+from .schemas import RiderSchema, HorseSchema, ResultSchema, CompetitionSchema, TestSchema, RankingListSchema, RankingListTestSchema, TaskSchema, UserSchema, RankingListResultSchema

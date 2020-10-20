@@ -2,14 +2,6 @@ from marshmallow import fields
 from app import db
 from flask import current_app
 
-from .RiderModel import Rider
-from .HorseModel import Horse
-from .CompetitionModel import Competition
-from .TestModel import Test
-from .RankingListModel import RankingList
-
-import codecs
-
 class Result(db.Model):
     __tablename__ = 'results'
     id = db.Column(db.Integer, primary_key=True)
@@ -27,6 +19,8 @@ class Result(db.Model):
     
     @staticmethod
     def load_from_file(filename):
+        from app.models import Rider, Horse, Competition, Test, Ranking
+        
         competition_id = filename.split('.')[0]
         competition = Competition.query.filter_by(isirank_id=competition_id).first()
         

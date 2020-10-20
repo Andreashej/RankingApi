@@ -1,8 +1,9 @@
 from flask_restful import Resource, reqparse
 from flask import request, current_app
-from app import db, cache, auth
-from app.models import Result, ResultSchema, Rider, Horse, TaskSchema
-# from app.resources.Ranking import get_ranking
+from app import db
+from app import cache, auth
+from app.models import Result, Rider, Horse, ResultSchema, TaskSchema
+
 import os
 
 results_schema = ResultSchema(many=True)
@@ -20,7 +21,7 @@ class ResultsResource(Resource):
 
     def get(self):
         results = Result.query.all()
-        results = results_schema.dump(results).data
+        results = results_schema.dump(results)
 
         return {'status': 'OK', 'data': results}, 200
     
@@ -38,7 +39,7 @@ class ResultsResource(Resource):
             except:
                 pass
 
-            task = task_schema.dump(task).data
+            task = task_schema.dump(task)
             return {'status': 'OK', 'data': task}
         else:
             return {'status': 'ERROR', 'message': 'File not found'},200

@@ -12,10 +12,10 @@ import rq
 
 from . import config
 
-db = SQLAlchemy()
 migrate = Migrate()
 ma = Marshmallow()
 cors = CORS()
+db = SQLAlchemy()
 
 api_bp = Blueprint('api', __name__)
 api = Api(api_bp)
@@ -36,7 +36,9 @@ def create_app():
     cors.init_app(app)
 
     with app.app_context():
-        from . import routes, models
+        from app import routes, models
+
+        db.create_all()
 
         app.redis = Redis.from_url(app.config['REDIS_URL'])
         app.task_queue = rq.Queue('iceranking-tasks', connection=app.redis)

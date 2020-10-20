@@ -12,5 +12,5 @@ class TaskResource(Resource):
         if task is None:
             return {'status': 'NOT FOUND'}, 404
         
-        task = task_schema.dump(task).data
+        task = task_schema.dump(task)
         return {'status': 'OK', 'data': task}

@@ -3,7 +3,7 @@ from app.resources.Rider import RiderResource, RidersResource, RiderResultResour
 from app.resources.Ranking import RankingResource, RankingsResource, RankingListResource, RankingListResultsResource, RankingListsResource
 from app.resources.Competition import CompetitionsResource, CompetitionResource
 from app.resources.Test import TestsResource, TestResource
-from app.resources.Horse import HorsesResource, HorseResource
+from app.resources.Horse import HorsesResource, HorseResource, HorseResultResource
 from app.resources.Task import TaskResource
 from app.resources.User import UsersResource, UserResource, TokenResource, ProfileResource
 from app.resources.Search import SearchResource
@@ -19,12 +19,14 @@ api.add_resource(RiderResultResource, '/riders/<int:rider_id>/results/<testcode>
 
 api.add_resource(HorsesResource, '/horses', endpoint='horses')
 api.add_resource(HorseResource, '/horses/<int:horse_id>', endpoint='horse')
+api.add_resource(HorseResultResource, '/horses/<int:horse_id>/results/<string:testcode>', endpoint='result_for_horse')
 
 api.add_resource(RankingsResource, '/rankings', endpoint='rankings')
 api.add_resource(RankingResource, '/rankings/<string:listname>', endpoint='ranking')
 
 api.add_resource(RankingListsResource, '/rankings/<string:listname>/tests', endpoint='rankinglists')
-api.add_resource(RankingListResource, '/rankings/<string:listname>/tests/<string:testcode>', endpoint='rankinglist')
+api.add_resource(RankingListResource, '/rankings/<string:listname>/tests/<string:testcode>', endpoint='rankinglist-pretty')
+api.add_resource(RankingListResource, '/rankingtest/<int:id>', endpoint='rankinglist')
 
 api.add_resource(RankingListResultsResource, '/rankings/<string:listname>/tests/<string:testcode>/results', endpoint='resultlist')
 

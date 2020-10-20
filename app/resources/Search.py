@@ -19,7 +19,7 @@ class SearchResource(Resource):
         horses = Horse.query.filter(or_(Horse.horse_name.like(term), Horse.feif_id.like(term))).limit(10).all()
         competitions = Competition.query.filter(Competition.name.like(term)).order_by(Competition.first_date).limit(10).all()
 
-        results = rankings_schema.dump(rankings).data + riders_schema.dump(riders).data + horses_schema.dump(horses).data + competitions_schema.dump(competitions).data
+        results = rankings_schema.dump(rankings) + riders_schema.dump(riders) + horses_schema.dump(horses) + competitions_schema.dump(competitions)
 
         return {
             'status': 'OK',

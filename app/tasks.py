@@ -2,7 +2,7 @@ import time
 from rq import get_current_job
 
 from app import db, cache, create_app
-from app.models import Task, Test, Result, Rider, Horse, Competition, RankingListTest
+from app.models import Task, Test, Result, Rider, Horse, Competition, RankingListTest, RankingResultsCache
 
 import sys
 
@@ -80,3 +80,62 @@ def import_competition(competition_id, lines):
     except:
         _set_task_progress(100)
         app.logger.error('Unhandled exception', exc_info=sys.exc_info())
+
+def compute_ranking(test_id):
+    try:
+        test = RankingListTest.query.get(test_id)
+
+        RankingResultsCache.query.filter_by(test_id = test.id).delete()
+
+        try:
+            db.session.commit()
+        except:
+            pass
+
+        if test.grouping == 'rider':
+            group = Rider.query.filter(Rider.count_results_for_ranking(test) >= test.included_marks).all()
+
+        if test.grouping == 'horse':
+            group = Horse.query.filter(Horse.count_results_for_ranking(test) >= test.included_marks).all()
+
+        for i, g in enumerate(group):
+            results = g.get_results_for_ranking(test)
+
+            result = RankingResultsCache(results, test)
+            try:
+                db.session.add(result)
+            except Exception as e:
+                app.logger.error(e, exc_info=sys.exc_info())
+                
+            _set_task_progress(50 * i // len(group))
+
+        try:
+            db.session.commit()
+
+            if test.order == 'desc':
+                results = RankingResultsCache.query.filter_by(test_id = test.id).order_by(RankingResultsCache.mark.desc()).all()
+            else:
+                results = RankingResultsCache.query.filter_by(test_id = test.id).order_by(RankingResultsCache.mark.asc()).all()
+
+            rank = 0
+            prev_score = 0
+            for result in results:
+                if prev_score != result.mark:
+                    rank += 1
+                
+                print(rank, result)
+                result.rank = rank
+
+                prev_score = result.mark
+
+                _set_task_progress(50 + (50 * rank // len(results)))
+
+            db.session.commit()
+        except Exception as e:
+            app.logger.error(e, exc_info=sys.exc_info())
+        finally:
+            _set_task_progress(100)
+            cache.delete_memoized(RankingResultsCache.get_results,RankingResultsCache,test)
+    except:
+        _set_task_progress(100)
+        app.logger.error("Unhandled exception", exc_info=sys.exc_info())

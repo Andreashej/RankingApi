@@ -1,6 +1,7 @@
 from flask_restful import Resource, reqparse
 from flask import g
-from app import db, auth
+from app import db
+from app import auth
 
 from app.models import User, UserSchema
 
@@ -19,7 +20,7 @@ class UsersResource(Resource):
         if len(users) == 0:
             return { 'status': 'NOT FOUND', 'message': "No users found."}, 404
         
-        return { 'status': 'OK', 'data': users_schema.dump(users).data }
+        return { 'status': 'OK', 'data': users_schema.dump(users) }
     
     def post(self):
         args = self.reqparse.parse_args()
@@ -36,7 +37,7 @@ class UsersResource(Resource):
         except:
             return {'status': 'ERROR', 'message': 'Unknown error'}, 500
 
-        return { 'status': 'OK', 'data': user_schema.dump(user).data}, 201
+        return { 'status': 'OK', 'data': user_schema.dump(user)}, 201
 
 class UserResource(Resource):
     def get(self, username):
@@ -45,17 +46,17 @@ class UserResource(Resource):
         if user is None:
             return { 'status': 'NOT FOUND'}, 404
         
-        return { 'status': 'OK', 'data': user_schema.dump(user).data }
+        return { 'status': 'OK', 'data': user_schema.dump(user) }
 
 class TokenResource(Resource):
     @auth.login_required
     def post(self):
         token = g.user.generate_auth_token()
 
-        return {'status': 'OK', 'data': user_schema.dump(g.user).data, 'token': token.decode('ascii')}
+        return {'status': 'OK', 'data': user_schema.dump(g.user), 'token': token.decode('ascii')}
 
 class ProfileResource(Resource):
     decorators = [auth.login_required]
 
     def get(self):
-        return { 'status': 'OK', 'data': user_schema.dump(g.user).data }
+        return { 'status': 'OK', 'data': user_schema.dump(g.user) }

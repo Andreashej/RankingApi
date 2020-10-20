@@ -7,7 +7,7 @@ class RankingList(db.Model):
     listname = db.Column(db.String(250))
     shortname = db.Column(db.String(3), unique=True)
     results_valid_days = db.Column(db.Integer)
-    tests = db.relationship("RankingListTest", backref="rankinglist", lazy='dynamic')
+    tests = db.relationship("RankingListTest", backref="rankinglist", lazy='dynamic', order_by="RankingListTest.testcode")
     branding_image = db.Column(db.String(250))
 
     def __init__(self, name, shortname):

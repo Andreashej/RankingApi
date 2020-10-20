@@ -3,9 +3,9 @@ from sqlalchemy import func, and_
 from sqlalchemy.orm import contains_eager
 from datetime import datetime, timedelta
 
-from app.models import Result, Test, Competition, Rider, RankingList, Horse
+from flask import current_app
 
-
+from .TaskModel import Task
 
 class RankingListTest(db.Model):
     __tablename__ = 'rankinglist_tests'
@@ -17,70 +17,29 @@ class RankingListTest(db.Model):
     grouping = db.Column(db.String(5), default='rider')
     min_mark = db.Column(db.Float)
     rounding_precision = db.Column(db.Integer)
+    mark_type = db.Column(db.String(4), default='mark') # Allowed values: {mark, time}
+    tasks = db.relationship("Task", backref="test", lazy='dynamic')
+
+    ranking_results_cached = db.relationship("RankingResultsCache", backref="cached_results", lazy="joined")
+
+    def __repr__(self):
+        return "<{}.{}>".format(self.__class__.__name__, self.id)
     
-    @cache.memoize(timeout=1440)
-    def get_ranking(self):
-        ranking = self.rankinglist
+    def launch_task(self, name, description, *args, **kwargs):
+        rq_job = current_app.task_queue.enqueue('app.tasks.' + name, self.id, *args, **kwargs)
 
-        if self.order == 'desc':
-            results = db.session.query(Result).filter(Result.mark >= self.min_mark)\
-                .join(Test, Result.test_id == Test.id).filter_by(testcode=self.testcode)\
-                .join(Competition).filter(Competition.last_date >= (datetime.now() - timedelta(days=ranking.results_valid_days)))\
-                .join(RankingList, Competition.include_in_ranking).filter_by(shortname=ranking.shortname)\
-                .order_by(Result.mark.desc())\
-                .subquery()
-        else:
-            results = db.session.query(Result).filter(and_(Result.mark <= self.min_mark, Result.mark > 0))\
-                .join(Test, Result.test_id == Test.id).filter_by(testcode=self.testcode)\
-                .join(Competition).filter(Competition.last_date >= (datetime.now() - timedelta(days=ranking.results_valid_days)))\
-                .join(RankingList, Competition.include_in_ranking).filter_by(shortname=ranking.shortname)\
-                .order_by(Result.mark.asc())\
-                .subquery()
+        task = Task(id=rq_job.get_id(), name=name, description=description, test=self)
+        db.session.add(task)
 
-        if self.grouping == 'rider':
-            items = db.session.query(Rider)\
-                .join(results, Rider.id == results.c.rider_id)\
-                .options(contains_eager(Rider.results, alias=results))\
-                .all()
-            
-            from app.models import RiderSchema
-            schema = RiderSchema(many=True)
+        try:
+            db.session.commit()
+        except:
+            pass
 
-        elif self.grouping == 'horse':
-            items = db.session.query(Horse)\
-                .join(results, Horse.id == results.c.horse_id)\
-                .options(contains_eager(Horse.results, alias=results))\
-                .all()
+        return task        
 
-            from app.models import HorseSchema
-            schema = HorseSchema(many=True)
-
-        items = schema.dump(items).data
-
-        valid_results = []
-
-        for item in items:
-            if (len(item['results']) > self.included_marks - 1):
-                item['results'] = item['results'][:self.included_marks]
-                final_mark = 0
-                for result in item['results']:
-                    final_mark += result['mark']
-
-                final_mark = round(final_mark / len(item['results']), self.rounding_precision)
-                item.update({'final_mark': final_mark})
-                valid_results.append(item)
-            
-        valid_results = sorted(valid_results, key=lambda i: i['final_mark'], reverse=self.order=='desc')
-
-        current_rank = 0
-        prev_score = 0
-
-        for result in valid_results:
-            if prev_score != result['final_mark']:
-                current_rank += 1
-
-            result.update({'rank': current_rank})
-
-            prev_score = result['final_mark']
-        
-        return valid_results
+    def get_tasks_in_progress(self):
+        return Task.query.filter_by(test=self, complete=False).all()
+    
+    def get_task_in_progress(self, name):
+        return Task.query.filter_by(name=name, test=self, complete=False).first()

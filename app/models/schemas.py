@@ -1,8 +1,8 @@
 from app import ma
 from marshmallow import fields
-from app.models import Rider, Horse, Result, Competition, Test, RankingList, Task, RankingListTest, User
+from app.models import Rider, Horse, Result, Competition, Test, RankingList, Task, RankingListTest, User, RankingResultsCache
 
-class UserSchema(ma.ModelSchema):
+class UserSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = User
         exclude = ["password_hash", "id"]
@@ -13,7 +13,7 @@ class UserSchema(ma.ModelSchema):
         }
     )
 
-class RiderSchema(ma.ModelSchema):
+class RiderSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Rider
 
@@ -29,11 +29,14 @@ class RiderSchema(ma.ModelSchema):
         }
     )
 
-class HorseSchema(ma.ModelSchema):
+class HorseSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Horse
     
     results = ma.List(ma.Nested("ResultSchema", exclude=("horse",)))
+    number_of_results = fields.Integer()
+    
+    testlist = fields.List(fields.String())
         
     _links = ma.Hyperlinks(
         {
@@ -41,12 +44,12 @@ class HorseSchema(ma.ModelSchema):
         }
     )
 
-class ResultSchema(ma.ModelSchema):
+class ResultSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Result
 
-    rider = ma.Nested("RiderSchema", exclude=("results","id",))
-    horse = ma.Nested("HorseSchema", exclude=("results","id",))
+    rider = ma.Nested("RiderSchema", exclude=("results",))
+    horse = ma.Nested("HorseSchema", exclude=("results",))
     test = ma.Nested("TestSchema", exclude=("results","id",))
 
     _links = ma.Hyperlinks(
@@ -58,9 +61,10 @@ class ResultSchema(ma.ModelSchema):
         }
     )
 
-class CompetitionSchema(ma.ModelSchema):
+class CompetitionSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Competition
+        include_relationships = True
 
     tests = ma.List(ma.Nested("TestSchema", exclude=("competition","results")))
     include_in_ranking = ma.List(ma.Nested("RankingListSchema", only=("shortname","listname","results_valid_days",)))
@@ -71,9 +75,10 @@ class CompetitionSchema(ma.ModelSchema):
         }
     )
 
-class TestSchema(ma.ModelSchema):
+class TestSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Test
+        include_relationships = True    
 
     competition = ma.Nested("CompetitionSchema", only=("name","last_date","first_date","id", "include_in_ranking"))
 
@@ -84,11 +89,14 @@ class TestSchema(ma.ModelSchema):
         }
     )
 
-class RankingListSchema(ma.ModelSchema):
+class RankingListSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = RankingList
+        include_relationships = True
     
     competitions = ma.List(ma.Nested("CompetitionSchema", exclude=("include_in_ranking",)))
+
+    tests = ma.Nested("RankingListTestSchema", only=("testcode",), many=True)
     
     _links = ma.Hyperlinks(
         {
@@ -99,18 +107,28 @@ class RankingListSchema(ma.ModelSchema):
         }
     )
 
-class RankingListTestSchema(ma.ModelSchema):
+class RankingListTestSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = RankingListTest
     
     _links = ma.Hyperlinks(
         {
-            "self": ma.URLFor("api.rankinglist", listname="<rankinglist.shortname>", testcode="<testcode>" ),
+            "self": ma.URLFor("api.rankinglist", id="<id>" ),
             "results": ma.URLFor("api.resultlist", listname="<rankinglist.shortname>", testcode="<testcode>")
         }
     )
 
-class TaskSchema(ma.ModelSchema):
+class RankingListResultSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = RankingResultsCache
+
+        exclude = ["cached_results", "id"]
+
+    riders = ma.Nested("RiderSchema", many=True, only=("id","fullname",))
+    horses = ma.Nested("HorseSchema", many=True, only=("id","horse_name","feif_id",))
+    marks = ma.Nested("ResultSchema", many=True, only=("mark","horse.horse_name","horse.feif_id","test.competition.name"))
+
+class TaskSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Task
     
