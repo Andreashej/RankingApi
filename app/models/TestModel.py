@@ -19,6 +19,6 @@ class Test(db.Model):
         query = self._results.join(Test)
         
         if self.order == 'asc':
-            return query.order_by(Result.mark.asc())
+            return query.filter(Result.mark > 0).order_by(Result.mark.asc())
         else:
             return query.order_by(Result.mark.desc())
