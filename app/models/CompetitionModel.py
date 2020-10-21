@@ -1,5 +1,6 @@
 from marshmallow import fields
 from app import db
+from sqlalchemy.ext.hybrid import hybrid_property, hybrid_method
 
 from flask import current_app
 

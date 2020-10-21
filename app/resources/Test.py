@@ -2,7 +2,7 @@ from flask_restful import Resource, reqparse
 from app import db
 from app import auth
 
-from app.models import Test, Competition, TestSchema
+from app.models import Test, Competition, TestSchema, Result
 
 test_schema = TestSchema()
 tests_schema = TestSchema(many=True)

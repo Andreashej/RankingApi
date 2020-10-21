@@ -68,7 +68,7 @@ class CompetitionSchema(ma.SQLAlchemyAutoSchema):
 
     tests = ma.List(ma.Nested("TestSchema", exclude=("competition","results")))
     include_in_ranking = ma.List(ma.Nested("RankingListSchema", only=("shortname","listname","results_valid_days",)))
-    
+
     _links = ma.Hyperlinks(
         {
             "self": ma.URLFor("api.competition", competition_id="<id>")
@@ -81,6 +81,7 @@ class TestSchema(ma.SQLAlchemyAutoSchema):
         include_relationships = True    
 
     competition = ma.Nested("CompetitionSchema", only=("name","last_date","first_date","id", "include_in_ranking"))
+    results = ma.Nested("ResultSchema", only=("rider.id", "rider.fullname", "horse.id", "horse.horse_name", "horse.feif_id", "mark"), many=True)
 
     _links = ma.Hyperlinks(
         {
