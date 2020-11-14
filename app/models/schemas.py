@@ -1,6 +1,6 @@
 from app import ma
 from marshmallow import fields
-from app.models import Rider, Horse, Result, Competition, Test, RankingList, Task, RankingListTest, User, RankingResultsCache
+from app.models import Rider, Horse, Result, Competition, Test, RankingList, Task, RankingListTest, User, RankingResultsCache, TestCatalog
 
 class UserSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
@@ -123,11 +123,11 @@ class RankingListResultSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = RankingResultsCache
 
-        exclude = ["cached_results", "id"]
+        exclude = ["cached_results"]
 
     riders = ma.Nested("RiderSchema", many=True, only=("id","fullname",))
     horses = ma.Nested("HorseSchema", many=True, only=("id","horse_name","feif_id",))
-    marks = ma.Nested("ResultSchema", many=True, only=("mark","horse.horse_name","horse.feif_id","test.competition.name"))
+    marks = ma.Nested("ResultSchema", many=True, only=("mark","horse.horse_name","horse.feif_id","test.competition.name","test.competition.id", "test.testcode"))
 
 class TaskSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
@@ -140,3 +140,14 @@ class TaskSchema(ma.SQLAlchemyAutoSchema):
             "self": ma.URLFor("api.task", task_id="<id>")
         }
     )
+
+class TestCatalogSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = TestCatalog
+    
+    # _links = ma.Hyperlinks(
+    #     {
+    #         "self": ma.URLFor("api.rankinglist", id="<id>" ),
+    #         "results": ma.URLFor("api.resultlist", listname="<rankinglist.shortname>", testcode="<testcode>")
+    #     }
+    # )

@@ -4,7 +4,7 @@ from flask_restful import Resource, reqparse
 from flask import request
 from app import db
 from app import cache, auth
-from app.models import Competition, RankingList, RankingListTest, CompetitionSchema
+from app.models import Competition, RankingList, RankingListTest, CompetitionSchema, TestCatalog, Test
 
 competitions_schema = CompetitionSchema(many=True)
 competition_schema = CompetitionSchema()
@@ -13,10 +13,11 @@ class CompetitionsResource(Resource):
     def __init__(self):
         self.reqparse = reqparse.RequestParser()
         self.reqparse.add_argument('name', type=str, required=True, location='json')
-        self.reqparse.add_argument('isirank', type=str, required=True, location='json')
-        self.reqparse.add_argument('startdate', type=lambda x: datetime.datetime.strptime(x, '%Y-%m-%d'), required=True, location='json')
-        self.reqparse.add_argument('enddate', type=lambda x: datetime.datetime.strptime(x, '%Y-%m-%d'), required=True, location='json')
+        self.reqparse.add_argument('isirank', type=str, required=False, location='json')
+        self.reqparse.add_argument('startdate', type=lambda x: datetime.datetime.strptime(x, '%d/%m/%Y'), required=True, location='json')
+        self.reqparse.add_argument('enddate', type=lambda x: datetime.datetime.strptime(x, '%d/%m/%Y'), required=True, location='json')
         self.reqparse.add_argument('ranking_scopes', type=str, action='append', location='json')
+        self.reqparse.add_argument('tests', type=str, action='append', location='json')
     
     def get(self):
         competitions = Competition.query.all()
@@ -28,12 +29,23 @@ class CompetitionsResource(Resource):
     def post(self):
         args = self.reqparse.parse_args()
 
-        competition = Competition(args['name'], args['isirank'], args['startdate'], args['enddate'])
+        competition = Competition(args['name'], args['startdate'], args['enddate'])
+
+        if args['isirank']:
+            competition.isirank_id = args['isirank']
 
         for ranking in args['ranking_scopes']:
             rankinglist = RankingList.query.filter_by(shortname=ranking).first()
 
             competition.include_in_ranking.append(rankinglist)
+
+        for testcode in args['tests']:
+            origtest = TestCatalog.query.filter_by(testcode = testcode).first()
+
+            test = Test(testcode)
+            test.rounding_precision = origtest.rounding_precision
+            test.order = origtest.order
+            competition.tests.append(test)
 
         try:
             db.session.add(competition)
@@ -42,8 +54,6 @@ class CompetitionsResource(Resource):
             return {'status': 'ERROR'}, 500
 
         competition = competition_schema.dump(competition)
-
-        cache.delete_memoized(RankingListTest.get_ranking)
         
         return {'status': 'OK', 'data': competition}, 200
     
@@ -113,4 +123,17 @@ class CompetitionResource(Resource):
         
         return {'status': 'OK', 'data': competition}
 
+    @auth.login_required
+    def delete(self, competition_id):
+        competition = Competition.query.get(competition_id)
 
+        if competition is None:
+            return { 'status': 'NOT FOUND' }, 404
+
+        try:
+            db.session.delete(competition)
+            db.session.commit()
+        except:
+            return { 'status': 'ERROR'},500
+        
+        return { 'STATUS': 'OK' }, 204

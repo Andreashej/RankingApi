@@ -7,6 +7,7 @@ from app.resources.Horse import HorsesResource, HorseResource, HorseResultResour
 from app.resources.Task import TaskResource
 from app.resources.User import UsersResource, UserResource, TokenResource, ProfileResource
 from app.resources.Search import SearchResource
+from app.resources.TestCatalog import TestCatalogResource, TestDefinitionResource
 
 from app import api
 
@@ -47,3 +48,6 @@ api.add_resource(TokenResource, '/login', endpoint='login')
 api.add_resource(ProfileResource, '/profile', endpoint='profile')
 
 api.add_resource(SearchResource, '/search', endpoint='search')
+
+api.add_resource(TestCatalogResource, '/test-catalog', endpoint="test-catalog")
+api.add_resource(TestDefinitionResource, '/test-catalog/<string:testcode>', endpoint="test-definition")

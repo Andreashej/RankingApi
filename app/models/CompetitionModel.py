@@ -19,10 +19,10 @@ class Competition(db.Model):
     first_date = db.Column(db.Date)
     last_date = db.Column(db.Date)
     include_in_ranking = db.relationship('RankingList', secondary=competitions_rankinglists, lazy='dynamic', backref=db.backref('competitions', lazy=True))
-    tests = db.relationship("Test", backref="competition", lazy='dynamic')
+    tests = db.relationship("Test", backref="competition", lazy='dynamic', cascade='all, delete')
     tasks = db.relationship("Task", backref="competition", lazy='dynamic')
 
-    def __init__(self, isi_id, startdate=None, enddate=None, name=''):
+    def __init__(self, name='', startdate=None, enddate=None, isi_id = None):
         self.name = name
         self.isirank_id = isi_id
         self.first_date = startdate
