@@ -41,7 +41,9 @@ def create_app():
         db.create_all()
 
         app.redis = Redis.from_url(app.config['REDIS_URL'])
-        app.task_queue = rq.Queue('iceranking-tasks', connection=app.redis)
+        
+        app.task_queue = rq.Queue(app.config['QUEUE'], connection=app.redis)
+
 
         app.register_blueprint(api_bp, url_prefix='/api')
 

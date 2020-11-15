@@ -10,6 +10,7 @@ class Horse(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     feif_id = db.Column(db.String(12), unique=True)
     horse_name = db.Column(db.String(250))
+    last_checked_wf = db.Column(db.DateTime)
     results = db.relationship("Result", backref="horse", lazy="joined")
 
     def __init__(self, feif_id, name):

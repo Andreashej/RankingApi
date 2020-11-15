@@ -25,6 +25,8 @@ ISIRANK_FILES = basedir + '/files/'
 
 REDIS_URL = os.environ.get('REDIS_URL') or 'redis://'
 
+QUEUE = 'iceranking-tasks'
+
 RIDERS_PER_PAGE = 100
 
 API_VERSION = "0.1.0"
