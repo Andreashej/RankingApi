@@ -1,13 +1,14 @@
-import datetime
+import datetime, os
 
 from flask_restful import Resource, reqparse
-from flask import request
+from flask import request, current_app
 from app import db
 from app import cache, auth
-from app.models import Competition, RankingList, RankingListTest, CompetitionSchema, TestCatalog, Test
+from app.models import Competition, RankingList, RankingListTest, CompetitionSchema, TestCatalog, Test, TaskSchema
 
-competitions_schema = CompetitionSchema(many=True)
+competitions_schema = CompetitionSchema(many=True, exclude=("tests","include_in_ranking","tasks",))
 competition_schema = CompetitionSchema()
+task_schema = TaskSchema()
 
 class CompetitionsResource(Resource):
     def __init__(self):
@@ -26,7 +27,7 @@ class CompetitionsResource(Resource):
         return {'status': 'OK', 'data': competitions}, 200
 
     @auth.login_required
-    def post(self):
+    def post(self):        
         args = self.reqparse.parse_args()
 
         competition = Competition(args['name'], args['startdate'], args['enddate'])

@@ -1,6 +1,7 @@
 from marshmallow import fields
 from app import db
 from sqlalchemy.ext.hybrid import hybrid_property, hybrid_method
+import csv
 
 from flask import current_app
 
@@ -27,6 +28,9 @@ class Competition(db.Model):
         self.isirank_id = isi_id
         self.first_date = startdate
         self.last_date = enddate
+    
+    def __repr__(self):
+        return f'<Competition {self.name} from {self.first_date} to {self.last_date}>'
 
     def launch_task(self, name, descripton, *args, **kwargs):
         rq_job = current_app.task_queue.enqueue('app.tasks.' + name, self.id, *args, **kwargs)

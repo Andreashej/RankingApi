@@ -42,7 +42,7 @@ class ResultsResource(Resource):
             task = task_schema.dump(task)
             return {'status': 'OK', 'data': task}
         else:
-            return {'status': 'ERROR', 'message': 'File not found'},200
+            return {'status': 'ERROR', 'message': 'File not found'},500
 
     @auth.login_required
     def delete(self):

@@ -1,8 +1,10 @@
+from datetime import date
 import time
 from rq import get_current_job
 
 from app import db, cache, create_app
-from app.models import Task, Test, Result, Rider, Horse, Competition, RankingListTest, RankingResultsCache
+from app.models import Task, Test, Result, Rider, Horse, Competition, RankingListTest, RankingResultsCache, RankingList
+import datetime
 
 import sys
 
@@ -139,3 +141,50 @@ def compute_ranking(test_id):
     except:
         _set_task_progress(100)
         app.logger.error("Unhandled exception", exc_info=sys.exc_info())
+
+def import_competitions(ranking_id, competitions):
+    ranking = RankingList.query.get(ranking_id)
+    try:
+        total_lines = len(competitions)
+        for i, c in enumerate(competitions):
+            startdate = datetime.datetime.strptime(c['startdate'], '%Y-%m-%d')
+            enddate = datetime.datetime.strptime(c['enddate'], '%Y-%m-%d')
+
+            competition = Competition.query.filter_by(isirank_id = c["isirank_id"]).first()
+
+            if competition is None:
+                competition = Competition(c['competition_name'], startdate, enddate, c['isirank_id'])
+                competition.include_in_ranking.append(ranking)
+
+                try:
+                    db.session.add(competition)
+                except Exception as e:
+                    db.session.rollback()
+                    print(e)
+            else:
+                if ranking not in competition.include_in_ranking:
+                    competition.include_in_ranking.append(ranking)
+            _set_task_progress(i / total_lines * 100)
+        
+        try:
+            db.session.commit()
+        except Exception as e:
+            app.logger.error(e, exc_info=sys.exc_info())
+        finally:
+            _set_task_progress(100)
+
+    except Exception as e:
+        _set_task_progress(100)
+        app.logger.error(e, exc_info=sys.exc_info())
+    
+def import_results(ranking_id, results):
+    ranking = RankingList.query.get(ranking_id)
+    try:
+        total_lines = len(results)
+        for i, r in enumerate(results):
+            print(r)
+            _set_task_progress(i / total_lines * 100)
+    except Exception as e:
+        app.logger.error(e, exc_info=sys.exc_info())
+    finally:
+        _set_task_progress(100)

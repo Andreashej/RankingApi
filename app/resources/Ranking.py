@@ -1,9 +1,11 @@
 from datetime import datetime, timedelta
 
+import os
+
+from flask import request, current_app
 from flask_restful import Resource, reqparse
-from app import db
-from app import cache, auth
-from app.models import Result, RankingList, Test, Rider, RankingListTest, RankingListSchema, RankingListSchema, RiderSchema, RankingListTestSchema, TaskSchema, RankingResultsCache, Horse
+from .. import db, auth
+from ..models import RankingList, RankingListTest, RankingListSchema, RankingListSchema, RiderSchema, RankingListTestSchema, TaskSchema, RankingResultsCache, Competition
 
 from sqlalchemy import func
 from sqlalchemy.orm import contains_eager
@@ -79,6 +81,39 @@ class RankingResource(Resource):
     
     def patch(self, listname):
         ranking = RankingList.query.filter_by(shortname=listname).first()
+
+        file = request.files.get('competitions')
+        if file:
+            file.save(os.path.join(current_app.config["ISIRANK_FILES"], file.filename))
+
+            task = ranking.import_competitions(file.filename)
+
+            os.remove(current_app.config["ISIRANK_FILES"] + file.filename)
+
+            try:
+                db.session.commit()
+            except:
+                return { 'status': 'ERROR', 'message': 'Database error'}, 500
+
+            task = task_schema.dump(task)
+
+            return {'status': 'OK', 'data': task}
+
+        file = request.files.get('results')
+        if file:
+            file.save(os.path.join(current_app.config["ISIRANK_FILES"], file.filename))
+
+            task = ranking.import_results(file.filename)
+
+            os.remove(current_app.config["ISIRANK_FILES"] + file.filename)
+
+            try:
+                db.session.commit()
+            except Exception as e:
+                return { 'status': 'ERROR', 'message': e.args}
+            
+            task = task_schema.dump(task)
+            return { 'status': 'OK', 'data': task }
 
         args = self.reqparse.parse_args()
 
