@@ -1,6 +1,6 @@
-from app import db
+from .. import db
 from sqlalchemy.ext.hybrid import hybrid_property
-from app.models import Result
+from . import Result
 
 class Test(db.Model):
     __tablename__ = 'tests'

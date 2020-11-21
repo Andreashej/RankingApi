@@ -1,4 +1,4 @@
-from app import db, cache
+from .. import db, cache
 from sqlalchemy import func, and_
 from sqlalchemy.orm import contains_eager
 from datetime import datetime, timedelta

@@ -1,4 +1,4 @@
-from app import db,cache
+from .. import db,cache
 
 from sqlalchemy.orm import joinedload
 

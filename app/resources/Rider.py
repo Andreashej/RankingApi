@@ -1,7 +1,9 @@
+import os
+
 from flask_restful import Resource, reqparse, current_app, request, url_for
-from app import db
-from app import auth
-from app.models import Rider, Result, Test, Competition, RiderSchema, ResultSchema, TestSchema
+from .. import db
+from .. import auth
+from ..models import Rider, RiderSchema, ResultSchema, TestSchema, TaskSchema
 
 from sqlalchemy import and_
 
@@ -12,6 +14,8 @@ results_schema = ResultSchema(many=True, exclude=("rider",))
 result_schema = ResultSchema(exclude=("rider",))
 
 tests_schema = TestSchema(many=True, exclude=("results",))
+
+task_schema = TaskSchema()
 
 class RidersResource(Resource):
     def __init__(self):
@@ -35,13 +39,34 @@ class RidersResource(Resource):
 
         return {'status': 'success', 'data': wrapper}, 200
     
-    @auth.login_required
+    # @auth.login_required
     def post(self):
+
+        file = request.files.get('aliases')
+        if file:
+            file.save(os.path.join(current_app.config["ISIRANK_FILES"], file.filename))
+
+            task = Rider.import_aliases(file.filename)
+
+            os.remove(current_app.config["ISIRANK_FILES"] + file.filename)
+
+            try:
+                db.session.commit()
+            except:
+                return { 'status': 'ERROR', 'message': 'Database error'}, 500
+
+            task = task_schema.dump(task)
+
+            return {'status': 'OK', 'data': task}
+
         args = self.reqparse.parse_args()
-        rider = Rider(
-            first=args['fname'],
-            last=args['lname']
-        )
+        try:
+            rider = Rider(
+                first=args['fname'],
+                last=args['lname']
+            )
+        except Exception as e:
+            return { 'status': 'EXISTS', 'message' : e.args}, 403
 
         try:
             db.session.add(rider)

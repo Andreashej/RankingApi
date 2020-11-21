@@ -3,7 +3,7 @@ import rq
 
 from sqlalchemy.ext.hybrid import hybrid_property
 
-from app import db
+from .. import db
 from flask import current_app
 
 class Task(db.Model):

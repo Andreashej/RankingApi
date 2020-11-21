@@ -1,5 +1,5 @@
 from marshmallow import fields
-from app import db
+from .. import db
 from sqlalchemy.ext.hybrid import hybrid_property, hybrid_method
 import csv
 

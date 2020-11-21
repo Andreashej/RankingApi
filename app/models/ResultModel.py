@@ -1,5 +1,5 @@
 from marshmallow import fields
-from app import db
+from .. import db
 from flask import current_app
 
 class Result(db.Model):
@@ -19,7 +19,7 @@ class Result(db.Model):
     
     @staticmethod
     def load_from_file(filename):
-        from app.models import Rider, Horse, Competition, Test, Ranking
+        from . import Competition, Test
         
         competition_id = filename.split('.')[0]
         competition = Competition.query.filter_by(isirank_id=competition_id).first()

@@ -1,6 +1,6 @@
-from app import ma
+from .. import ma
 from marshmallow import fields
-from app.models import Rider, Horse, Result, Competition, Test, RankingList, Task, RankingListTest, User, RankingResultsCache, TestCatalog
+from . import Rider, Horse, Result, Competition, Test, RankingList, Task, RankingListTest, User, RankingResultsCache, TestCatalog
 
 class UserSchema(ma.SQLAlchemyAutoSchema):
     class Meta:

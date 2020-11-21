@@ -1,10 +1,14 @@
+import csv
+
 from marshmallow import fields
-from app import db
+from .. import db
 from sqlalchemy.ext.hybrid import hybrid_property, hybrid_method
 from sqlalchemy import desc, func, and_
 from flask import current_app
 
 from datetime import datetime, timedelta
+
+from .RiderAliasModel import RiderAlias
 
 class Rider(db.Model):
     __tablename__ = 'riders'
@@ -12,6 +16,21 @@ class Rider(db.Model):
     firstname = db.Column(db.String(250))
     lastname = db.Column(db.String(250))
     results = db.relationship("Result", backref="rider", lazy="joined")
+    aliases = db.relationship("RiderAlias", backref="rider", lazy="dynamic")
+
+    def __init__(self, first, last):
+        exists = Rider.query.with_entities(Rider.id).filter_by(fullname = first + " " + last).scalar()
+
+        if exists:
+            raise Exception("A rider with that name already exists")
+
+        alias = RiderAlias.query.with_entities(RiderAlias.id).filter_by(alias = first + " " + last).scalar()
+
+        if alias:
+            raise Exception("A rider alias already exists with this name")
+
+        self.firstname = first
+        self.lastname = last
 
     @hybrid_property
     def fullname(self):
@@ -102,10 +121,23 @@ class Rider(db.Model):
             )
 
         return query.as_scalar()
-
-    def __init__(self, first, last):
-        self.firstname = first
-        self.lastname = last
     
+    def add_alias(self, alias):
+        self.aliases.append(alias)
+
     def __repr__(self):
         return '<Rider {} {}>'.format(self.firstname, self.lastname)
+
+    @staticmethod
+    def import_aliases(filename):
+        from .TaskModel import Task
+        with open(current_app.config['ISIRANK_FILES'] + filename, mode='r', encoding="utf-8-sig") as csv_file:
+            lines = csv.DictReader(csv_file)
+
+            rq_job = current_app.task_queue.enqueue('app.tasks.import_aliases', list(lines))
+
+            task = Task(id=rq_job.get_id(), name="import_aliases", description="Import rider aliases")
+
+            db.session.add(task)
+
+            return task

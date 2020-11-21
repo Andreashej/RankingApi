@@ -1,9 +1,10 @@
 from datetime import date
 import time
 from rq import get_current_job
+import sqlalchemy
 
 from app import db, cache, create_app
-from app.models import Task, Test, Result, Rider, Horse, Competition, RankingListTest, RankingResultsCache, RankingList
+from app.models import Task, Test, Result, Rider, Horse, Competition, RankingListTest, RankingResultsCache, RankingList, RiderAlias
 import datetime
 
 import sys
@@ -188,3 +189,34 @@ def import_results(ranking_id, results):
         app.logger.error(e, exc_info=sys.exc_info())
     finally:
         _set_task_progress(100)
+
+def import_aliases(aliases):
+    items = len(aliases)
+    try:
+        for i, alias in enumerate(aliases):
+            rider = Rider.query.filter_by(fullname = alias['real_name']).first()
+
+            if not rider:
+                (fname, sep, lname) = alias['real_name'].rpartition(' ')
+                rider = Rider(fname, lname)
+                db.session.add(rider)
+
+            a = RiderAlias.query.filter_by(alias = alias['alias']).first()
+            if not a:
+                a = RiderAlias(alias['alias'])
+
+                rider.add_alias(a)
+                
+            else:
+                print(f"Alias {alias['alias']} already exists")
+            
+            _set_task_progress(i / items * 100)
+
+            db.session.commit()
+            print(rider)
+    except Exception as e:
+        db.session.rollback()
+        app.logger.error(e, exc_info=sys.exc_info())
+    finally:
+        _set_task_progress(100)
+

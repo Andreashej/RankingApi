@@ -36,7 +36,7 @@ def create_app():
     cors.init_app(app)
 
     with app.app_context():
-        from app import routes, models
+        from . import routes, models
 
         db.create_all()
 
@@ -53,7 +53,7 @@ def create_app():
 
         return app
 
-from app.models import User
+from .models import User
 @auth.verify_password
 def verify_password(username_or_token, password):
 

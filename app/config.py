@@ -16,6 +16,9 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 SQLALCHEMY_ECHO = False
 SQLALCHEMY_TRACK_MODIFICATIONS = True
 
+SQLALCHEMY_POOL_RECYCLE = 499
+SQLALCHEMY_POOL_TIMEOUT = 20
+
 SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://' + DB_USERNAME + ':' + DB_PASSWORD + '@' + DB_HOSTNAME + ':' + DB_PORT + '/' + DB_NAME
 # SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'mysql+pymysql://andreas2_ranking:V+Zr1cD09XiX@cp02.azehosting.net/andreas2_iceranking'
 # SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'mysql+pymysql://root:79137913@localhost/iceranking'
