@@ -9,6 +9,7 @@ class Test(db.Model):
     competition_id = db.Column(db.Integer, db.ForeignKey('competitions.id'), nullable=False)
     rounding_precision = db.Column(db.Integer, default=2)
     order = db.Column(db.String(4), default='desc')
+    mark_type = db.Column(db.String(4), default='mark')
     _results = db.relationship('Result', backref='test', lazy='dynamic')
 
     def __init__(self, testcode):
@@ -22,3 +23,17 @@ class Test(db.Model):
             return query.filter(Result.mark > 0).order_by(Result.mark.asc())
         else:
             return query.order_by(Result.mark.desc())
+
+    def add_result(self, rider, horse, mark, **kwargs):
+    
+        if (not kwargs.get('skip_check', False)):
+            exists = Result.query.with_entities(Result.id).filter(Result.rider_id == rider.id, Result.horse_id == horse.id).scalar()
+
+            if exists:
+                raise Exception("A combination cannot have more than one result per test")
+
+        result = Result(self, mark)
+        result.rider = rider
+        result.horse = horse
+
+        return result

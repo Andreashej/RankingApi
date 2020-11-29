@@ -141,3 +141,24 @@ class Rider(db.Model):
             db.session.add(task)
 
             return task
+
+    @classmethod
+    def create_by_name(cls, name):
+        (fname, sep, lname) = name.rpartition(' ')
+        rider = cls(fname, lname)
+
+        return rider
+    
+    @classmethod
+    def find_by_name(cls, name):
+        rider = cls.query.filter_by(fullname = name).first()
+
+        if rider:
+            return rider
+        
+        rider = cls.query.join(Rider.aliases, aliased = True).filter_by(alias = name).first()
+
+        if rider:
+            return rider
+
+        return None

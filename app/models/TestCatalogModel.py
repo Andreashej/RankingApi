@@ -14,3 +14,12 @@ class TestCatalog(db.Model):
 
     def __repr__(self):
         return f"<{self.__class__.__name__}.{self.testcode}"
+    
+    @classmethod
+    def get_by_testcode(cls, testcode):
+        test = cls.query.filter_by(testcode = testcode).first()
+
+        if not test:
+            raise Exception("Test not defined in catalog")
+
+        return test

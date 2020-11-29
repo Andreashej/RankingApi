@@ -1,10 +1,10 @@
 from datetime import date
 import time
-from rq import get_current_job
+from rq import get_current_job, job
 import sqlalchemy
 
 from app import db, cache, create_app
-from app.models import Task, Test, Result, Rider, Horse, Competition, RankingListTest, RankingResultsCache, RankingList, RiderAlias
+from app.models import Task, Test, Result, Rider, Horse, Competition, RankingListTest, RankingResultsCache, RankingList, RiderAlias, TestCatalog
 import datetime
 
 import sys
@@ -161,7 +161,7 @@ def import_competitions(ranking_id, competitions):
                     db.session.add(competition)
                 except Exception as e:
                     db.session.rollback()
-                    print(e)
+                    app.logger.error(e, exc_info=sys.exc_info())
             else:
                 if ranking not in competition.include_in_ranking:
                     competition.include_in_ranking.append(ranking)
@@ -177,14 +177,56 @@ def import_competitions(ranking_id, competitions):
     except Exception as e:
         _set_task_progress(100)
         app.logger.error(e, exc_info=sys.exc_info())
-    
+
 def import_results(ranking_id, results):
     ranking = RankingList.query.get(ranking_id)
     try:
         total_lines = len(results)
         for i, r in enumerate(results):
-            print(r)
-            _set_task_progress(i / total_lines * 100)
+            rider = Rider.find_by_name(r['rider'])
+
+            if not rider:
+                rider = Rider.create_by_name(r['rider'])
+                db.session.add(rider)
+
+            feif_id = 'IR0000000000' if r['horse'] == 'nn' else r['feif_id']
+            horse = Horse.query.filter_by(feif_id = feif_id).first()
+
+            if not horse:
+                horse = Horse(feif_id, r['horse'])
+                db.session.add(horse)
+
+            competition = Competition.query.filter_by(isirank_id = r['competition_id']).first()
+
+            if not competition:
+                print (f"Competition {r['competition_id']} not found, skipping result")
+                continue
+                
+            test = Test.query.filter_by(testcode=r['testcode'], competition=competition).first()
+
+            if not test:
+                try:
+                    testdef = TestCatalog.get_by_testcode(r['testcode'])
+                    test = Test(r['testcode'])
+                    test.competition = competition
+                    test.rounding_precision = testdef.rounding_precision
+                    test.order = testdef.order
+                    test.mark_type = testdef.mark_type
+                except Exception as e:
+                    app.logger.error(e, exc_info=sys.exc_info())
+                    print(e)
+                    continue
+
+            try:
+                result = test.add_result(rider, horse, r['mark'], skip_check = True if horse.horse_name == 'nn' else False)
+                db.session.add(result)
+                print(result)
+            except Exception as e:
+                app.logger.error(e, exc_info=sys.exc_info())
+            finally:
+                _set_task_progress(i / total_lines * 100)
+
+        db.session.commit()
     except Exception as e:
         app.logger.error(e, exc_info=sys.exc_info())
     finally:

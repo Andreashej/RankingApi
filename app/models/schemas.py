@@ -1,6 +1,6 @@
 from .. import ma
 from marshmallow import fields
-from . import Rider, Horse, Result, Competition, Test, RankingList, Task, RankingListTest, User, RankingResultsCache, TestCatalog
+from . import Rider, Horse, Result, Competition, Test, RankingList, Task, RankingListTest, User, RankingResultsCache, TestCatalog, RiderAlias
 
 class UserSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
@@ -23,11 +23,17 @@ class RiderSchema(ma.SQLAlchemyAutoSchema):
 
     testlist = fields.List(fields.String())
 
+    aliases = ma.Pluck('RiderAliasSchema', "alias", many = True)
+
     _links = ma.Hyperlinks(
         {
             "self": ma.URLFor("api.rider", rider_id="<id>"),
         }
     )
+
+class RiderAliasSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = RiderAlias
 
 class HorseSchema(ma.SQLAlchemyAutoSchema):
     class Meta:

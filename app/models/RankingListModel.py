@@ -35,7 +35,7 @@ class RankingList(db.Model):
         with open(current_app.config['ISIRANK_FILES'] +  filename, mode='r', encoding='utf-8-sig') as csv_file:
             lines = csv.DictReader(csv_file)
 
-            rq_job = current_app.task_queue.enqueue('app.tasks.import_results', self.id, list(lines))
+            rq_job = current_app.task_queue.enqueue('app.tasks.import_results', args = (self.id, list(lines)), job_timeout = -1)
 
             task = Task(id=rq_job.get_id(), name="import_results", description="Import results to ranking " + self.shortname, rankinglist=self)
             
