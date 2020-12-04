@@ -1,4 +1,4 @@
-from .app import create_app
+from app import create_app
 from rq import Connection, Worker
 import multiprocessing
 
