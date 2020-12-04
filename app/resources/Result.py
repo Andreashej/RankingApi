@@ -25,7 +25,7 @@ class ResultsResource(Resource):
 
         return {'status': 'OK', 'data': results}, 200
     
-    @auth.login_required
+    # @auth.login_required
     def post(self):
         if request.files:
             file = request.files['file']

@@ -19,13 +19,15 @@ class Result(db.Model):
     
     @staticmethod
     def load_from_file(filename):
-        from . import Competition, Test
+        from . import Competition, Test, RankingList
+        print("Started function")
         
         competition_id = filename.split('.')[0]
         competition = Competition.query.filter_by(isirank_id=competition_id).first()
         
         task = None
         if competition is not None:
+            print("Task already started")
             task = competition.get_task_in_progress('import_competition')
         
         if task is not None:
