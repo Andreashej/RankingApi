@@ -49,14 +49,14 @@ def import_competition(competition_id, lines):
             if not test.testcode:
                 test.testcode = fields[1]
 
-            (fname, sep, lname) = fields[0].rpartition(' ')
             rider = Rider.query.filter_by(fullname = fields[0]).first()
+            rider = Rider.find_by_name(fields[0])
             if rider is None:
-                rider = Rider(fname, lname)
+                rider = Rider.create_by_name(fields[0])
                 try:
                     db.session.add(rider)
                 except:
-                    pass
+                    db.sesion.rollback()
             
             horse = Horse.query.filter_by(feif_id=fields[3]).first()
 
@@ -65,7 +65,7 @@ def import_competition(competition_id, lines):
                 try:
                     db.session.add(horse)
                 except:
-                    pass
+                    db.session.rollback()
             
             result = Result(test, fields[2])
             result.horse = horse
@@ -80,9 +80,12 @@ def import_competition(competition_id, lines):
 
             i += 1
             _set_task_progress(100 * i // total_lines)
+
+        db.session.commit()
     except:
         _set_task_progress(100)
         app.logger.error('Unhandled exception', exc_info=sys.exc_info())
+        db.session.rollback()
 
 def compute_ranking(test_id):
     try:
