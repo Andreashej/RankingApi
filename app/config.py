@@ -1,4 +1,5 @@
 import os
+from . import redis_config
 
 SECRET_KEY = 'verySecretKey#noGuess'
 
@@ -21,16 +22,14 @@ SQLALCHEMY_POOL_TIMEOUT = 20
 
 SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://' + DB_USERNAME + ':' + DB_PASSWORD + '@' + DB_HOSTNAME + ':' + DB_PORT + '/' + DB_NAME
 
-
 ISIRANK_FILES = basedir + '/files/'
-
-REDIS_URL = os.environ.get('REDIS_URL') or 'redis://'
-
-QUEUES = ['iceranking-tasks']
 
 RIDERS_PER_PAGE = 100
 
 API_VERSION = "0.1.0"
+
+REDIS_URL = redis_config.REDIS_URL
+QUEUES = redis_config.REDIS_URL
 
 # RDS_HOST iceranking-api.c8fmxoomvwpn.eu-central-1.rds.amazonaws.com
 # RDS_DB_NAME iceranking

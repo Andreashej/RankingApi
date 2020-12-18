@@ -10,7 +10,7 @@ from flask_caching import Cache
 from redis import Redis
 import rq
 
-from . import config
+from . import config, redis_config
 
 migrate = Migrate()
 ma = Marshmallow()
