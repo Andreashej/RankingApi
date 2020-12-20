@@ -1,5 +1,4 @@
 import os
-from . import redis_config
 
 SECRET_KEY = 'verySecretKey#noGuess'
 
@@ -28,8 +27,9 @@ RIDERS_PER_PAGE = 100
 
 API_VERSION = "0.1.0"
 
-REDIS_URL = redis_config.REDIS_URL
-QUEUES = redis_config.REDIS_URL
+REDIS_URL = os.environ.get('REDIS_URL') or 'redis://'
+
+QUEUES = ['iceranking-tasks']
 
 # RDS_HOST iceranking-api.c8fmxoomvwpn.eu-central-1.rds.amazonaws.com
 # RDS_DB_NAME iceranking
