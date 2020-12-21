@@ -34,6 +34,7 @@ def import_competition(competition_id, lines):
         i = 0
 
         for line in lines:
+            print(f"Processing line {i+1} of {lines}")
             if line == '[END]':
                 _set_task_progress(100)
                 cache.delete_memoized(RankingListTest.get_ranking)
