@@ -26,7 +26,6 @@ class Result(db.Model):
         
         task = None
         if competition is not None:
-            print("Task already started")
             task = competition.get_task_in_progress('import_competition')
         
         if task is not None:
@@ -39,7 +38,7 @@ class Result(db.Model):
             lines = contents.splitlines()
 
             if competition is None:
-                competition = Competition(competition_id)
+                competition = Competition('', None, None, competition_id)
 
                 if competition_id[2] == "2" or competition_id[2] == "3":
                     rsn = 'DRL'

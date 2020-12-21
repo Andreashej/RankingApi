@@ -141,7 +141,6 @@ def compute_ranking(test_id):
             app.logger.error(e, exc_info=sys.exc_info())
         finally:
             _set_task_progress(100)
-            cache.delete_memoized(RankingResultsCache.get_results,RankingResultsCache,test)
     except:
         _set_task_progress(100)
         app.logger.error("Unhandled exception", exc_info=sys.exc_info())
