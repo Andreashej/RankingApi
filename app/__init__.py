@@ -42,7 +42,7 @@ def create_app():
 
         app.redis = Redis.from_url(app.config['REDIS_URL'])
         
-        app.task_queue = rq.Queue(app.config['QUEUES'], connection=app.redis)
+        app.task_queue = rq.Queue(app.config['QUEUE'], connection=app.redis)
 
 
         app.register_blueprint(api_bp, url_prefix='/api')
