@@ -40,6 +40,8 @@ def create_app():
 
         db.create_all()
 
+        print(app.config['REDIS_URL'])
+
         app.redis = Redis.from_url(app.config['REDIS_URL'])
         
         app.task_queue = rq.Queue(app.config['QUEUE'], connection=app.redis)
