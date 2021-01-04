@@ -5,7 +5,7 @@ from .resources.Competition import CompetitionsResource, CompetitionResource
 from .resources.Test import TestsResource, TestResource
 from .resources.Horse import HorsesResource, HorseResource, HorseResultResource
 from .resources.Task import TaskResource, TasksResource
-from .resources.User import UsersResource, UserResource, TokenResource, ProfileResource
+from .resources.User import TokenRefresh, UserLogin, UserLogoutAccess, UserLogoutRefresh, UsersResource, UserResource, TokenResource, ProfileResource
 from .resources.Search import SearchResource
 from .resources.TestCatalog import TestCatalogResource, TestDefinitionResource
 
@@ -43,8 +43,10 @@ api.add_resource(TaskResource, '/tasks/<string:task_id>', endpoint='task')
 
 api.add_resource(UsersResource, '/users', endpoint='users')
 api.add_resource(UserResource, '/users/<string:username>', endpoint='user')
-
-api.add_resource(TokenResource, '/login', endpoint='login')
+api.add_resource(UserLogin, '/login', endpoint='login')
+api.add_resource(UserLogoutAccess, '/logout/access', endpoint='logoutaccess')
+api.add_resource(UserLogoutRefresh, '/logout/refresh', endpoint='logoutrefresh')
+api.add_resource(TokenRefresh, '/token/refresh', endpoint='tokenrefresh')
 
 api.add_resource(ProfileResource, '/profile', endpoint='profile')
 

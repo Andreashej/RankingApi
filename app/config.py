@@ -2,6 +2,10 @@ import os
 
 SECRET_KEY = 'verySecretKey#noGuess'
 
+JWT_SECRET_KEY = 'thisIs3xtremelyZcret'
+JWT_BLACKLIST_ENABLED = True
+JWT_BLACKLIST_TOKEN_CHECKS = ['access', 'refresh']
+
 SERVER_NAME = os.environ.get('SERVER_NAME') or 'localhost:5000'
 
 # from dotenv import load_dotenv

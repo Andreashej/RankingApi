@@ -7,6 +7,7 @@ from flask_migrate import Migrate
 from flask_marshmallow import Marshmallow
 from flask_httpauth import HTTPBasicAuth
 from flask_caching import Cache
+from flask_jwt_extended import JWTManager
 from redis import Redis
 import rq
 
@@ -24,6 +25,8 @@ cache = Cache()
 
 auth = HTTPBasicAuth()
 
+jwt = JWTManager()
+
 def create_app():
     app = Flask(__name__)   
     app.config.from_object(config)
@@ -34,6 +37,7 @@ def create_app():
     migrate.init_app(app, db)
     ma.init_app(app)
     cors.init_app(app)
+    jwt.init_app(app)
 
     with app.app_context():
         from . import routes, models
@@ -68,3 +72,8 @@ def verify_password(username_or_token, password):
     g.user = user
 
     return True
+
+@jwt.token_in_blacklist_loader
+def check_if_token_in_blacklist(decrypted_token):
+    jti = decrypted_token['jti']
+    return models.RevokedToken.is_jti_blacklisted(jti)

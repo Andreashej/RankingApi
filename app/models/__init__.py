@@ -10,5 +10,6 @@ from .UserModel import User
 from .RankingResultsCache import RankingResultsCache
 from .TestCatalogModel import TestCatalog
 from .RiderAliasModel import RiderAlias
+from . RevokedTokenModel import RevokedToken
 
 from .schemas import RiderSchema, HorseSchema, ResultSchema, CompetitionSchema, TestSchema, RankingListSchema, RankingListTestSchema, TaskSchema, UserSchema, RankingListResultSchema, TestCatalogSchema
