@@ -1,5 +1,6 @@
 import redis
 import rq
+import datetime
 
 from sqlalchemy.ext.hybrid import hybrid_property
 
@@ -14,6 +15,9 @@ class Task(db.Model):
     rankinglist_test_id = db.Column(db.Integer, db.ForeignKey('rankinglist_tests.id'), default=None)
     rankinglist_id = db.Column(db.Integer, db.ForeignKey('rankinglists.id'), default=None)
     complete = db.Column(db.Boolean, default=False)
+    created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+    started_at = db.Column(db.DateTime)
+    completed_at = db.Column(db.DateTime)
 
     def get_rq_job(self):
         try:

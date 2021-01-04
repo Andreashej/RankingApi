@@ -1,6 +1,7 @@
 import csv
 
 from flask import current_app
+from flask_migrate import current
 
 from .. import db
 from .TaskModel import Task
@@ -31,17 +32,44 @@ class RankingList(db.Model):
 
             return task
     
-    def import_results(self, filename):
+    def import_results(self, filename, filter=None):
+        from .CompetitionModel import Competition
         with open(current_app.config['ISIRANK_FILES'] +  filename, mode='r', encoding='utf-8-sig') as csv_file:
+
             lines = csv.DictReader(csv_file)
+            tasks = []
 
-            rq_job = current_app.task_queue.enqueue('app.tasks.import_results', args = (self.id, list(lines)), job_timeout = -1)
+            current_competition = ''
+            current_competition_results = []
+            for line in lines:
+                if not current_competition:
+                    current_competition = line['competition_id']
 
-            task = Task(id=rq_job.get_id(), name="import_results", description="Import results to ranking " + self.shortname, rankinglist=self)
-            
-            db.session.add(task)
+                if current_competition != line['competition_id']:
+                    competition = Competition.query.filter_by(isirank_id = current_competition).first()
 
-            return task
+                    if not competition:
+                        print (f"Competition {current_competition} does not exist")
+                        continue
+
+                    current_competition_results.append("[END]")
+
+                    if (filter and current_competition in filter) or not filter:
+                        print(current_competition)
+                        task = competition.launch_task('import_competition', 'Importing competition ' + current_competition, current_competition_results)
+
+                        try:
+                            db.session.commit()
+                            tasks.append(task)
+                        except:
+                            print ("Database error")
+
+                    current_competition = line['competition_id']
+                    current_competition_results = []
+                    
+                current_competition_results.append(f"{line['rider']}\t{line['testcode']}\t{line['mark']}\t{line['feif_id']}\t{line['horse']}")
+
+            return tasks
 
     def get_tasks_in_progress(self):
         return Task.query.filter_by(rankinglist=self, complete=False).all()

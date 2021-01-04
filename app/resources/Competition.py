@@ -2,9 +2,10 @@ import datetime, os
 
 from flask_restful import Resource, reqparse
 from flask import request, current_app
-from app import db
-from app import cache, auth
-from app.models import Competition, RankingList, RankingListTest, CompetitionSchema, TestCatalog, Test, TaskSchema
+from .. import db
+from .. import cache, auth
+from ..models import Competition, RankingList, RankingListTest, CompetitionSchema, TestCatalog, Test, TaskSchema, Result
+from sqlalchemy import not_, func
 
 competitions_schema = CompetitionSchema(many=True, exclude=("tests","include_in_ranking","tasks",))
 competition_schema = CompetitionSchema()
@@ -21,7 +22,23 @@ class CompetitionsResource(Resource):
         self.reqparse.add_argument('tests', type=str, action='append', location='json')
     
     def get(self):
-        competitions = Competition.query.all()
+        noresults = request.args.get('noresults', False, type=bool)
+
+        query = Competition.query
+
+        if noresults:
+            # tests = Test.query.all()
+            # # tests_without_results = [test.competition_id for test in tests if test._results.count() == 0]
+            # for test in tests:
+            #     if (test._results.count() == 0):
+            #         print(f"Test {test.id} has no results!")
+
+            query = query.filter(not_(Competition.tests.any()))\
+            #     .join(Competition.tests)\
+            #     .filter(Test._results == 0)
+            
+        competitions = query.all()
+
         competitions = competitions_schema.dump(competitions)
 
         return {'status': 'OK', 'data': competitions}, 200

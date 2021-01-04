@@ -2,6 +2,8 @@ import os
 
 SECRET_KEY = 'verySecretKey#noGuess'
 
+SERVER_NAME = os.environ.get('SERVER_NAME') or 'localhost:5000'
+
 # from dotenv import load_dotenv
 
 DB_USERNAME = os.environ.get('RDS_USERNAME') or 'andreas2_ranking'

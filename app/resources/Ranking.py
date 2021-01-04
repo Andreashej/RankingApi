@@ -4,13 +4,13 @@ import os
 
 from flask import request, current_app
 from flask_restful import Resource, reqparse
-from .. import db, auth
-from ..models import RankingList, RankingListTest, RankingListSchema, RankingListSchema, RiderSchema, RankingListTestSchema, TaskSchema, RankingResultsCache, Competition
+from .. import db, auth, cache
+from ..models import RankingList, RankingListTest, RankingListSchema, RankingListSchema, RiderSchema, RankingListTestSchema, TaskSchema, RankingResultsCache, Competition, Task
 
 from sqlalchemy import func
 from sqlalchemy.orm import contains_eager
 
-ranking_lists_schema = RankingListSchema(many=True)
+ranking_lists_schema = RankingListSchema(many=True,exclude=("competitions",))
 ranking_list_schema = RankingListSchema(exclude=("competitions",))
 
 riders_schema = RiderSchema(many=True)
@@ -103,7 +103,7 @@ class RankingResource(Resource):
         if file:
             file.save(os.path.join(current_app.config["ISIRANK_FILES"], file.filename))
 
-            task = ranking.import_results(file.filename)
+            tasks = ranking.import_results(file.filename, filter=request.form.getlist('filter'))
 
             os.remove(current_app.config["ISIRANK_FILES"] + file.filename)
 
@@ -112,8 +112,8 @@ class RankingResource(Resource):
             except Exception as e:
                 return { 'status': 'ERROR', 'message': e.args}
             
-            task = task_schema.dump(task)
-            return { 'status': 'OK', 'data': task }
+            tasks = tasks_schema.dump(tasks)
+            return { 'status': 'OK', 'data': tasks }
 
         args = self.reqparse.parse_args()
 
@@ -268,10 +268,18 @@ class RankingListResultsResource(Resource):
     def get(self, listname, testcode):
         ranking = RankingList.query.filter_by(shortname = listname).first()
 
+        if ranking is None:
+            return {'status': 'NOT FOUND', 'message': f'Rankinglist {listname} does not exist'}, 404
+
         test = RankingListTest.query.filter_by(testcode = testcode, rankinglist=ranking).first()
 
         if test is None:
-            return {'status': 'NOT FOUND', 'message': 'No test with testcode {} exist for ranking {}.'.format(testcode, ranking)},404
+            return {'status': 'NOT FOUND', 'message': 'No test with testcode {} exist for ranking {}.'.format(testcode, listname)},404
+        
+        clear_cache = request.args.get('clearcache', None)
+
+        if clear_cache:
+            cache.delete_memoized(RankingResultsCache.get_results, RankingResultsCache, test)
 
         results = RankingResultsCache.get_results(test)
 

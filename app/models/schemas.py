@@ -71,6 +71,7 @@ class CompetitionSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Competition
         include_relationships = True
+        exclude = ["tests._results"]
 
     tests = ma.List(ma.Nested("TestSchema", exclude=("competition","results")))
     include_in_ranking = ma.List(ma.Nested("RankingListSchema", only=("shortname","listname","results_valid_days",)))
@@ -84,7 +85,8 @@ class CompetitionSchema(ma.SQLAlchemyAutoSchema):
 class TestSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Test
-        include_relationships = True    
+        include_relationships = True
+        exclude = ["_results"]  
 
     competition = ma.Nested("CompetitionSchema", only=("name","last_date","first_date","id", "include_in_ranking"))
     results = ma.Nested("ResultSchema", only=("rider.id", "rider.fullname", "horse.id", "horse.horse_name", "horse.feif_id", "mark"), many=True)

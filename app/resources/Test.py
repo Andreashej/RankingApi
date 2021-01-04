@@ -1,11 +1,11 @@
+from flask.globals import request
 from flask_restful import Resource, reqparse
-from app import db
-from app import auth
+from .. import db, auth
 
-from app.models import Test, Competition, TestSchema, Result
+from ..models import Test, Competition, TestSchema, Result
 
 test_schema = TestSchema()
-tests_schema = TestSchema(many=True)
+tests_schema = TestSchema(many=True, exclude=("results",))
 
 class TestsResource(Resource):
     def __init__(self):
@@ -14,7 +14,15 @@ class TestsResource(Resource):
         self.reqparse.add_argument('competition_id')
     
     def get(self):
-        tests = Test.query.all()
+        competition = request.args.get('competition_id')
+
+        query = Test.query
+
+        if competition:
+            query = query.filter_by(competition_id = competition)
+
+        tests = query.all()
+
         tests = tests_schema.dump(tests)
 
         return {'status': 'OK', 'data': tests}, 200
@@ -38,13 +46,20 @@ class TestsResource(Resource):
         test = test_schema.dump(test)
         return {'status': 'OK', 'data': test},200
     
-    @auth.login_required
+    # @auth.login_required
     def delete(self):
+        competition = request.args.get('competition_id')
+
+        query = Test.query
+
+        if competition:
+            query = query.filter_by(competition_id = competition)
+
         try:
-            Test.query.delete()
+            query.delete()
             db.session.commit()
-        except:
-            return {'status': 'ERROR'}, 500
+        except Exception as e:
+            return {'status': 'ERROR', 'message': str(e)}, 500
         
         return {'status': 'OK'}, 204
 

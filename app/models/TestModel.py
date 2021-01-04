@@ -10,7 +10,7 @@ class Test(db.Model):
     rounding_precision = db.Column(db.Integer, default=2)
     order = db.Column(db.String(4), default='desc')
     mark_type = db.Column(db.String(4), default='mark')
-    _results = db.relationship('Result', backref='test', lazy='dynamic')
+    _results = db.relationship('Result', backref='test', lazy='dynamic', cascade="all,delete")
 
     def __init__(self, testcode):
         self.testcode = testcode
@@ -37,3 +37,20 @@ class Test(db.Model):
         result.horse = horse
 
         return result
+    
+    @classmethod
+    def create_from_catalog(cls, testcode):
+        from . import TestCatalog
+
+        test = cls(testcode)
+
+        try:
+            catalog = TestCatalog.get_by_testcode(testcode)
+
+            test.rounding_precision = catalog.rounding_precision
+            test.mark_type = catalog.mark_type
+            test.order = catalog.order
+        except:
+            pass
+
+        return test

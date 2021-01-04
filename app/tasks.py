@@ -1,11 +1,13 @@
-from datetime import date
-import time
 from rq import get_current_job, job
 import sqlalchemy
 
-from app import db, cache, create_app
-from app.models import Task, Test, Result, Rider, Horse, Competition, RankingListTest, RankingResultsCache, RankingList, RiderAlias, TestCatalog
+from flask import url_for
+
+from . import db, cache, create_app
+from .models import Task, Test, Result, Rider, Horse, Competition, RankingListTest, RankingResultsCache, RankingList, RiderAlias, TestCatalog
 import datetime
+
+import requests
 
 import sys
 
@@ -19,36 +21,41 @@ def _set_task_progress(progress):
         job.save_meta()
         task = Task.query.get(job.get_id())
 
+        if not task.started_at:
+            task.started_at = datetime.datetime.utcnow()
+
         if progress >= 100:
+            task.completed_at = datetime.datetime.utcnow()
             task.complete = True
         
-        db.session.commit()
+        try:
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            app.logger.error(e, exc_info=sys.exc_info())
     
 def import_competition(competition_id, lines):
     try:
-        competition = Competition.query.get(competition_id)
         _set_task_progress(0)
+        competition = Competition.query.get(competition_id)
         results = []
 
         total_lines = len(lines)
         i = 0
 
         for line in lines:
-            print(f"Processing line {i+1} of {lines}")
+            print(f"Processing line {i+1} of {total_lines}")
             if line == '[END]':
                 _set_task_progress(100)
-                cache.delete_memoized(RankingListTest.get_ranking)
+                print(f"Finished processing competition {competition.isirank_id}")
                 break
 
             fields = line.split('\t')
             
             test = Test.query.filter_by(testcode=fields[1], competition=competition).first()
             if test is None:
-                test = Test(fields[1])
+                test = Test.create_from_catalog(fields[1])
                 competition.tests.append(test)
-
-            if not test.testcode:
-                test.testcode = fields[1]
 
             rider = Rider.query.filter_by(fullname = fields[0]).first()
             rider = Rider.find_by_name(fields[0])
@@ -90,6 +97,7 @@ def import_competition(competition_id, lines):
 
 def compute_ranking(test_id):
     try:
+        _set_task_progress(0)
         test = RankingListTest.query.get(test_id)
 
         RankingResultsCache.query.filter_by(test_id = test.id).delete()
@@ -97,7 +105,7 @@ def compute_ranking(test_id):
         try:
             db.session.commit()
         except:
-            pass
+            db.session.rollback()
 
         if test.grouping == 'rider':
             group = Rider.query.filter(Rider.count_results_for_ranking(test) >= test.included_marks).all()
@@ -107,13 +115,19 @@ def compute_ranking(test_id):
 
         for i, g in enumerate(group):
             results = g.get_results_for_ranking(test)
-
-            result = RankingResultsCache(results, test)
+            result = None
             try:
-                db.session.add(result)
+                result = RankingResultsCache(results, test)
             except Exception as e:
-                app.logger.error(e, exc_info=sys.exc_info())
-                
+                app.logger.debug(e)
+            
+            if result:
+                try:
+                    db.session.add(result)
+                except Exception as e:
+                    db.session.rollback()
+                    app.logger.error(e, exc_info=sys.exc_info())
+    
             _set_task_progress(50 * i // len(group))
 
         try:
@@ -130,7 +144,6 @@ def compute_ranking(test_id):
                 if prev_score != result.mark:
                     rank += 1
                 
-                print(rank, result)
                 result.rank = rank
 
                 prev_score = result.mark
@@ -139,16 +152,23 @@ def compute_ranking(test_id):
 
             db.session.commit()
         except Exception as e:
+            db.session.rollback()
             app.logger.error(e, exc_info=sys.exc_info())
         finally:
             _set_task_progress(100)
+        
+        # Get call to refresh browsercache
+        url = url_for('api.resultlist', listname=test.rankinglist.shortname, testcode=test.testcode)
+        requests.get(url, params={'clearcache': 1})
     except:
         _set_task_progress(100)
         app.logger.error("Unhandled exception", exc_info=sys.exc_info())
 
 def import_competitions(ranking_id, competitions):
-    ranking = RankingList.query.get(ranking_id)
     try:
+        _set_task_progress(0)
+
+        ranking = RankingList.query.get(ranking_id)
         total_lines = len(competitions)
         for i, c in enumerate(competitions):
             startdate = datetime.datetime.strptime(c['startdate'], '%Y-%m-%d')
@@ -158,32 +178,33 @@ def import_competitions(ranking_id, competitions):
 
             if competition is None:
                 competition = Competition(c['competition_name'], startdate, enddate, c['isirank_id'])
-                competition.include_in_ranking.append(ranking)
 
                 try:
                     db.session.add(competition)
                 except Exception as e:
                     db.session.rollback()
                     app.logger.error(e, exc_info=sys.exc_info())
-            else:
-                if ranking not in competition.include_in_ranking:
-                    competition.include_in_ranking.append(ranking)
+
+            if ranking not in competition.include_in_ranking:
+                competition.include_in_ranking.append(ranking)
+
             _set_task_progress(i / total_lines * 100)
         
         try:
             db.session.commit()
         except Exception as e:
+            db.session.rollback()
             app.logger.error(e, exc_info=sys.exc_info())
-        finally:
-            _set_task_progress(100)
 
     except Exception as e:
-        _set_task_progress(100)
         app.logger.error(e, exc_info=sys.exc_info())
+    finally:
+        _set_task_progress(100)
 
 def import_results(ranking_id, results):
-    ranking = RankingList.query.get(ranking_id)
     try:
+        _set_task_progress(0)
+
         total_lines = len(results)
         for i, r in enumerate(results):
             rider = Rider.find_by_name(r['rider'])
@@ -229,15 +250,17 @@ def import_results(ranking_id, results):
             finally:
                 _set_task_progress(i / total_lines * 100)
 
-        db.session.commit()
+            db.session.commit()
     except Exception as e:
         app.logger.error(e, exc_info=sys.exc_info())
     finally:
         _set_task_progress(100)
 
 def import_aliases(aliases):
-    items = len(aliases)
     try:
+        _set_task_progress(0)
+
+        items = len(aliases)
         for i, alias in enumerate(aliases):
             rider = Rider.query.filter_by(fullname = alias['real_name']).first()
 

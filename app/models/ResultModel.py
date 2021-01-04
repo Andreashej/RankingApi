@@ -8,7 +8,7 @@ class Result(db.Model):
     mark = db.Column(db.Float)
     rider_id = db.Column(db.Integer, db.ForeignKey('riders.id', ondelete='CASCADE'),nullable=False)
     horse_id = db.Column(db.Integer, db.ForeignKey('horses.id', ondelete='CASCADE'), nullable=False)
-    test_id = db.Column(db.Integer, db.ForeignKey('tests.id'), nullable=False)
+    test_id = db.Column(db.Integer, db.ForeignKey('tests.id', ondelete='CASCADE'), nullable=False)
     
     def __init__(self, test, mark):
         self.test = test
@@ -16,6 +16,26 @@ class Result(db.Model):
     
     def __repr__(self):
         return '<Result {} {} {} >'.format(self.test.testcode, self.mark, self.rider.firstname)
+
+    def get_mark(self):
+        mark = None
+
+        if self.test.mark_type == 'time':
+            if self.test.testcode == 'P1':
+                mark = (32.50 - self.mark) / 1.25 
+            
+            if (self.test.testcode == 'P2'):
+                mark = (12.00 - self.mark ) / 0.55
+            
+            if (self.test.testcode == 'P3'):
+                mark = 22.00 - self.mark
+            
+            mark = max(min(mark, 10.00), 0.00)
+
+        if mark == None:
+            mark = self.mark
+
+        return round(mark, self.test.rounding_precision)
     
     @staticmethod
     def load_from_file(filename):

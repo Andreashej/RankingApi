@@ -1,15 +1,15 @@
-from app.resources.Result import ResultsResource, ResultResource
-from app.resources.Rider import RiderResource, RidersResource, RiderResultResource
-from app.resources.Ranking import RankingResource, RankingsResource, RankingListResource, RankingListResultsResource, RankingListsResource
-from app.resources.Competition import CompetitionsResource, CompetitionResource
-from app.resources.Test import TestsResource, TestResource
-from app.resources.Horse import HorsesResource, HorseResource, HorseResultResource
-from app.resources.Task import TaskResource
-from app.resources.User import UsersResource, UserResource, TokenResource, ProfileResource
-from app.resources.Search import SearchResource
-from app.resources.TestCatalog import TestCatalogResource, TestDefinitionResource
+from .resources.Result import ResultsResource, ResultResource
+from .resources.Rider import RiderResource, RidersResource, RiderResultResource
+from .resources.Ranking import RankingResource, RankingsResource, RankingListResource, RankingListResultsResource, RankingListsResource
+from .resources.Competition import CompetitionsResource, CompetitionResource
+from .resources.Test import TestsResource, TestResource
+from .resources.Horse import HorsesResource, HorseResource, HorseResultResource
+from .resources.Task import TaskResource, TasksResource
+from .resources.User import UsersResource, UserResource, TokenResource, ProfileResource
+from .resources.Search import SearchResource
+from .resources.TestCatalog import TestCatalogResource, TestDefinitionResource
 
-from app import api
+from . import api
 
 api.add_resource(ResultsResource, '/results', endpoint="results")
 api.add_resource(ResultResource, '/results/<int:result_id>', endpoint="result")
@@ -38,6 +38,7 @@ api.add_resource(CompetitionResource, '/competitions/<int:competition_id>', endp
 api.add_resource(TestsResource, '/tests', endpoint='tests')
 api.add_resource(TestResource, '/tests/<int:test_id>', endpoint='test')
 
+api.add_resource(TasksResource, '/tasks', endpoint='tasks')
 api.add_resource(TaskResource, '/tasks/<string:task_id>', endpoint='task')
 
 api.add_resource(UsersResource, '/users', endpoint='users')

@@ -29,14 +29,16 @@ class RankingResultsCache(db.Model):
     marks = db.relationship("Result", secondary=cached_results_based_on, lazy='dynamic')
 
     def __init__(self, results, test):
-        if (len(results) < test.included_marks):
+        testcount = 2 if test.testcode == 'C4' else 3 if test.testcode == 'C5' else 1
+
+        if len(results) < test.included_marks * testcount:
             raise Exception("Not enough marks to generate result")
 
         final_mark = 0
         self.test_id = test.id
 
         for result in results:
-            final_mark += result.mark
+            final_mark += result.get_mark()
             
             if result.rider not in self.riders:
                 self.riders.append(result.rider)
@@ -45,7 +47,7 @@ class RankingResultsCache(db.Model):
                 self.horses.append(result.horse)
 
             self.marks.append(result)
-
+        
         self.mark = round(final_mark / len(results), test.rounding_precision)
         
 
@@ -55,7 +57,7 @@ class RankingResultsCache(db.Model):
     @classmethod
     @cache.memoize(timeout=1440)
     def get_results(cls, test):
-        from app.models import Rider, Horse, RankingListResultSchema
+        from ..models import Rider, Horse, RankingListResultSchema
         
         if test.grouping == 'rider':
             results_schema = RankingListResultSchema(many=True, exclude=("horses",))

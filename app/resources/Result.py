@@ -44,13 +44,13 @@ class ResultsResource(Resource):
         else:
             return {'status': 'ERROR', 'message': 'File not found'},500
 
-    @auth.login_required
+    # @auth.login_required
     def delete(self):
         try:
-            results = Result.query.all()
-            for result in results:
-                if(result.test == None):
-                    db.session.delete(result)
+            results = Result.query.delete()
+            # for result in results:
+            #     if(result.test == None):
+            #         db.session.delete(result)
             
             db.session.commit()
         except:

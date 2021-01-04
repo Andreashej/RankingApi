@@ -1,5 +1,5 @@
+from sqlalchemy.ext.hybrid import hybrid_property
 from .. import db, cache
-from sqlalchemy import func, and_
 from sqlalchemy.orm import contains_eager
 from datetime import datetime, timedelta
 
@@ -17,10 +17,21 @@ class RankingListTest(db.Model):
     grouping = db.Column(db.String(5), default='rider')
     min_mark = db.Column(db.Float)
     rounding_precision = db.Column(db.Integer)
-    mark_type = db.Column(db.String(4), default='mark') # Allowed values: {mark, time}
+    mark_type = db.Column(db.String(4), default='mark') # Allowed values: {mark, time, comb}
     tasks = db.relationship("Task", backref="test", lazy='dynamic')
 
     ranking_results_cached = db.relationship("RankingResultsCache", backref="cached_results", lazy="joined")
+
+    @hybrid_property
+    def included_tests(self):
+        tests = ['T1', 'T1', 'V1', 'F1']
+        if self.testcode == 'C4':
+            return tests
+
+        if self.testcode == 'C5':
+            return tests + ['PP1', 'P1', 'P2', 'P3']
+        
+        return [self.testcode]
 
     def __repr__(self):
         return "<{}.{}>".format(self.__class__.__name__, self.id)

@@ -74,24 +74,53 @@ class Rider(db.Model):
             results_query = results_query.filter(Result.mark >= test.min_mark)
         else:
             results_query = results_query.filter(Result.mark > 0)
-        
-        results_query = results_query.join(Test, Result.test_id == Test.id).filter_by(testcode=test.testcode)\
-            .join(Competition).filter(Competition.last_date >= (datetime.now() - timedelta(days=test.rankinglist.results_valid_days)))\
-            .join(RankingList, Competition.include_in_ranking).filter_by(shortname=test.rankinglist.shortname)\
-        
-        if test.order == 'desc':
-            results_query = results_query.order_by(Result.mark.desc())
-        else:
-            results_query = results_query.order_by(Result.mark.asc())
 
-        return results_query.limit(test.included_marks).all()
+        results_query = results_query.join(Test, Result.test_id == Test.id)
+
+        queries = {}
+        if test.testcode == 'C4' or test.testcode == 'C5':
+            queries['tolt'] = results_query.filter((Test.testcode == 'T1') | (Test.testcode == 'T2'))
+
+            queries['gait'] = results_query.filter((Test.testcode == 'V1') | (Test.testcode == 'F1'))
+
+            if (test.testcode == 'C5'):
+                queries['pace'] = results_query.filter((Test.testcode == 'PP1') | (Test.testcode == 'P1') | (Test.testcode == 'P2') | (Test.testcode == 'P3'))
+        else:
+            queries['all'] = results_query.filter_by(testcode=test.testcode)
+
+        results = list()
+        
+        for key in queries:
+            queries[key] = queries[key]\
+                .join(Competition).filter(Competition.last_date >= (datetime.now() - timedelta(days=test.rankinglist.results_valid_days)))\
+                .join(RankingList, Competition.include_in_ranking).filter_by(shortname=test.rankinglist.shortname)
+
+            if test.order == 'desc':
+                queries[key] = queries[key].order_by(Result.mark.desc())
+            else:
+                queries[key] = queries[key].order_by(Result.mark.asc())
+
+            queries[key] = queries[key].limit(test.included_marks).all()
+
+            for result in queries[key]:
+                results.append(result)
+        
+        return results
     
     @hybrid_method
     def count_results_for_ranking(self, test):
+        # tests = [test.testcode]
+
+        # if test.testcode in ['C4', 'C5']:
+        #     tests = ['T1', 'T2', 'V1', 'F1'] 
+
+        #     if test.testcode == 'C5':
+        #         tests = tests + ['PP1', 'P1', 'P2', 'P3']
+        
         return len(list(
             filter(
                 lambda result: (
-                    result.test.testcode == test.testcode and
+                    result.test.testcode in result.test.included_tests and
                     result.test.competition in test.rankinglist.competitions
                     ),
                 self.results
@@ -100,7 +129,7 @@ class Rider(db.Model):
 
     @count_results_for_ranking.expression
     def count_results_for_ranking(cls, test):
-        from app.models import Result, Test, Competition
+        from . import Result, Test, Competition
 
         competition_ids = list(map(lambda comp: comp.id, test.rankinglist.competitions))
 
@@ -110,16 +139,23 @@ class Rider(db.Model):
             query = query.filter(Result.mark >= test.min_mark)
         else:
             query = query.filter(Result.mark > 0)
+        
+        # tests = [test.testcode]
+
+        # if test.testcode in ['C4', 'C5']:
+        #     tests = ['T1', 'T2', 'V1', 'F1'] 
+
+        #     if test.testcode == 'C5':
+        #         tests = tests + ['PP1', 'P1', 'P2', 'P3']
 
         query = query\
-            .join(Result.test).filter(Test.testcode == test.testcode)\
+            .join(Result.test).filter(Test.testcode.in_(test.included_tests))\
             .join(Test.competition).filter(
                 and_(
                     Competition.id.in_(competition_ids), 
                     Competition.last_date >= (datetime.now() - timedelta(days=test.rankinglist.results_valid_days))
                 )
             )
-
         return query.as_scalar()
     
     def add_alias(self, alias):
