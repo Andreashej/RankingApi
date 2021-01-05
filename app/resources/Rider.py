@@ -1,8 +1,8 @@
 import os
 
 from flask_restful import Resource, reqparse, current_app, request, url_for
+from flask_jwt_extended import jwt_required
 from .. import db
-from .. import auth
 from ..models import Rider, RiderSchema, ResultSchema, TestSchema, TaskSchema
 
 from sqlalchemy import and_
@@ -39,7 +39,7 @@ class RidersResource(Resource):
 
         return {'status': 'success', 'data': wrapper}, 200
     
-    # @auth.login_required
+    @jwt_required
     def post(self):
 
         file = request.files.get('aliases')
@@ -78,7 +78,7 @@ class RidersResource(Resource):
 
         return {'status': 'OK', 'data': rider}, 200
     
-    @auth.login_required
+    @jwt_required
     def delete(self):
         try:
             Rider.query.delete()
@@ -103,7 +103,7 @@ class RiderResource(Resource):
 
         return {'status': 'OK', 'data': rider}
     
-    @auth.login_required
+    @jwt_required
     def patch(self, rider_id):
         args = self.reqparse.parse_args()
         
@@ -122,7 +122,7 @@ class RiderResource(Resource):
         
         return {'status': 'OK', 'data': rider}
 
-    @auth.login_required
+    @jwt_required
     def delete(self, rider_id):
         rider = Rider.query.get(rider_id)
 

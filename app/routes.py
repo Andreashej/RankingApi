@@ -5,7 +5,7 @@ from .resources.Competition import CompetitionsResource, CompetitionResource
 from .resources.Test import TestsResource, TestResource
 from .resources.Horse import HorsesResource, HorseResource, HorseResultResource
 from .resources.Task import TaskResource, TasksResource
-from .resources.User import TokenRefresh, UserLogin, UserLogoutAccess, UserLogoutRefresh, UsersResource, UserResource, TokenResource, ProfileResource
+from .resources.User import TokenRefresh, UserLogin, UserLogoutAccess, UserLogoutRefresh, UsersResource, UserResource, ProfileResource
 from .resources.Search import SearchResource
 from .resources.TestCatalog import TestCatalogResource, TestDefinitionResource
 

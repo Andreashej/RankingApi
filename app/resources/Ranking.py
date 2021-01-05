@@ -1,14 +1,10 @@
-from datetime import datetime, timedelta
-
 import os
 
 from flask import request, current_app
+from flask_jwt_extended import jwt_required
 from flask_restful import Resource, reqparse
 from .. import db, auth, cache
 from ..models import RankingList, RankingListTest, RankingListSchema, RankingListSchema, RiderSchema, RankingListTestSchema, TaskSchema, RankingResultsCache, Competition, Task
-
-from sqlalchemy import func
-from sqlalchemy.orm import contains_eager
 
 ranking_lists_schema = RankingListSchema(many=True,exclude=("competitions",))
 ranking_list_schema = RankingListSchema(exclude=("competitions",))
@@ -34,7 +30,7 @@ class RankingsResource(Resource):
 
         return {'status': 'OK', 'data': rankings}
     
-    @auth.login_required
+    @jwt_required
     def post(self):
         args = self.reqparse.parse_args()
         ranking = RankingList(
@@ -52,7 +48,7 @@ class RankingsResource(Resource):
         ranking = ranking_list_schema.dump(ranking)
         return {'status': 'OK', 'data': ranking}
     
-    @auth.login_required
+    @jwt_required
     def delete(self):
         try:
             RankingList.query.delete()
@@ -154,7 +150,7 @@ class RankingListsResource(Resource):
         tests = tests_schema.dump(rankinglist.tests)
         return {'status': 'OK', 'data': tests}
 
-    @auth.login_required
+    @jwt_required
     def post(self, listname):
         args = self.reqparse.parse_args()
 

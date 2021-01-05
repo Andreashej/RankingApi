@@ -2,10 +2,10 @@ import datetime, os
 
 from flask_restful import Resource, reqparse
 from flask import request, current_app
-from .. import db
-from .. import cache, auth
+from .. import db, cache
 from ..models import Competition, RankingList, RankingListTest, CompetitionSchema, TestCatalog, Test, TaskSchema, Result
 from sqlalchemy import not_, func
+from flask_jwt_extended import jwt_required
 
 competitions_schema = CompetitionSchema(many=True, exclude=("tests","include_in_ranking","tasks",))
 competition_schema = CompetitionSchema()
@@ -43,7 +43,7 @@ class CompetitionsResource(Resource):
 
         return {'status': 'OK', 'data': competitions}, 200
 
-    @auth.login_required
+    @jwt_required
     def post(self):        
         args = self.reqparse.parse_args()
 
@@ -75,7 +75,7 @@ class CompetitionsResource(Resource):
         
         return {'status': 'OK', 'data': competition}, 200
     
-    @auth.login_required
+    @jwt_required
     def delete(self):
         try:
             Competition.query.delete()
@@ -104,7 +104,7 @@ class CompetitionResource(Resource):
 
         return {'status': 'OK', 'data': competition}
     
-    @auth.login_required
+    @jwt_required
     def patch(self, competition_id):
         args = self.reqparse.parse_args()
 
@@ -141,7 +141,7 @@ class CompetitionResource(Resource):
         
         return {'status': 'OK', 'data': competition}
 
-    @auth.login_required
+    @jwt_required
     def delete(self, competition_id):
         competition = Competition.query.get(competition_id)
 

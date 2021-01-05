@@ -1,8 +1,8 @@
 from flask_restful import Resource, reqparse
 from flask import request, current_app
-from app import db
-from app import cache, auth
-from app.models import Result, Rider, Horse, ResultSchema, TaskSchema
+from flask_jwt_extended import jwt_required
+from .. import db,
+from ..models import Result, ResultSchema, TaskSchema
 
 import os
 
@@ -25,7 +25,7 @@ class ResultsResource(Resource):
 
         return {'status': 'OK', 'data': results}, 200
     
-    # @auth.login_required
+    @jwt_required
     def post(self):
         if request.files:
             file = request.files['file']
@@ -44,14 +44,10 @@ class ResultsResource(Resource):
         else:
             return {'status': 'ERROR', 'message': 'File not found'},500
 
-    # @auth.login_required
+    @jwt_required
     def delete(self):
         try:
-            results = Result.query.delete()
-            # for result in results:
-            #     if(result.test == None):
-            #         db.session.delete(result)
-            
+            Result.query.delete()
             db.session.commit()
         except:
             return {'status': 'ERROR'}, 500

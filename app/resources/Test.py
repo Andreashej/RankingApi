@@ -1,5 +1,6 @@
 from flask.globals import request
 from flask_restful import Resource, reqparse
+from flask_jwt_extended import jwt_required
 from .. import db, auth
 
 from ..models import Test, Competition, TestSchema, Result
@@ -27,7 +28,7 @@ class TestsResource(Resource):
 
         return {'status': 'OK', 'data': tests}, 200
     
-    @auth.login_required
+    @jwt_required
     def post(self):
         args = self.reqparse.parse_args()
 
@@ -46,7 +47,7 @@ class TestsResource(Resource):
         test = test_schema.dump(test)
         return {'status': 'OK', 'data': test},200
     
-    # @auth.login_required
+    @jwt_required
     def delete(self):
         competition = request.args.get('competition_id')
 
@@ -77,6 +78,6 @@ class TestResource(Resource):
 
         return {'status': 'OK', 'data': test}
 
-    @auth.login_required
+    @jwt_required
     def patch(self):
         pass

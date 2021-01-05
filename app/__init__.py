@@ -8,10 +8,21 @@ from flask_marshmallow import Marshmallow
 from flask_httpauth import HTTPBasicAuth
 from flask_caching import Cache
 from flask_jwt_extended import JWTManager
+from flask_jwt_extended.exceptions import JWTExtendedException
+from jwt import PyJWTError
 from redis import Redis
 import rq
 
 from . import config
+
+class FixedApi(Api):
+  def error_router(self, original_handler, e):
+    if not isinstance(e, PyJWTError) and not isinstance(e, JWTExtendedException) and self._has_fr_route():
+      try:
+        return self.handle_error(e)
+      except Exception:
+        pass  # Fall through to original handler
+    return original_handler(e)
 
 migrate = Migrate()
 ma = Marshmallow()
@@ -19,7 +30,7 @@ cors = CORS()
 db = SQLAlchemy()
 
 api_bp = Blueprint('api', __name__)
-api = Api(api_bp)
+api = FixedApi(api_bp)
 
 cache = Cache()
 

@@ -1,8 +1,8 @@
 from flask_restful import Resource, reqparse
-from app import db
-from app import auth
+from flask_jwt_extended import jwt_required
+from .. import db
 
-from app.models import Horse, Result, Competition, Test, HorseSchema, ResultSchema, TestSchema
+from ..models import Horse, Result, Competition, Test, HorseSchema, ResultSchema, TestSchema
 
 horses_schema = HorseSchema(many=True, exclude=("results",))
 horse_schema = HorseSchema(exclude=("results",))
@@ -24,7 +24,7 @@ class HorsesResource(Resource):
 
         return {'status': 'OK', 'data': horses}, 200
     
-    @auth.login_required
+    @jwt_required
     def post(self):
         args = self.reqparse.parse_args()
 
@@ -44,7 +44,7 @@ class HorsesResource(Resource):
 
         return {'status': 'OK', 'data': horse},200
 
-    @auth.login_required
+    @jwt_required
     def delete(self):
         try:
             Horse.query.delete()
