@@ -32,6 +32,10 @@ class RankingListTest(db.Model):
             return tests + ['PP1', 'P1', 'P2', 'P3']
         
         return [self.testcode]
+    
+    @hybrid_property
+    def tasks_in_progress(self):
+        return self.get_tasks_in_progress()
 
     def __repr__(self):
         return "<{}.{}>".format(self.__class__.__name__, self.id)

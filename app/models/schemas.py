@@ -120,6 +120,8 @@ class RankingListTestSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = RankingListTest
     
+    tasks_in_progress = ma.Nested("TaskSchema", many=True)
+    
     _links = ma.Hyperlinks(
         {
             "self": ma.URLFor("api.rankinglist", id="<id>" ),
@@ -135,7 +137,7 @@ class RankingListResultSchema(ma.SQLAlchemyAutoSchema):
 
     riders = ma.Nested("RiderSchema", many=True, only=("id","fullname",))
     horses = ma.Nested("HorseSchema", many=True, only=("id","horse_name","feif_id",))
-    marks = ma.Nested("ResultSchema", many=True, only=("mark","horse.horse_name","horse.feif_id","test.competition.name","test.competition.id", "test.testcode"))
+    marks = ma.Nested("ResultSchema", many=True, only=("id","mark","horse.horse_name","horse.feif_id","test.competition.name","test.competition.id", "test.testcode"))
 
 class TaskSchema(ma.SQLAlchemyAutoSchema):
     class Meta:

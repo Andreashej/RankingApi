@@ -2,7 +2,7 @@ from flask_jwt_extended.utils import create_access_token, get_jwt_identity
 from flask_migrate import current
 from flask_restful import Resource, reqparse
 from flask import g
-from flask_jwt_extended import jwt_required, jwt_refresh_token_required, get_raw_jwt
+from flask_jwt_extended import jwt_required, jwt_refresh_token_required, get_raw_jwt, jwt_optional
 import jwt
 from .. import db, auth, verify_password
 
@@ -106,7 +106,11 @@ class TokenRefresh(Resource):
         return { 'access_token': access_token }
 
 class ProfileResource(Resource):
-    @jwt_required
+    @jwt_optional
     def get(self):
         current_user = User.find_by_username(get_jwt_identity())
+
+        if not current_user:
+            return { 'message': 'You are not logged in.' }, 401
+        
         return { 'data': user_schema.dump(current_user) }

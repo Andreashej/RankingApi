@@ -1,7 +1,7 @@
 from flask_restful import Resource, reqparse
 from flask import request, current_app
 from flask_jwt_extended import jwt_required
-from .. import db,
+from .. import db
 from ..models import Result, ResultSchema, TaskSchema
 
 import os
