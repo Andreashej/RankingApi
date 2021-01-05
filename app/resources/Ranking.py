@@ -3,7 +3,7 @@ import os
 from flask import request, current_app
 from flask_jwt_extended import jwt_required
 from flask_restful import Resource, reqparse
-from .. import db, auth, cache
+from .. import db, cache
 from ..models import RankingList, RankingListTest, RankingListSchema, RankingListSchema, RiderSchema, RankingListTestSchema, TaskSchema, RankingResultsCache, Competition, Task
 
 ranking_lists_schema = RankingListSchema(many=True,exclude=("competitions",))
