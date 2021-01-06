@@ -1,5 +1,4 @@
-from icerankingapi import db, create_app
-import icerankingapi.models
+from .app import db, create_app, models
 
 app = create_app()
 
