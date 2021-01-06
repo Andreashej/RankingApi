@@ -1,0 +1,78 @@
+Mummi Páls	F1	0.00	Is2006186183	Dökkvi frá Bakkakoti
+Sofie Hedegaard Sørensen	F1	4.63	IS2004187674	Hróður frá Votmúla 2
+Amalie Juul Hansen	F2	5.13	Dk2010100084	Mídas fra Hovensgaard
+Askja Isabel	F2	4.93	DK2007102993	Vinur fra Krosnesi
+Astrid Normann Andersen	F2	4.03	DK2012100512	Helgi fra Hellig Kildegaard
+Clara Thing Andersen	F2	1.87	IS2000158490	Hrafnar frá Ytri-Hofdölum
+Maja Kallmayer	F2	3.47	IS2002284461	Von frá Hólavatni
+Sus Vendelbo	F2	4.07	DK2011100626	Vitus fra Vesterheden
+Camille Blirup	T1	3.37	DK2010100632	Skjóni fra Vester Dalsgaard
+Laura Helledie	T1	4.03	DK2009200320	Iðunn fra Jespersgaarde
+Peter Juhl	T1	5.93	DK2002102428	Loke fra Skurmosen
+Bettina Lamp Henriksen	T2	4.93	IS2013184868	Aries frá Hvolsvelli
+Ingrid Damgaard	T2	5.33	DK2009100352	Albert fra Kirstineholm
+Mummi Páls	T2	5.87	IS2009186101	Stapi frá Kirkjubæ
+Sofie Hedegaard Sørensen	T2	4.20	IS2004187674	Hróður frá Votmúla 2
+Agnes Normann Andersen	T3	3.80	DK2008205422	Stelpa fra Pikkerbakken
+Anja Mose	T3	4.73	dk2010200437	Drottning fra Horskilde
+Anne Mette Ullitz Nielsen	T3	4.13	DK2009200388	Vinda fra Jullanbo
+Desirée Alameri	T3	4.67	DK2013100476	Aftann fra Langtved
+Gabriella Stenfeldt Johansen	T3	5.13	IS2006181405	Einir frá Kastalabrekku
+Janni Jensen    T3	5.07    IS2004187597	Hektor fra Litlu-Sandvík
+karina vynne	T3	5.00	IS2012181565	Rögnir frá Minni-Völlum
+Karoline Amalie Penthin Madsen	T3	4.43	DK2012200410	Svala fra Bøghegård
+Kent Ostenfeld	T3	4.37	DK2010100570	Högni fra Guldbæk
+Laura Brinkmann kristensen	T3	4.23	IS2000188613	Kórall frá Dalsmynni
+Lisbet Karred Larsen	T3	4.07	DK2004106828	Elgur fra Ærtebjerg
+Maria Adolfsen	T3	4.77	DK2010200375	Björk fra Horsdalgaard
+Marie Thing Andersen	T3	4.33	DK2008108396	Oskar fra Katknøs
+Oline Damgaard	T3	4.53	DK2013100499	Sjóli fra Gingsholm
+Simone Højgaard Simonsen	T3	4.20	DK2012200678	Bleik fra Linå
+Amalie Juul Hansen	T4	5.37	Dk2010100084	Mídas fra Hovensgaard
+Astrid Normann Andersen	T4	4.03	DK2012100512	Helgi fra Hellig Kildegaard
+Didde Marie Mose	T4	4.67	DK2014100466	Mars fra Tindsgarði
+Maja Kallmayer	T4	4.83	DE2012110684	Taktur vom Meiersberg
+Clara Thing Andersen	T7	2.93	IS2000158490	Hrafnar frá Ytri-Hofdölum
+Emilia Hegaard	T7	4.80	DK2014100392	Kobbi fra Hyldsbæk
+Ida Sofie Hegaard	T7	4.37	DK2011200668	Dúkka fra Langtved
+Karen Kirketerp	T7	4.80	DK2012100486	Matti fra Ny Nørregård
+Birgitte Lindberg Olesen	T8	4.87	DK2013100749	Hörður fra Nr. Tolstrup
+Else Ottosen	T8	5.00	DK2010100317	Ási fra Stutteri Geysir
+Kamma Vinther	T8	4.43	Dk2013100358	Hrímnir fra Vindhøj
+Maria Adolfsen	T8	3.67	DK2014100034	Askur fra Nørgaard
+Marie Thing Andersen	T8	4.03	DK2013200667	Alfa fra Bundgaard
+Randi Fredborg Andreasen	T8	4.53	DK2011100384	Tristan fra Rosenlund
+Tora Vynne	T8	4.80	SE2012204592	Saga från Backome
+Agnete Præstholm Schneider	V1	5.80	DK2013200389	Smilla fra Teglborg
+Camille Blirup	V1	5.30	DK2010100632	Skjóni fra Vester Dalsgaard
+Desirée Alameri	V1	5.50	DK2013100476	Aftann fra Langtved
+Laura Helledie	V1	5.33	DK2009200320	Iðunn fra Jespersgaarde
+Marie Thing Andersen	V1	4.97	DK2008108396	Oskar fra Katknøs
+Mummi Páls	V1	5.30	IS2009186101	Stapi frá Kirkjubæ
+Anja Mose	V2	4.87	dk2010200437	Drottning fra Horskilde
+Ingrid Damgaard	V2	5.13	DK2009100352	Albert fra Kirstineholm
+Karoline Amalie Penthin Madsen	V2	5.53	DK2012200410	Svala fra Bøghegård
+Kent Ostenfeld	V2	0.00	DK2010100570	Högni fra Guldbæk
+Maja Kallmayer	V2	5.47	DE2012110684	Taktur vom Meiersberg
+Maria Adolfsen	V2	5.50	DK2010200375	Björk fra Horsdalgaard
+Simone Højgaard Simonsen	V2	4.67	DK2012200678	Bleik fra Linå
+Agnes Normann Andersen	V3	4.60	DK2008205422	Stelpa fra Pikkerbakken
+Anne Mette Ullitz Nielsen	V3	5.10	DK2009200388	Vinda fra Jullanbo
+Bettina Lamp Henriksen	V3	4.97	IS2013184868	Aries frá Hvolsvelli
+Didde Marie Mose	V3	5.33	DK2014100466	Mars fra Tindsgarði
+Emilia Hegaard	V3	4.37	DK2014100392	Kobbi fra Hyldsbæk
+Ida Sofie Hegaard	V3	4.70	DK2011200668	Dúkka fra Langtved
+Janni Jensen	V3	5.40	IS2004187597    Hektor fra Litlu-Sandvík
+Karen Kirketerp	V3	5.10	DK2012100486	Matti fra Ny Nørregård
+Laura Brinkmann kristensen	V3	3.77	IS2000188613	Kórall frá Dalsmynni
+Birgitte Lindberg Olesen	V5	5.03	DK2013100749	Hörður fra Nr. Tolstrup
+Caroline Bach Frederiksen	V5	4.37	IS2003182199	Rökkvi frá Borgargerði
+Else Ottosen	V5	4.23	DK2010100317	Ási fra Stutteri Geysir
+Emilia lønskov Liebach	V5	4.97	DK2013100530	Armur fra Guldbæk
+Kamma Vinther	V5	5.13	Dk2013100358	Hrímnir fra Vindhøj
+Maria Adolfsen	V5	5.20	DK2014100034	Askur fra Nørgaard
+Marie Thing Andersen	V5	3.77	DK2013200667	Alfa fra Bundgaard
+Randi Fredborg Andreasen	V5	3.10	DK2011100384	Tristan fra Rosenlund
+[END]
+
+

@@ -1,4 +1,4 @@
-from app import create_app
+from icerankingapi import create_app
 
 application = create_app()
 

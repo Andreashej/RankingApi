@@ -1,0 +1,91 @@
+Almira Rasch Stæhr	F1	5.23	NL2010100145	Kjalar van de Valge
+Caroline Holvad	F1	5.80	IS2012158160	Pipar frá Þúfum
+Cecilie Katrine Salling	F1	5.27	DE2008122275	Romeo vom Heesberg
+Freja Løvgreen	F1	5.30	dk2010200369	Rós fra Kongehøj
+Gerd Engelbrecht	F1	6.13	IS2008182584	Janus frá Skúfslæk
+Line Søgaard	F1	3.87	IS2011201049	Álfamær frá Skipaskaga
+Natalie Fischer	F1	6.17	DK2009100743	Ímnir fra Egeskov
+Sigurður Óli Kristinsson	F1	6.90	IS2012187981	Draumur frá Vorsabæ II
+Anette Elise Jørgensen	F2	3.13	DK2009100067	Ísbjörn fra Nordhus
+Camilla Fredslund Kragh-Hansen	F2	4.67	DK2011100808	Víkingur fra Ørskov Vestergård
+Mathilde Hudlebusch Vestergaard	F2	4.07	Dk2005205020	Kráka fra Rødstenskær
+Mette Koefoed	F2	5.73	DK2009100840	Kóngur fra Højbjerg
+Michelle Munkholm Andersen	F2	4.43	DK2008108842	Dagur fra Debelmose
+Signe Hjort	F2	5.53	DK2012100752	Dugur fra Dalhus
+Cecilie Katrine Salling	P2	9.55	DE2008122275	Romeo vom Heesberg
+Ida Brunsgaard Pedersen	P2	11.15	IS2011101286	Galdur frá Hrafnsvík
+Mathilde Hudlebusch Vestergaard	P2	13.11	Dk2005205020	Kráka fra Rødstenskær
+Mette Koefoed	P2	9.04	DK2009100840	Kóngur fra Højbjerg
+Natalie Fischer	P2	7.89	DK2009100743	Ímnir fra Egeskov
+Sigurður Óli Kristinsson	P2	9.69	IS2013181420	Frami frá Fákshólum
+Sigurður Óli Kristinsson	P2	8.31	IS2006249014	Snælda frá Laugabóli
+Anette Elise Jørgensen	PP1	0.00	DK2009100067	Ísbjörn fra Nordhus
+Camilla Fredslund Kragh-Hansen	PP1	3.21	DK2011100808	Víkingur fra Ørskov Vestergård
+Caroline Grønbek Nielsen	PP1	4.38	IS2005125086	Kaldi frá Meðalfelli
+Cecilie Katrine Salling	PP1	5.21	DE2008122275	Romeo vom Heesberg
+Clara Håkonsson	PP1	6.08	IS2004286692	Branda frá Holtsmúla 1
+Freja Løvgreen	PP1	2.17	dk2007103016	Fjölvi fra Hedegaard
+Ida Brunsgaard Pedersen	PP1	1.17	IS2011101286	Galdur frá Hrafnsvík
+Mathilde Hudlebusch Vestergaard	PP1	1.88	Dk2005205020	Kráka fra Rødstenskær
+Mette Koefoed	PP1	2.83	DK2009100840	Kóngur fra Højbjerg
+Natalie Fischer	PP1	6.96	DK2009100743	Ímnir fra Egeskov
+Signe Hjort	PP1	1.50	DK2012100752	Dugur fra Dalhus
+Almira Rasch Stæhr	T1	6.57	DK2006207106	Ástund fra Ny Nørregård
+Camilla Fredslund Kragh-Hansen	T1	6.33	DK2011100808	Víkingur fra Ørskov Vestergård
+Caroline Holvad	T1	6.33	IS2012158160	Pipar frá Þúfum
+Gerd Engelbrecht	T1	6.43	IS2008182584	Janus frá Skúfslæk
+Ingeborg Larsen	T1	5.77	DK2008106246	Kiljan fra Skovkrogen
+Kristina Holst Hansen	T1	6.43	IS2010258842	Birta frá Miðsitju
+Lone Høst	T1	6.27	IS2007282010	Píla frá Hvoli
+Olivia kasperczyk	T1	6.50	DK2010100770	Svipur fra Rødstenskær
+Rikke Severin	T1	6.20	DK2010200083	Venja fra Toftedal
+Sigurður Óli Kristinsson	T1	7.53	IS2010187001	Sólbjartur frá Kjarri
+stine Flintegaard Kældsø	T1	6.37	DK2009100419	Kjarkur fra Højgården
+Almira Rasch Stæhr	T2	6.23	NL2010100145	Kjalar van de Valge
+Anne Mariager	T2	5.37	Dk2009200422	Gæfa fra Stihøj
+Michelle Munkholm Andersen	T2	6.00	DK2008108842	Dagur fra Debelmose
+Anna Sophie Kiskov	T3	4.77	DK2007103162	Trítill fra Voreslyst
+Anne Mariager	T3	5.70	Dk2008205593	Gáska fra Grundet Hus
+Camilla Pers Petersen	T3	5.27	DK2013100682	Sprettur fra Hanseseje
+Charlotte Elman Handberg	T3	5.37	DK2011100792	Kristall fra Handberggaard
+Henriette Hindbo	T3	6.80	DK2008103960	Ullinn fra Faurholt
+Inger Tony Bjørn Hansen	T3	6.00	IS2007184886	Vonandi frá Strandarhjáleigu
+Karin Madsen	T3	5.93	DK2011100310	Herjann fra HCL Hestar
+Laura Emilie Nielsen	T3	5.07	DK2010100116	Hnokki fra Toftedal
+Line Søgaard	T3	5.70	IS2011201049	Álfamær frá Skipaskaga
+Line Søgaard	T3	5.57	DK2013100756	Ganti fra Ganges Bro
+Maja S. Vestergård	T3	4.87	DK2010100171	Sleipnir fra Sophiendal
+Susanna Wisborg	T3	5.13	IS2009255476	Eik frá Þóreyjarnúpi
+Cecilia Rosell	T4	5.33	Dk2008103075	Abel fra Trappehaven
+Ida Brunsgaard Pedersen	T4	5.17	IS2011101286	Galdur frá Hrafnsvík
+Kathrine Eskesen	T4	3.73	DE2006122894	Fjandi von Heidmoor
+Mathilde Hudlebusch Vestergaard	T4	5.17	Is2005188472	Hljómur frá Fellskoti
+Almira Rasch Stæhr	V1	5.97	DK2006207106	Ástund fra Ny Nørregård
+Gerd Engelbrecht	V1	6.10	DK2010100460	Adam fra Tømmerby Kær
+Ingeborg Larsen	V1	5.40	DK2008106246	Kiljan fra Skovkrogen
+Kristina Holst Hansen	V1	5.80	IS2010258842	Birta frá Miðsitju
+Lone Høst	V1	5.97	IS2007282010	Píla frá Hvoli
+Mathilde Hudlebusch Vestergaard	V1	5.50	Is2005188472	Hljómur frá Fellskoti
+Mette Koefoed	V1	6.27	SE2007107883	Smári från Ränteröd
+Olivia kasperczyk	V1	5.70	DK2010100770	Svipur fra Rødstenskær
+Rikke Severin	V1	6.00	DK2010200083	Venja fra Toftedal
+Sigurður Óli Kristinsson	V1	7.10	IS2010187001	Sólbjartur frá Kjarri
+stine Flintegaard Kældsø	V1	6.10	DK2009100419	Kjarkur fra Højgården
+Anna Sophie Kiskov	V2	4.70	DK2007103162	Trítill fra Voreslyst
+Anne Mariager	V2	5.63	Dk2008205593	Gáska fra Grundet Hus
+Anne Mariager	V2	3.93	Dk2009200422	Gæfa fra Stihøj
+Camilla Pers Petersen	V2	4.53	DK2013100682	Sprettur fra Hanseseje
+Cecilia Rosell	V2	5.17	Dk2008103075	Abel fra Trappehaven
+Charlotte Elman Handberg	V2	5.03	DK2011100792	Kristall fra Handberggaard
+Henriette Hindbo	V2	6.40	DK2008103960	Ullinn fra Faurholt
+Inger Tony Bjørn Hansen	V2	6.03	IS2007184886	Vonandi frá Strandarhjáleigu
+Karin Madsen	V2	5.73	DK2011100310	Herjann fra HCL Hestar
+Kathrine Eskesen	V2	5.33	DE2006122894	Fjandi von Heidmoor
+Laura Emilie Nielsen	V2	5.10	DK2010100116	Hnokki fra Toftedal
+Line Søgaard	V2	4.23	DK2014200066	Halla fra Fauskjær
+Line Søgaard	V2	5.47	DK2013100756	Ganti fra Ganges Bro
+Line Søgaard	V2	5.60	DK2013100424	Keilir fra Nordal
+Maja S. Vestergård	V2	4.73	DK2010100171	Sleipnir fra Sophiendal
+[END]
+
+
