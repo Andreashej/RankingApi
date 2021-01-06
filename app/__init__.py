@@ -64,6 +64,8 @@ def create_app():
 
         os.makedirs(app.config['ISIRANK_FILES'], exist_ok=True)
 
+        print(app.config)
+
         @app.route('/')
         def healthcheck():
             return "Application is running"
