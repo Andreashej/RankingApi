@@ -7,4 +7,4 @@ env/
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
 
-app/files/
+app/files/*

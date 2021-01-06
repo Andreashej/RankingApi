@@ -39,7 +39,7 @@ class RidersResource(Resource):
 
         return {'status': 'success', 'data': wrapper}, 200
     
-    # @jwt_required
+    @jwt_required
     def post(self):
 
         file = request.files.get('aliases')
