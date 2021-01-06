@@ -67,7 +67,7 @@ def import_competition(competition_id, lines):
                     db.sesion.rollback()
 
             
-            feif_id = 'IR0000000000' if (line[4] == 'nn' or line[4] == 'NULL') else line[3]
+            feif_id = 'IR0000000000' if (fields[4] == 'nn' or fields[4] == 'NULL' or fields[3] == 'NULL' or fields[3] == 'XX0000000000') else fields[3]
             horse = Horse.query.filter_by(feif_id=feif_id).first()
 
             if horse is None:
