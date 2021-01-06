@@ -2,6 +2,7 @@ import datetime, os
 
 from flask_restful import Resource, reqparse
 from flask import request, current_app
+import jwt
 from .. import db, cache
 from ..models import Competition, RankingList, RankingListTest, CompetitionSchema, TestCatalog, Test, TaskSchema, Result
 from sqlalchemy import not_, func
@@ -27,15 +28,9 @@ class CompetitionsResource(Resource):
         query = Competition.query
 
         if noresults:
-            # tests = Test.query.all()
-            # # tests_without_results = [test.competition_id for test in tests if test._results.count() == 0]
-            # for test in tests:
-            #     if (test._results.count() == 0):
-            #         print(f"Test {test.id} has no results!")
-
             query = query.filter(not_(Competition.tests.any()))\
-            #     .join(Competition.tests)\
-            #     .filter(Test._results == 0)
+
+        query = self._filter(query)
             
         competitions = query.all()
 
@@ -73,17 +68,28 @@ class CompetitionsResource(Resource):
 
         competition = competition_schema.dump(competition)
         
-        return {'status': 'OK', 'data': competition}, 200
+        return { 'data': competition }, 200
     
     @jwt_required
     def delete(self):
         try:
-            Competition.query.delete()
+            self._filter(Competition.query).delete()
             db.session.commit()
-        except:
-            return {'status': 'ERROR'}, 500
+        except Exception as e:
+            return { 'message': str(e)}, 500
         
-        return {'status': 'OK'}, 204
+        return {}, 204
+
+    def _filter(self, query):
+        filters = request.args.to_dict()
+
+        for key, value in filters.items():
+            try:
+                query = query.filter(getattr(Competition, key) == value)
+            except Exception as e:
+                return { 'message': str(e)}
+
+        return query
 
 class CompetitionResource(Resource):
     def __init__(self):

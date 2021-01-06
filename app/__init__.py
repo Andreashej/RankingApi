@@ -54,8 +54,6 @@ def create_app():
     with app.app_context():
         from . import routes, models
 
-        print(app.config['SQLALCHEMY_DATABASE_URI'])
-
         db.create_all()
 
         app.redis = Redis.from_url(app.config['REDIS_URL'])
@@ -65,8 +63,6 @@ def create_app():
         app.register_blueprint(api_bp, url_prefix='/api')
 
         os.makedirs(app.config['ISIRANK_FILES'], exist_ok=True)
-
-        print(app.config)
 
         @app.route('/')
         def healthcheck():

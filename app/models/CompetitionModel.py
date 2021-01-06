@@ -16,9 +16,10 @@ class Competition(db.Model):
     __tablename__ = 'competitions'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(250))
-    isirank_id = db.Column(db.String(10), unique=True)
+    isirank_id = db.Column(db.String(12), unique=True)
     first_date = db.Column(db.Date)
     last_date = db.Column(db.Date)
+    state = db.Column(db.String(12), default="NORMAL") # { NORMAL, BLOCKED, CANCELLED, UNLISTED }
     include_in_ranking = db.relationship('RankingList', secondary=competitions_rankinglists, lazy='dynamic', backref=db.backref('competitions', lazy=True))
     tests = db.relationship("Test", backref="competition", lazy='dynamic', cascade='all,delete')
     tasks = db.relationship("Task", backref="competition", lazy='dynamic')

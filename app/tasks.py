@@ -14,8 +14,6 @@ import sys
 app = create_app()
 app.app_context().push()
 
-print(app.config)
-
 def _set_task_progress(progress):
     job = get_current_job()
     if job:
@@ -67,8 +65,10 @@ def import_competition(competition_id, lines):
                     db.session.add(rider)
                 except:
                     db.sesion.rollback()
+
             
-            horse = Horse.query.filter_by(feif_id=fields[3]).first()
+            feif_id = 'IR0000000000' if (line[4] == 'nn' or line[4] == 'NULL') else line[3]
+            horse = Horse.query.filter_by(feif_id=feif_id).first()
 
             if horse is None:
                 horse = Horse(fields[3], fields[4])
@@ -83,8 +83,9 @@ def import_competition(competition_id, lines):
 
             try:
                 db.session.add(result)
-            except:
-                pass
+            except Exception as e:
+                db.session.rollback()
+                app.logger.error(e, exc_info=sys.exc_info())
 
             results.append(result)
 
@@ -173,13 +174,22 @@ def import_competitions(ranking_id, competitions):
         ranking = RankingList.query.get(ranking_id)
         total_lines = len(competitions)
         for i, c in enumerate(competitions):
-            startdate = datetime.datetime.strptime(c['startdate'], '%Y-%m-%d')
-            enddate = datetime.datetime.strptime(c['enddate'], '%Y-%m-%d')
+            startdate = datetime.datetime.strptime(c['startdate'], '%d-%m-%Y')
+            enddate = datetime.datetime.strptime(c['enddate'], '%d-%m-%Y')
 
             competition = Competition.query.filter_by(isirank_id = c["isirank_id"]).first()
 
             if competition is None:
                 competition = Competition(c['competition_name'], startdate, enddate, c['isirank_id'])
+
+                if c['status'] == 'not listed any longer':
+                    competition.state = 'UNLISTED'
+                elif c['status'] == 'cancelled':
+                    competition.state = 'CANCELLED'
+                elif c['status'] == 'blocked':
+                    competition.state = 'BLOCKED'
+                elif c['status'] == 'to be ignored':
+                    competition.state = 'IGNORE'
 
                 try:
                     db.session.add(competition)
@@ -198,61 +208,6 @@ def import_competitions(ranking_id, competitions):
             db.session.rollback()
             app.logger.error(e, exc_info=sys.exc_info())
 
-    except Exception as e:
-        app.logger.error(e, exc_info=sys.exc_info())
-    finally:
-        _set_task_progress(100)
-
-def import_results(ranking_id, results):
-    try:
-        _set_task_progress(0)
-
-        total_lines = len(results)
-        for i, r in enumerate(results):
-            rider = Rider.find_by_name(r['rider'])
-
-            if not rider:
-                rider = Rider.create_by_name(r['rider'])
-                db.session.add(rider)
-
-            feif_id = 'IR0000000000' if r['horse'] == 'nn' else r['feif_id']
-            horse = Horse.query.filter_by(feif_id = feif_id).first()
-
-            if not horse:
-                horse = Horse(feif_id, r['horse'])
-                db.session.add(horse)
-
-            competition = Competition.query.filter_by(isirank_id = r['competition_id']).first()
-
-            if not competition:
-                print (f"Competition {r['competition_id']} not found, skipping result")
-                continue
-                
-            test = Test.query.filter_by(testcode=r['testcode'], competition=competition).first()
-
-            if not test:
-                try:
-                    testdef = TestCatalog.get_by_testcode(r['testcode'])
-                    test = Test(r['testcode'])
-                    test.competition = competition
-                    test.rounding_precision = testdef.rounding_precision
-                    test.order = testdef.order
-                    test.mark_type = testdef.mark_type
-                except Exception as e:
-                    app.logger.error(e, exc_info=sys.exc_info())
-                    print(e)
-                    continue
-
-            try:
-                result = test.add_result(rider, horse, r['mark'], skip_check = True if horse.horse_name == 'nn' else False)
-                db.session.add(result)
-                print(result)
-            except Exception as e:
-                app.logger.error(e, exc_info=sys.exc_info())
-            finally:
-                _set_task_progress(i / total_lines * 100)
-
-            db.session.commit()
     except Exception as e:
         app.logger.error(e, exc_info=sys.exc_info())
     finally:
