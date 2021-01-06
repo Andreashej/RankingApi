@@ -30,7 +30,7 @@ cors = CORS()
 db = SQLAlchemy()
 
 api_bp = Blueprint('api', __name__)
-api = Api(api_bp)
+api = FixedApi(api_bp)
 
 cache = Cache()
 
