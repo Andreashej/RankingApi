@@ -36,9 +36,3 @@ API_VERSION = "0.1.0"
 REDIS_URL = os.environ.get('REDIS_URL') or 'redis://'
 
 QUEUE = 'iceranking-tasks'
-
-# RDS_HOST iceranking-api.c8fmxoomvwpn.eu-central-1.rds.amazonaws.com
-# RDS_DB_NAME iceranking
-# RDS_USERNAME iceranking
-# RDS_PASSWORD qmkL2YvhtuSS7FZM
-# RDS_PORT 3306

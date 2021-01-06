@@ -14,6 +14,8 @@ import sys
 app = create_app()
 app.app_context().push()
 
+print(app.config)
+
 def _set_task_progress(progress):
     job = get_current_job()
     if job:
