@@ -12,6 +12,7 @@ from flask_jwt_extended.exceptions import JWTExtendedException
 from jwt import PyJWTError
 from redis import Redis
 import rq
+import os
 
 from . import config
 
@@ -60,6 +61,8 @@ def create_app():
         app.task_queue = rq.Queue(app.config['QUEUE'], connection=app.redis, default_timeout=-1)
 
         app.register_blueprint(api_bp, url_prefix='/api')
+
+        os.makedirs(app.config['ISIRANK_FILES'], exist_ok=True)
 
         @app.route('/')
         def healthcheck():
