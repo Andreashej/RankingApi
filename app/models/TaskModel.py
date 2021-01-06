@@ -31,6 +31,19 @@ class Task(db.Model):
     def progress(self):
         return self.get_progress()
 
+    @hybrid_property
+    def state(self):
+        if self.complete:
+            return 'COMPLETE'
+        
+        if self.progress == 100:
+            return 'ERROR'
+        
+        if self.progress > 0:
+            return 'PROGRESS'
+        
+        return 'WAITING'
+
     def get_progress(self):
         job = self.get_rq_job()
         return job.meta.get('progress', 0) if job is not None else 100

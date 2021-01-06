@@ -144,6 +144,7 @@ class TaskSchema(ma.SQLAlchemyAutoSchema):
         model = Task
     
     progress = fields.Integer()
+    state = fields.String()
 
     _links = ma.Hyperlinks(
         {
