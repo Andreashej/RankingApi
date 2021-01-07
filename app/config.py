@@ -28,6 +28,7 @@ SQLALCHEMY_POOL_TIMEOUT = 20
 SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://' + DB_USERNAME + ':' + DB_PASSWORD + '@' + DB_HOSTNAME + ':' + DB_PORT + '/' + DB_NAME
 
 ISIRANK_FILES = basedir + '/files/'
+IMAGE_FILES = basedir + '/static/images/'
 
 RIDERS_PER_PAGE = 100
 

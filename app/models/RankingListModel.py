@@ -2,6 +2,7 @@ import csv
 
 from flask import current_app
 from flask_migrate import current
+from sqlalchemy.ext.hybrid import hybrid_property
 
 from .. import db
 from .TaskModel import Task
@@ -19,6 +20,14 @@ class RankingList(db.Model):
     def __init__(self, name, shortname):
         self.listname = name
         self.shortname = shortname
+
+    @hybrid_property
+    def logo(self):
+        if self.branding_image:
+            return '//' + current_app.config['SERVER_NAME'] + '/images/' + self.branding_image
+        
+        # return '//' + current_app.config['SERVER_NAME'] + '/images/default.png'
+        return 'https://via.placeholder.com/150'
 
     def import_competitions(self, filename):
         with open(current_app.config['ISIRANK_FILES'] + filename, mode='r', encoding="utf-8-sig") as csv_file:

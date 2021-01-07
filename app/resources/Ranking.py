@@ -78,6 +78,9 @@ class RankingResource(Resource):
     def patch(self, listname):
         ranking = RankingList.query.filter_by(shortname=listname).first()
 
+        if not ranking:
+            return { 'status': 'NOT FOUND'}, 404
+
         file = request.files.get('competitions')
         if file:
             file.save(os.path.join(current_app.config["ISIRANK_FILES"], file.filename))
@@ -111,10 +114,15 @@ class RankingResource(Resource):
             tasks = tasks_schema.dump(tasks)
             return { 'status': 'OK', 'data': tasks }
 
+        file = request.files.get('logo')
+
+        if file:
+            file.save(os.path.join(current_app.config["IMAGE_FILES"], file.filename))
+            ranking.branding_image = file.filename
+
         args = self.reqparse.parse_args()
 
-        if not ranking:
-            return { 'status': 'NOT FOUND'}, 404
+
         
         if args['listname'] is not None:
             ranking.listname = args['listname']

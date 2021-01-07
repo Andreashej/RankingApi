@@ -40,7 +40,7 @@ auth = HTTPBasicAuth()
 jwt = JWTManager()
 
 def create_app():
-    app = Flask(__name__)   
+    app = Flask(__name__, static_folder='static', static_url_path='')   
     app.config.from_object(config)
 
     cache.init_app(app, config={'CACHE_TYPE': 'simple'})
@@ -63,6 +63,7 @@ def create_app():
         app.register_blueprint(api_bp, url_prefix='/api')
 
         os.makedirs(app.config['ISIRANK_FILES'], exist_ok=True)
+        os.makedirs(app.config['IMAGE_FILES'], exist_ok=True)
 
         @app.route('/')
         def healthcheck():

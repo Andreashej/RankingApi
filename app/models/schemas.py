@@ -106,6 +106,8 @@ class RankingListSchema(ma.SQLAlchemyAutoSchema):
     competitions = ma.List(ma.Nested("CompetitionSchema", exclude=("include_in_ranking",)))
 
     tests = ma.Nested("RankingListTestSchema", only=("testcode",), many=True)
+
+    logo = fields.String()
     
     _links = ma.Hyperlinks(
         {
