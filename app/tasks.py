@@ -67,7 +67,7 @@ def import_competition(competition_id, lines):
                     db.sesion.rollback()
 
             
-            feif_id = 'IR0000000000' if (fields[4] == 'nn' or fields[4] == 'NULL' or fields[3] == 'NULL' or fields[3] == 'XX0000000000') else fields[3]
+            feif_id = 'IR0000000000' if (fields[4] == 'nn' or fields[4] == 'NULL' or fields[3] == 'XX0000000000') else fields[3]
             horse = Horse.query.filter_by(feif_id=feif_id).first()
 
             if horse is None:
@@ -92,7 +92,11 @@ def import_competition(competition_id, lines):
             i += 1
             _set_task_progress(100 * i // total_lines)
 
-        db.session.commit()
+            try:
+                db.session.commit()
+            except Exception as e:
+                db.session.rollback()
+                app.logger.error(e, exc_info=sys.exc_info())
     except:
         _set_task_progress(100)
         app.logger.error('Unhandled exception', exc_info=sys.exc_info())
