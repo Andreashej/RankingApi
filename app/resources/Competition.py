@@ -5,7 +5,7 @@ from flask import request, current_app
 import jwt
 from .. import db, cache
 from ..models import Competition, RankingList, RankingListTest, CompetitionSchema, TestCatalog, Test, TaskSchema, Result
-from sqlalchemy import not_, func
+from sqlalchemy import not_, and_
 from flask_jwt_extended import jwt_required
 
 competitions_schema = CompetitionSchema(many=True, exclude=("tests","include_in_ranking","tasks",))
@@ -30,7 +30,10 @@ class CompetitionsResource(Resource):
         if noresults:
             query = query.filter(not_(Competition.tests.any()))\
 
-        query = self._filter(query)
+        try:
+            query = self._filter(query)
+        except Exception as e:
+            return { 'message': str(e) }
             
         competitions = query.all()
 
@@ -81,13 +84,39 @@ class CompetitionsResource(Resource):
         return {}, 204
 
     def _filter(self, query):
-        filters = request.args.to_dict()
+        filters = request.args.getlist('filter')
 
-        for key, value in filters.items():
-            try:
-                query = query.filter(getattr(Competition, key) == value)
-            except Exception as e:
-                return { 'message': str(e)}
+        for filter in filters:
+            [field, operator, value] = filter.split()
+
+            if field == 'include_in_ranking':
+                value = RankingList.query.filter_by(shortname=value).first()
+            
+            elif (field == 'first_date' or field == 'last_date'):
+                value = datetime.datetime.strptime(value, '%d/%m/%Y')
+            
+            if operator == 'contains':
+                query = query.filter(getattr(Competition, field).contains(value))
+            elif operator == '<' :
+                query = query.filter(getattr(Competition, field) < value)
+            elif operator == '>' :
+                query = query.filter(getattr(Competition, field) > value)
+            else:
+                query = query.filter(getattr(Competition, field) == value)
+        
+        order = request.args.get('order_by')
+
+        if order:
+            [field, direction] = order.split()
+            if direction == 'desc':
+                query = query.order_by(getattr(Competition, field).desc())
+            else:
+                query = query.order_by(getattr(Competition, field).asc())
+
+        limit = request.args.get('limit')
+
+        if limit:
+            query = query.limit(limit)
 
         return query
 
