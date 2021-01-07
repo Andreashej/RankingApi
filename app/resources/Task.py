@@ -16,7 +16,7 @@ class TasksResource(Resource):
             try:
                 if key == 'state':
                     if value == 'ERROR':
-                        query = query.filter_by(complete = True, error = True)
+                        query = query.filter_by(error = True)
                     elif value == 'COMPLETE':
                         query = query = query.filter_by(complete = True, error = False)
                     elif value == 'IN PROGRESS':

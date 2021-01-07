@@ -23,7 +23,6 @@ def _set_task_progress(progress, error = False):
 
         if not task.started_at:
             task.started_at = datetime.datetime.utcnow()
-            task.state = 1
 
         if progress >= 100:
             task.completed_at = datetime.datetime.utcnow()
