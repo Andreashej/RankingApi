@@ -14,7 +14,7 @@ import sys
 app = create_app()
 app.app_context().push()
 
-def _set_task_progress(progress):
+def _set_task_progress(progress, error = False):
     job = get_current_job()
     if job:
         job.meta['progress'] = progress
@@ -23,10 +23,12 @@ def _set_task_progress(progress):
 
         if not task.started_at:
             task.started_at = datetime.datetime.utcnow()
+            task.state = 1
 
         if progress >= 100:
             task.completed_at = datetime.datetime.utcnow()
             task.complete = True
+            task.state = 2 if not error else 3
         
         try:
             db.session.commit()
@@ -104,7 +106,7 @@ def import_competition(competition_id, lines):
                 app.logger.error(e, exc_info=sys.exc_info())
     except:
         db.session.rollback()
-        _set_task_progress(100)
+        _set_task_progress(100, True)
         app.logger.error('Unhandled exception', exc_info=sys.exc_info())
 
 def compute_ranking(test_id):
@@ -173,7 +175,7 @@ def compute_ranking(test_id):
         url = url_for('api.resultlist', listname=test.rankinglist.shortname, testcode=test.testcode)
         requests.get(url, params={'clearcache': 1})
     except:
-        _set_task_progress(100)
+        _set_task_progress(100, True)
         app.logger.error("Unhandled exception", exc_info=sys.exc_info())
 
 def import_competitions(ranking_id, competitions):
@@ -213,14 +215,15 @@ def import_competitions(ranking_id, competitions):
         
         try:
             db.session.commit()
+            _set_task_progress(100)
         except Exception as e:
             db.session.rollback()
             app.logger.error(e, exc_info=sys.exc_info())
+            _set_task_progress(100, True)
 
     except Exception as e:
         app.logger.error(e, exc_info=sys.exc_info())
-    finally:
-        _set_task_progress(100)
+        _set_task_progress(100, True)
 
 def import_aliases(aliases):
     try:
@@ -248,9 +251,10 @@ def import_aliases(aliases):
 
             db.session.commit()
             print(rider)
+            
+        _set_task_progress(100)
     except Exception as e:
         db.session.rollback()
         app.logger.error(e, exc_info=sys.exc_info())
-    finally:
-        _set_task_progress(100)
+        _set_task_progress(100, True)
 

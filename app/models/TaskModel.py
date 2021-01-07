@@ -2,7 +2,7 @@ import redis
 import rq
 import datetime
 
-from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy.ext.hybrid import hybrid_property, hybrid_method
 
 from .. import db
 from flask import current_app
@@ -18,6 +18,7 @@ class Task(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     started_at = db.Column(db.DateTime)
     completed_at = db.Column(db.DateTime)
+    error = db.Column(db.Boolean, default=False)
 
     def get_rq_job(self):
         try:
@@ -28,21 +29,24 @@ class Task(db.Model):
         return rq_job
     
     @hybrid_property
+    def state(self):
+        # {0: WAITING, 1: IN PROGRESS, 2: COMPLETE, 3: COMPLETED WITH ERRORS}
+        print (self)
+
+        if self.complete:
+            if self.error:
+                return "ERROR"
+            
+            return "COMPLETE"
+
+        if self.started_at:
+            return "IN PROGRESS"
+        
+        return "WAITING"
+    
+    @hybrid_property
     def progress(self):
         return self.get_progress()
-
-    @hybrid_property
-    def state(self):
-        if self.complete:
-            return 'COMPLETE'
-        
-        if self.progress == 100 and (self.started_at and not self.completed_at):
-            return 'ERROR'
-        
-        if self.started_at:
-            return 'PROGRESS'
-        
-        return 'WAITING'
 
     def get_progress(self):
         job = self.get_rq_job()

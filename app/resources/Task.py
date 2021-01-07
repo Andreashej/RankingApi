@@ -1,5 +1,6 @@
 from flask_restful import Resource, reqparse
 from flask import request
+from sqlalchemy import and_, not_
 from .. import db
 
 from ..models import Task, TaskSchema
@@ -13,14 +14,25 @@ class TasksResource(Resource):
 
         for key, value in filters.items():
             try:
-                query = query.filter(getattr(Task, key) == value)
+                if key == 'state':
+                    if value == 'ERROR':
+                        query = query.filter_by(complete = True, error = True)
+                    elif value == 'COMPLETE':
+                        query = query = query.filter_by(complete = True, error = False)
+                    elif value == 'IN PROGRESS':
+                        query = query.filter(and_(not_(Task.started_at == None), Task.complete == False))
+                    elif value == 'WAITING':
+                        query = query.filter(and_(Task.started_at == None, not_(Task.complete == True)))
+                else:
+                    query = query.filter(getattr(Task, key) == value)
             except Exception as e:
-                return { 'status': 'ERROR', 'message': str(e)}
+                print(e)
+                continue
 
         return query
 
     def get(self):
-        tasks = self._filter(Task.query).order_by(Task.created_at.desc()).all()
+        tasks = self._filter(Task.query).order_by(Task.started_at.desc()).all()
 
         tasks = tasks_schema.dump(tasks)
         
