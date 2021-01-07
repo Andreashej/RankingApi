@@ -20,7 +20,7 @@ class TasksResource(Resource):
         return query
 
     def get(self):
-        tasks = self._filter(Task.query)
+        tasks = self._filter(Task.query).order_by(Task.created_at.desc()).all()
 
         tasks = tasks_schema.dump(tasks)
         

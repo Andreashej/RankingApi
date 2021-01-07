@@ -36,10 +36,10 @@ class Task(db.Model):
         if self.complete:
             return 'COMPLETE'
         
-        if self.progress == 100:
+        if self.progress == 100 and (self.started_at and not self.completed_at):
             return 'ERROR'
         
-        if self.progress > 0:
+        if self.started_at:
             return 'PROGRESS'
         
         return 'WAITING'
