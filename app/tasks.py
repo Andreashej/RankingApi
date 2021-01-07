@@ -53,7 +53,7 @@ def import_competition(competition_id, lines):
             fields = line.split('\t')
             
             test = Test.query.filter_by(testcode=fields[1], competition=competition).first()
-            
+
             if not test:
                 test = Test.create_from_catalog(fields[1])
                 competition.tests.append(test)
@@ -71,6 +71,7 @@ def import_competition(competition_id, lines):
             
             feif_id = 'IR0000000000' if (fields[4] == 'nn' or fields[4] == 'NULL' or fields[3] == 'XX0000000000') else fields[3]
             horse = Horse.query.filter_by(feif_id=feif_id).first()
+            print(horse)
 
             if not horse:
                 horse = Horse(fields[3], fields[4])
