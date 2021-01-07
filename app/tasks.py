@@ -28,7 +28,7 @@ def _set_task_progress(progress, error = False):
         if progress >= 100:
             task.completed_at = datetime.datetime.utcnow()
             task.complete = True
-            task.state = 2 if not error else 3
+            task.error = error
         
         try:
             db.session.commit()
