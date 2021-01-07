@@ -53,13 +53,15 @@ def import_competition(competition_id, lines):
             fields = line.split('\t')
             
             test = Test.query.filter_by(testcode=fields[1], competition=competition).first()
-            if test is None:
+            
+            if not test:
                 test = Test.create_from_catalog(fields[1])
                 competition.tests.append(test)
 
             rider = Rider.query.filter_by(fullname = fields[0]).first()
             rider = Rider.find_by_name(fields[0])
-            if rider is None:
+
+            if not rider:
                 rider = Rider.create_by_name(fields[0])
                 try:
                     db.session.add(rider)
@@ -70,7 +72,7 @@ def import_competition(competition_id, lines):
             feif_id = 'IR0000000000' if (fields[4] == 'nn' or fields[4] == 'NULL' or fields[3] == 'XX0000000000') else fields[3]
             horse = Horse.query.filter_by(feif_id=feif_id).first()
 
-            if horse is None:
+            if not horse:
                 horse = Horse(fields[3], fields[4])
                 try:
                     db.session.add(horse)
@@ -98,9 +100,9 @@ def import_competition(competition_id, lines):
                 db.session.rollback()
                 app.logger.error(e, exc_info=sys.exc_info())
     except:
+        db.session.rollback()
         _set_task_progress(100)
         app.logger.error('Unhandled exception', exc_info=sys.exc_info())
-        db.session.rollback()
 
 def compute_ranking(test_id):
     try:
