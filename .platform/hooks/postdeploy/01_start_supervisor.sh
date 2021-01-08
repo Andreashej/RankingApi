@@ -1,3 +1,3 @@
 #!/bin/bash
 
-/etc/init.d/supervisord restart
+sudo /etc/init.d/supervisord restart
