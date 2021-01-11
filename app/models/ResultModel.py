@@ -1,4 +1,3 @@
-from marshmallow import fields
 from .. import db
 from flask import current_app
 
