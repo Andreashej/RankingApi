@@ -5,7 +5,9 @@ from itsdangerous import (TimedJSONWebSignatureSerializer as Serializer, BadSign
 
 from flask_jwt_extended import create_access_token, create_refresh_token
 
-class User(db.Model):
+from .RestMixin import RestMixin
+
+class User(db.Model, RestMixin):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(32), index=True)

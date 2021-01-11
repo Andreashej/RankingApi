@@ -1,11 +1,12 @@
-from marshmallow import fields
 from .. import db
 from sqlalchemy.ext.hybrid import hybrid_property, hybrid_method
 from sqlalchemy import func, and_
 
 from datetime import datetime, timedelta
 
-class Horse(db.Model):
+from .RestMixin import RestMixin
+
+class Horse(db.Model, RestMixin):
     __tablename__ = 'horses'
     id = db.Column(db.Integer, primary_key=True)
     feif_id = db.Column(db.String(12), unique=True)

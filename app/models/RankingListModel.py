@@ -7,7 +7,9 @@ from sqlalchemy.ext.hybrid import hybrid_property
 from .. import db
 from .TaskModel import Task
 
-class RankingList(db.Model):
+from .RestMixin import RestMixin
+
+class RankingList(db.Model, RestMixin):
     __tablename__ = 'rankinglists'
     id = db.Column(db.Integer, primary_key=True)
     listname = db.Column(db.String(250))

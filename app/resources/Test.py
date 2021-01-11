@@ -15,18 +15,14 @@ class TestsResource(Resource):
         self.reqparse.add_argument('competition_id')
     
     def get(self):
-        competition = request.args.get('competition_id')
-
-        query = Test.query
-
-        if competition:
-            query = query.filter_by(competition_id = competition)
-
-        tests = query.all()
+        try:
+            tests = Test.filter().all()
+        except Exception as e:
+            return { 'message': str(e) }
 
         tests = tests_schema.dump(tests)
 
-        return {'status': 'OK', 'data': tests}, 200
+        return { 'data': tests }, 200
     
     @jwt_required
     def post(self):
@@ -42,27 +38,20 @@ class TestsResource(Resource):
             db.session.add(test)
             db.session.commit()
         except:
-            return {'status': 'ERROR'}, 500
+            return {}, 500
         
         test = test_schema.dump(test)
-        return {'status': 'OK', 'data': test},200
+        return { 'data': test },200
     
     @jwt_required
     def delete(self):
-        competition = request.args.get('competition_id')
-
-        query = Test.query
-
-        if competition:
-            query = query.filter_by(competition_id = competition)
-
         try:
-            query.delete()
+            Competition.filter().delete()
             db.session.commit()
         except Exception as e:
             return {'status': 'ERROR', 'message': str(e)}, 500
         
-        return {'status': 'OK'}, 204
+        return {}, 204
 
 class TestResource(Resource):
     def __init__(self):
@@ -76,7 +65,7 @@ class TestResource(Resource):
         
         test = test_schema.dump(test)
 
-        return {'status': 'OK', 'data': test}
+        return { 'data': test }
 
     @jwt_required
     def patch(self):

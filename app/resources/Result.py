@@ -1,6 +1,7 @@
 from flask_restful import Resource, reqparse
 from flask import request, current_app
 from flask_jwt_extended import jwt_required
+from sqlalchemy.log import echo_property
 from .. import db
 from ..models import Result, ResultSchema, TaskSchema
 
@@ -20,10 +21,14 @@ class ResultsResource(Resource):
         self.reqparse.add_argument('mark', type=float, required = True, location = 'json')
 
     def get(self):
-        results = Result.query.all()
+        try:
+            results = Result.filter().all()
+        except Exception as e:
+            return { 'message': str(e) }, 500
+
         results = results_schema.dump(results)
 
-        return {'status': 'OK', 'data': results}, 200
+        return { 'data': results }, 200
     
     @jwt_required
     def post(self):
@@ -37,7 +42,7 @@ class ResultsResource(Resource):
             try:
                 db.session.commit()
             except:
-                pass
+                db.session.rollback()
 
             task = task_schema.dump(task)
             return {'status': 'OK', 'data': task}
@@ -47,12 +52,12 @@ class ResultsResource(Resource):
     @jwt_required
     def delete(self):
         try:
-            Result.query.delete()
+            Result.filter().delete()
             db.session.commit()
-        except:
-            return {'status': 'ERROR'}, 500
+        except Exception as e:
+            return { 'message': str(e)}, 500
         
-        return {'status': 'OK'}, 204
+        return {}, 204
 
 class ResultResource(Resource):
     def __init__(self):

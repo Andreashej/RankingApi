@@ -9,30 +9,11 @@ task_schema = TaskSchema()
 tasks_schema = TaskSchema(many=True)
 
 class TasksResource(Resource):
-    def _filter(self, query):
-        filters = request.args.to_dict()
-
-        for key, value in filters.items():
-            try:
-                if key == 'state':
-                    if value == 'ERROR':
-                        query = query.filter_by(error = True)
-                    elif value == 'COMPLETE':
-                        query = query = query.filter_by(complete = True, error = False)
-                    elif value == 'IN PROGRESS':
-                        query = query.filter(and_(not_(Task.started_at == None), Task.complete == False))
-                    elif value == 'WAITING':
-                        query = query.filter(and_(Task.started_at == None, not_(Task.complete == True)))
-                else:
-                    query = query.filter(getattr(Task, key) == value)
-            except Exception as e:
-                print(e)
-                continue
-
-        return query
-
     def get(self):
-        tasks = self._filter(Task.query).order_by(Task.started_at.desc()).all()
+        try:
+            tasks = Task.filter().all()
+        except Exception as e:
+            return { 'message': str(e) }
 
         tasks = tasks_schema.dump(tasks)
         

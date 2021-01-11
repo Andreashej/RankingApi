@@ -21,7 +21,6 @@ class SearchResource(Resource):
         results = rankings_schema.dump(rankings) + riders_schema.dump(riders) + horses_schema.dump(horses) + competitions_schema.dump(competitions)
 
         return {
-            'status': 'OK',
             'data': results
         }
 

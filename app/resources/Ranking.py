@@ -24,11 +24,14 @@ class RankingsResource(Resource):
         self.reqparse.add_argument('shortname', type= str, required = True, location = 'json')
     
     def get(self):
-        rankings = RankingList.query.all()
+        try:
+            rankings = RankingList.filter().all()
+        except Exception as e:
+            return { 'message': str(e) }, 500
 
         rankings = ranking_lists_schema.dump(rankings)
 
-        return {'status': 'OK', 'data': rankings}
+        return { 'data': rankings }
     
     @jwt_required
     def post(self):
@@ -42,21 +45,20 @@ class RankingsResource(Resource):
             db.session.add(ranking)
             db.session.commit()
         except Exception as inst:
-            print (inst.args)
-            return {'status': 'ERROR', 'message': inst.args}
+            return { 'message': inst.args }, 500
 
         ranking = ranking_list_schema.dump(ranking)
-        return {'status': 'OK', 'data': ranking}
+        return { 'data': ranking }
     
     @jwt_required
     def delete(self):
         try:
-            RankingList.query.delete()
+            RankingList.filter().delete()
             db.session.commit()
-        except:
-            return {'status': 'ERROR'}, 500
+        except Exception as e:
+            return {'message': str(e)}, 500
         
-        return {'status': 'OK'}, 204
+        return {}, 204
         
 class RankingResource(Resource):
     def __init__(self):
@@ -122,8 +124,6 @@ class RankingResource(Resource):
 
         args = self.reqparse.parse_args()
 
-
-        
         if args['listname'] is not None:
             ranking.listname = args['listname']
         
@@ -139,6 +139,16 @@ class RankingResource(Resource):
             return {'status': 'ERROR', 'message': e}, 500
         
         return {'status': 'OK', 'data': ranking_list_schema.dump(ranking)}
+    
+    def delete(self, listname):
+        
+        try:
+            RankingList.query.filter_by(shortname=listname).delete()
+            db.session.commit()
+        except Exception as e:
+            return { 'message': str(e) }, 500
+
+        return {}, 204
 
 
 

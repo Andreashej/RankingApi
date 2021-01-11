@@ -5,7 +5,9 @@ from flask import current_app
 
 from .TaskModel import Task
 
-class RankingListTest(db.Model):
+from .RestMixin import RestMixin
+
+class RankingListTest(db.Model, RestMixin):
     __tablename__ = 'rankinglist_tests'
     id = db.Column(db.Integer, primary_key=True)
     testcode = db.Column(db.String(3))

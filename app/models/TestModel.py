@@ -1,8 +1,9 @@
 from .. import db
 from sqlalchemy.ext.hybrid import hybrid_property
 from .ResultModel import Result
+from .RestMixin import RestMixin
 
-class Test(db.Model):
+class Test(db.Model, RestMixin):
     __tablename__ = 'tests'
     id = db.Column(db.Integer, primary_key=True)
     testcode = db.Column(db.String(3))

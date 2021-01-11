@@ -11,7 +11,11 @@ class TestCatalogResource(Resource):
         self.reqparse.add_argument('testcode', type=str, required=True, location='json')
     
     def get(self):
-        tests = TestCatalog.query.all()
+        try:
+            tests = TestCatalog.filter().all()
+        except Exception as e:
+            return { 'message': str(e) }
+            
         tests = tests_schema.dump(tests)
 
         return {'status': 'OK', 'data': tests}, 200

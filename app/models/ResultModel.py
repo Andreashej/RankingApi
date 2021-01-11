@@ -2,7 +2,9 @@ from marshmallow import fields
 from .. import db
 from flask import current_app
 
-class Result(db.Model):
+from .RestMixin import RestMixin
+
+class Result(db.Model, RestMixin):
     __tablename__ = 'results'
     id = db.Column(db.Integer, primary_key=True)
     mark = db.Column(db.Float)

@@ -1,5 +1,7 @@
 from .. import db, cache
 
+from .RestMixin import RestMixin
+
 rider_result = db.Table('rider_results', 
     db.Column('result_id', db.Integer, db.ForeignKey('results_cache.id', ondelete='CASCADE'), primary_key=True),
     db.Column('rider_id', db.Integer, db.ForeignKey('riders.id', ondelete='CASCADE'), primary_key=True),
@@ -15,7 +17,7 @@ cached_results_based_on = db.Table('rank_result_marks',
     db.Column('competition_result_id', db.ForeignKey('results.id', ondelete='CASCADE'), primary_key=True)
 )
 
-class RankingResultsCache(db.Model):
+class RankingResultsCache(db.Model, RestMixin):
     __tablename__ = 'results_cache'
     id = db.Column(db.Integer, primary_key=True)
     rank = db.Column(db.Integer)

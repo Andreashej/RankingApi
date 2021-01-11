@@ -10,7 +10,9 @@ from datetime import datetime, timedelta
 
 from .RiderAliasModel import RiderAlias
 
-class Rider(db.Model):
+from .RestMixin import RestMixin
+
+class Rider(db.Model, RestMixin):
     __tablename__ = 'riders'
     id = db.Column(db.Integer, primary_key=True)
     firstname = db.Column(db.String(250))

@@ -3,11 +3,14 @@ import rq
 import datetime
 
 from sqlalchemy.ext.hybrid import hybrid_property, hybrid_method
+from sqlalchemy import case, and_, not_
 
 from .. import db
 from flask import current_app
 
-class Task(db.Model):
+from .RestMixin import RestMixin
+
+class Task(db.Model, RestMixin):
     id = db.Column(db.String(36), primary_key=True)
     name = db.Column(db.String(128), index=True)
     description = db.Column(db.String(128))
@@ -30,19 +33,24 @@ class Task(db.Model):
     
     @hybrid_property
     def state(self):
-        # {0: WAITING, 1: IN PROGRESS, 2: COMPLETE, 3: COMPLETED WITH ERRORS}
-        print (self)
-
-        if self.complete:
-            if self.error:
-                return "ERROR"
-            
+        if self.error:
+            return "ERROR"
+        elif self.complete:
             return "COMPLETE"
-
-        if self.started_at:
-            return "IN PROGRESS"
-        
-        return "WAITING"
+        elif self.started_at and not self.complete:
+            return "PROGRESS"
+        else:
+            return "WAITING"
+    
+    @state.expression
+    def state(cls):
+        return case([
+                (cls.error, "ERROR"),
+                (cls.complete, "COMPLETE"),
+                (and_(cls.started_at, not_(cls.complete)), "PROGRESS")
+            ], 
+            else_='WAITING'
+        )
     
     @hybrid_property
     def progress(self):

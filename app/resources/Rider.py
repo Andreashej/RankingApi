@@ -7,7 +7,7 @@ from ..models import Rider, RiderSchema, ResultSchema, TestSchema, TaskSchema
 
 from sqlalchemy import and_
 
-riders_schema = RiderSchema(many=True, exclude=("results",))
+riders_schema = RiderSchema(many=True, exclude=("results","testlist","aliases",))
 rider_schema = RiderSchema(exclude=("results",))
 
 results_schema = ResultSchema(many=True, exclude=("rider",))
@@ -24,20 +24,15 @@ class RidersResource(Resource):
         self.reqparse.add_argument('lname', type= str, required = True, location = 'json')
 
     def get(self):
-        page = request.args.get('page', 1, type=int)
 
-        riders = Rider.query.paginate(page, current_app.config['RIDERS_PER_PAGE'],False)
-        riders_json = riders_schema.dump(riders.items)
+        try:
+            riders = Rider.filter()
+        except Exception as e:
+            return { 'message': str(e) }, 500
 
-        wrapper = {
-            "_links": {
-                "next": url_for("api.riders",page=riders.next_num) if riders.has_next else None,
-                "prev": url_for("api.riders",page=riders.prev_num) if riders.has_prev else None
-            },
-            "items": riders_json
-        }
+        riders_json = riders_schema.dump(riders.all())
 
-        return {'status': 'success', 'data': wrapper}, 200
+        return { 'data': riders_json }, 200
     
     @jwt_required
     def post(self):

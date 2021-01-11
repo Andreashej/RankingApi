@@ -1,10 +1,11 @@
+from flask import request
 from flask_restful import Resource, reqparse
 from flask_jwt_extended import jwt_required
 from .. import db
 
 from ..models import Horse, Result, Competition, Test, HorseSchema, ResultSchema, TestSchema
 
-horses_schema = HorseSchema(many=True, exclude=("results",))
+horses_schema = HorseSchema(many=True, exclude=("results","testlist",))
 horse_schema = HorseSchema(exclude=("results",))
 
 results_schema = ResultSchema(many=True, exclude=("horse",))
@@ -19,7 +20,11 @@ class HorsesResource(Resource):
         self.reqparse.add_argument('feif_id', type=str, required=True, location='json')
     
     def get(self):
-        horses = Horse.query.all()
+        try:
+            horses = Horse.filter().all()
+        except Exception as e:
+            return { 'message': str(e) }
+
         horses = horses_schema.dump(horses)
 
         return {'status': 'OK', 'data': horses}, 200
@@ -47,7 +52,7 @@ class HorsesResource(Resource):
     @jwt_required
     def delete(self):
         try:
-            Horse.query.delete()
+            Horse.filter().delete()
             db.session.commit()
         except:
             return {'status': 'ERROR'}, 500

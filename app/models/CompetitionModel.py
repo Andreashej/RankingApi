@@ -7,12 +7,14 @@ from flask import current_app
 
 from .TaskModel import Task
 
+from .RestMixin import RestMixin
+
 competitions_rankinglists = db.Table('competition_ranking_association',
     db.Column('competition_id', db.Integer, db.ForeignKey('competitions.id'), primary_key=True),
     db.Column('rankinglist_id', db.Integer, db.ForeignKey('rankinglists.id'), primary_key=True)
 )
 
-class Competition(db.Model):
+class Competition(db.Model, RestMixin):
     __tablename__ = 'competitions'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(250))

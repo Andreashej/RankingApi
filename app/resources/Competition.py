@@ -28,10 +28,10 @@ class CompetitionsResource(Resource):
         query = Competition.query
 
         if noresults:
-            query = query.filter(not_(Competition.tests.any()))\
+            query = query.filter(not_(Competition.tests.any()))
 
         try:
-            query = self._filter(query)
+            query = Competition.filter(query)
         except Exception as e:
             return { 'message': str(e) }
             
@@ -76,49 +76,12 @@ class CompetitionsResource(Resource):
     @jwt_required
     def delete(self):
         try:
-            self._filter(Competition.query).delete()
+            Competition.filter().delete()
             db.session.commit()
         except Exception as e:
             return { 'message': str(e)}, 500
         
         return {}, 204
-
-    def _filter(self, query):
-        filters = request.args.getlist('filter')
-
-        for filter in filters:
-            [field, operator, value] = filter.split()
-
-            if field == 'include_in_ranking':
-                value = RankingList.query.filter_by(shortname=value).first()
-            
-            elif (field == 'first_date' or field == 'last_date'):
-                value = datetime.datetime.strptime(value, '%d/%m/%Y')
-            
-            if operator == 'contains':
-                query = query.filter(getattr(Competition, field).contains(value))
-            elif operator == '<' :
-                query = query.filter(getattr(Competition, field) < value)
-            elif operator == '>' :
-                query = query.filter(getattr(Competition, field) > value)
-            else:
-                query = query.filter(getattr(Competition, field) == value)
-        
-        order = request.args.get('order_by')
-
-        if order:
-            [field, direction] = order.split()
-            if direction == 'desc':
-                query = query.order_by(getattr(Competition, field).desc())
-            else:
-                query = query.order_by(getattr(Competition, field).asc())
-
-        limit = request.args.get('limit')
-
-        if limit:
-            query = query.limit(limit)
-
-        return query
 
 class CompetitionResource(Resource):
     def __init__(self):

@@ -1,6 +1,7 @@
 from .. import db
+from .RestMixin import RestMixin
 
-class TestCatalog(db.Model):
+class TestCatalog(db.Model, RestMixin):
     __tablename__ = 'test_catalog'
     id = db.Column(db.Integer, primary_key=True)
     testcode = db.Column(db.String(3), unique=True, index=True)

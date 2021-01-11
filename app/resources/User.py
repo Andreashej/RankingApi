@@ -1,3 +1,4 @@
+from os import execv
 from flask_jwt_extended.utils import create_access_token, get_jwt_identity
 from flask_migrate import current
 from flask_restful import Resource, reqparse
@@ -15,7 +16,10 @@ parser.add_argument('password', type=str, required=True, location='json')
 
 class UsersResource(Resource):
     def get(self):
-        users = User.query.all()
+        try:
+            users = User.filter().all()
+        except Exception as e:
+            return { 'message': str(e) }
 
         if len(users) == 0:
             return { 'message': "No users found." }, 404
