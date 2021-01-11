@@ -23,7 +23,7 @@ class RestMixin(object):
                     relationship_class = field.property.mapper.class_
                     mapper = getattr(relationship_class, mapper_field)
                     value = relationship_class.query.filter(mapper == value).first()
-                    query.join(relationship_class)
+                    query.join(relationship_class, mapper==field)
 
             if hasattr(field, 'type'):
                 if (field.type == 'DATE'):
