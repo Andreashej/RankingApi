@@ -19,10 +19,10 @@ class Result(db.Model, RestMixin):
     def __repr__(self):
         return '<Result {} {} {} >'.format(self.test.testcode, self.mark, self.rider.firstname)
 
-    def get_mark(self):
+    def get_mark(self, convertTime = False):
         mark = None
-
-        if self.test.mark_type == 'time':
+        
+        if convertTime and self.test.mark_type == 'time':
             if self.test.testcode == 'P1':
                 mark = (32.50 - self.mark) / 1.25 
             

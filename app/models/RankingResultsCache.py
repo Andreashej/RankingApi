@@ -38,7 +38,7 @@ class RankingResultsCache(db.Model, RestMixin):
         self.test_id = test.id
 
         for result in results:
-            final_mark += result.get_mark()
+            final_mark += result.get_mark(test.testcode == 'C5')
             
             if result.rider not in self.riders:
                 self.riders.append(result.rider)
