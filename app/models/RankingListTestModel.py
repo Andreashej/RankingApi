@@ -20,7 +20,7 @@ class RankingListTest(db.Model, RestMixin):
     mark_type = db.Column(db.String(4), default='mark') # Allowed values: {mark, time, comb}
     tasks = db.relationship("Task", backref="test", lazy='dynamic')
 
-    ranking_results_cached = db.relationship("RankingResultsCache", backref="cached_results", lazy="joined")
+    ranking_results_cached = db.relationship("RankingResultsCache", backref="test", lazy="joined")
 
     @hybrid_property
     def included_tests(self):

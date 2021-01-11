@@ -3,7 +3,7 @@ from flask_restful import Resource, reqparse
 from flask_jwt_extended import jwt_required
 from .. import db
 
-from ..models import Horse, Result, Competition, Test, HorseSchema, ResultSchema, TestSchema
+from ..models import Horse, HorseSchema, ResultSchema, TestSchema, RankingListResultSchema
 
 horses_schema = HorseSchema(many=True, exclude=("results","testlist",))
 horse_schema = HorseSchema(exclude=("results",))
@@ -12,6 +12,7 @@ results_schema = ResultSchema(many=True, exclude=("horse",))
 result_schema = ResultSchema(exclude=("horse",))
 
 tests_schema = TestSchema(many=True, exclude=("results",))
+rankinglist_result_schema = RankingListResultSchema(only=("rank","test.rankinglist",))
 
 class HorsesResource(Resource):
     def __init__(self):
@@ -80,8 +81,13 @@ class HorseResultResource(Resource):
         pass
 
     def get(self, horse_id, testcode):
-        results_for_test = Result.query.filter_by(horse_id=horse_id).join(Result.test).filter(Test.testcode == testcode).join(Test.competition).order_by(Competition.last_date.desc()).all()
-        best = Result.query.filter_by(horse_id = horse_id).join(Result.test).filter(Test.testcode == testcode).order_by(Result.mark.desc()).limit(1).first()
+        horse = Horse.query.get(horse_id)
+
+        # results_for_test = Result.query.filter_by(horse_id=horse_id).join(Result.test).filter(Test.testcode == testcode).join(Test.competition).order_by(Competition.last_date.desc()).all()
+        results_for_test = horse.get_results(testcode)
+        # best = Result.query.filter_by(horse_id = horse_id).join(Result.test).filter(Test.testcode == testcode).order_by(Result.mark.desc()).limit(1).first()
+        best = horse.get_best_result(testcode)
+        best_rank = horse.get_best_rank(testcode)
 
         if (len(results_for_test) == 0):
             return {'status': 'NOT FOUND', 'message': 'The horse has no results in this test.'}, 404
@@ -90,6 +96,7 @@ class HorseResultResource(Resource):
             'status': 'OK',
             'data': {
                 'history': results_schema.dump(results_for_test),
-                'best': result_schema.dump(best)
+                'best': result_schema.dump(best),
+                'best_rank': rankinglist_result_schema.dump(best_rank)
             }
         }

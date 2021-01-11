@@ -54,8 +54,8 @@ class ResultSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Result
 
-    rider = ma.Nested("RiderSchema", exclude=("results",))
-    horse = ma.Nested("HorseSchema", exclude=("results",))
+    rider = ma.Nested("RiderSchema", exclude=("results","testlist","number_of_results","aliases",))
+    horse = ma.Nested("HorseSchema", exclude=("results","testlist","number_of_results",))
     test = ma.Nested("TestSchema", exclude=("results","id",))
 
     _links = ma.Hyperlinks(
@@ -123,6 +123,7 @@ class RankingListTestSchema(ma.SQLAlchemyAutoSchema):
         model = RankingListTest
     
     tasks_in_progress = ma.Nested("TaskSchema", many=True)
+    rankinglist = ma.Nested("RankingListSchema", only=("listname","shortname",))
     
     _links = ma.Hyperlinks(
         {
@@ -135,11 +136,12 @@ class RankingListResultSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = RankingResultsCache
 
-        exclude = ["cached_results"]
+        # exclude = ["test"]
 
     riders = ma.Nested("RiderSchema", many=True, only=("id","fullname",))
     horses = ma.Nested("HorseSchema", many=True, only=("id","horse_name","feif_id",))
     marks = ma.Nested("ResultSchema", many=True, only=("id","mark","horse.horse_name","horse.feif_id","test.competition.name","test.competition.id", "test.testcode"))
+    test = ma.Nested("RankingListTestSchema")
 
 class TaskSchema(ma.SQLAlchemyAutoSchema):
     class Meta:

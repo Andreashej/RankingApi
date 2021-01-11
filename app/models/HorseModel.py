@@ -39,7 +39,7 @@ class Horse(db.Model, RestMixin):
     @testlist.expression
     def testlist(cls):
         return db.session.query('results.horse_id, results.test_id').filter_by(horse_id = cls.id).join('tests').order_by('tests.testcode').distinct('tests.testcode')
-    
+
     def get_results_for_ranking(self, test):
         from . import Result, Test, Competition, RankingList
 
@@ -61,6 +61,39 @@ class Horse(db.Model, RestMixin):
 
         return results_query.limit(test.included_marks).all()
 
+    def get_results(self, testcode, **kwargs):
+        from ..models import Result, Test, Competition
+
+        limit = kwargs.get('limit', None)
+
+        return Result.query.filter_by(horse_id = self.id).join(Result.test).filter(Test.testcode == testcode).join(Test.competition).order_by(Competition.last_date.desc()).limit(limit).all()
+    
+    def get_best_result(self, testcode):
+        from ..models import Result, Test, TestCatalog
+
+        query = Result.query.filter_by(horse_id = self.id).join(Result.test).filter(Test.testcode == testcode)
+
+        test = TestCatalog.query.filter_by(testcode = testcode).first()
+        if test.order == 'asc':
+            query = query.order_by(Result.mark.asc())
+        else:
+            query = query.order_by(Result.mark.desc())
+        
+        return query.first()
+    
+    def get_best_rank(self, testcode):
+        from ..models import RankingResultsCache, TestCatalog, RankingListTest
+        
+        query = RankingResultsCache.query.filter(RankingResultsCache.horses.contains(self)).join(RankingResultsCache.test).filter(RankingListTest.testcode == testcode)
+
+        test = TestCatalog.query.filter_by(testcode = testcode).first()
+        if test.order == 'asc':
+            query = query.order_by(RankingResultsCache.mark.asc())
+        else:
+            query = query.order_by(RankingResultsCache.mark.desc())
+
+        return query.first()
+
     @hybrid_method
     def count_results_for_ranking(self, test):
         return len(list(
@@ -75,7 +108,7 @@ class Horse(db.Model, RestMixin):
     
     @count_results_for_ranking.expression
     def count_results_for_ranking(cls, test):
-        from app.models import Result, Test, Competition
+        from ..models import Result, Test, Competition
 
         competition_ids = list(map(lambda comp: comp.id, test.rankinglist.competitions))
 

@@ -3,7 +3,7 @@ import os
 from flask_restful import Resource, reqparse, current_app, request, url_for
 from flask_jwt_extended import jwt_required
 from .. import db
-from ..models import Rider, RiderSchema, ResultSchema, TestSchema, TaskSchema
+from ..models import Rider, RiderSchema, ResultSchema, TestSchema, TaskSchema, RankingListResultSchema
 
 from sqlalchemy import and_
 
@@ -16,6 +16,8 @@ result_schema = ResultSchema(exclude=("rider",))
 tests_schema = TestSchema(many=True, exclude=("results",))
 
 task_schema = TaskSchema()
+
+rankinglist_result_schema = RankingListResultSchema(only=("rank","test.rankinglist",))
 
 class RidersResource(Resource):
     def __init__(self):
@@ -136,6 +138,7 @@ class RiderResultResource(Resource):
         rider = Rider.query.get(rider_id)
         results_for_test = rider.get_results(testcode, limit=request.args.get('limit'))
         best = rider.get_best_result(testcode)
+        best_rank = rider.get_best_rank(testcode)
 
         if len(results_for_test) == 0:
             return { 'status': 'NOT FOUND', 'message': 'The rider has no results in this test'}, 404
@@ -144,6 +147,7 @@ class RiderResultResource(Resource):
             'status': 'OK',
             'data':{
                 'history': results_schema.dump(results_for_test),
-                'best': result_schema.dump(best)
+                'best': result_schema.dump(best),
+                'best_rank': rankinglist_result_schema.dump(best_rank)
             }
         }

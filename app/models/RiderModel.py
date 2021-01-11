@@ -69,9 +69,29 @@ class Rider(db.Model, RestMixin):
         return Result.query.filter_by(rider_id = self.id).join(Result.test).filter(Test.testcode == testcode).join(Test.competition).order_by(Competition.last_date.desc()).limit(limit).all()
     
     def get_best_result(self, testcode):
-        from ..models import Result, Test, Competition
+        from ..models import Result, Test, Competition, TestCatalog
 
-        return Result.query.filter_by(rider_id = self.id).join(Result.test).filter(Test.testcode == testcode).order_by(Result.mark.desc()).first()
+        query = Result.query.filter_by(rider_id = self.id).join(Result.test).filter(Test.testcode == testcode)
+
+        test = TestCatalog.query.filter_by(testcode = testcode).first()
+        if test.order == 'asc':
+            query = query.order_by(Result.mark.asc())
+        else:
+            query = query.order_by(Result.mark.desc())
+        
+        return query.first()
+    
+    def get_best_rank(self, testcode):
+        from ..models import RankingResultsCache, TestCatalog, RankingListTest
+        query = RankingResultsCache.query.filter(RankingResultsCache.riders.contains(self)).join(RankingResultsCache.test).filter(RankingListTest.testcode == testcode)
+
+        test = TestCatalog.query.filter_by(testcode = testcode).first()
+        if test.order == 'asc':
+            query = query.order_by(RankingResultsCache.mark.asc())
+        else:
+            query = query.order_by(RankingResultsCache.mark.desc())
+
+        return query.first()
 
     def get_results_for_ranking(self, test):
         from ..models import Result, Test, Competition, RankingList
