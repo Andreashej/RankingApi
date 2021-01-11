@@ -48,27 +48,33 @@ class Rider(db.Model, RestMixin):
 
     @hybrid_property
     def testlist(self):
-        t =[result.test.testcode for result in self.results]
-        return set(t)
+        t = []
+        for result in self.results:
+            if result.test.testcode in t:
+                continue
+
+            t.append(result.test.testcode)
+        t.sort()
+        return t
     
     @testlist.expression
     def testlist(cls):
-        return db.session.query('results.rider_id, results.test_id').filter_by(rider_id = cls.id).join('tests').distinct('tests.testcode')
+        return db.session.query('results.rider_id, results.test_id').filter_by(rider_id = cls.id).join('tests').order_by('tests.testcode').distinct('tests.testcode')
 
     def get_results(self, testcode, **kwargs):
-        from app.models import Result, Test, Competition
+        from ..models import Result, Test, Competition
 
         limit = kwargs.get('limit', None)
 
         return Result.query.filter_by(rider_id = self.id).join(Result.test).filter(Test.testcode == testcode).join(Test.competition).order_by(Competition.last_date.desc()).limit(limit).all()
     
     def get_best_result(self, testcode):
-        from app.models import Result, Test, Competition
+        from ..models import Result, Test, Competition
 
         return Result.query.filter_by(rider_id = self.id).join(Result.test).filter(Test.testcode == testcode).order_by(Result.mark.desc()).first()
 
     def get_results_for_ranking(self, test):
-        from app.models import Result, Test, Competition, RankingList
+        from ..models import Result, Test, Competition, RankingList
 
         results_query = Result.query.filter_by(rider_id = self.id)
 
@@ -111,14 +117,6 @@ class Rider(db.Model, RestMixin):
     
     @hybrid_method
     def count_results_for_ranking(self, test):
-        # tests = [test.testcode]
-
-        # if test.testcode in ['C4', 'C5']:
-        #     tests = ['T1', 'T2', 'V1', 'F1'] 
-
-        #     if test.testcode == 'C5':
-        #         tests = tests + ['PP1', 'P1', 'P2', 'P3']
-        
         return len(list(
             filter(
                 lambda result: (
@@ -141,14 +139,6 @@ class Rider(db.Model, RestMixin):
             query = query.filter(Result.mark >= test.min_mark)
         else:
             query = query.filter(Result.mark > 0)
-        
-        # tests = [test.testcode]
-
-        # if test.testcode in ['C4', 'C5']:
-        #     tests = ['T1', 'T2', 'V1', 'F1'] 
-
-        #     if test.testcode == 'C5':
-        #         tests = tests + ['PP1', 'P1', 'P2', 'P3']
 
         query = query\
             .join(Result.test).filter(Test.testcode.in_(test.included_tests))\

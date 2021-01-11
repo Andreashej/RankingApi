@@ -27,12 +27,18 @@ class Horse(db.Model, RestMixin):
     
     @hybrid_property
     def testlist(self):
-        t = [result.test.testcode for result in self.results]
-        return set(t)
+        t = []
+        for result in self.results:
+            if result.test.testcode in t:
+                continue
+
+            t.append(result.test.testcode)
+        t.sort()
+        return t
     
     @testlist.expression
     def testlist(cls):
-        return db.session.query('results.horse_id, results.test_id').filter_by(horse_id = cls.id).join('tests').distinct('tests.testcode')
+        return db.session.query('results.horse_id, results.test_id').filter_by(horse_id = cls.id).join('tests').order_by('tests.testcode').distinct('tests.testcode')
     
     def get_results_for_ranking(self, test):
         from . import Result, Test, Competition, RankingList
