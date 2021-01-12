@@ -15,9 +15,9 @@ class RankingList(db.Model, RestMixin):
     listname = db.Column(db.String(250))
     shortname = db.Column(db.String(3), unique=True)
     results_valid_days = db.Column(db.Integer)
-    tests = db.relationship("RankingListTest", backref="rankinglist", lazy='dynamic', order_by="RankingListTest.testcode", cascade="all,delete")
+    tests = db.relationship("RankingListTest", backref="rankinglist", lazy='dynamic', order_by="RankingListTest.testcode", cascade="all, delete")
     branding_image = db.Column(db.String(250))
-    tasks = db.relationship("Task", backref="rankinglist", lazy='dynamic', cascade="all,delete")
+    tasks = db.relationship("Task", backref="rankinglist", lazy='dynamic', cascade="all, delete")
 
     def __init__(self, name, shortname):
         self.listname = name

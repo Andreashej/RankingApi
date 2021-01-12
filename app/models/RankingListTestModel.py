@@ -11,20 +11,20 @@ class RankingListTest(db.Model, RestMixin):
     __tablename__ = 'rankinglist_tests'
     id = db.Column(db.Integer, primary_key=True)
     testcode = db.Column(db.String(3))
-    rankinglist_id = db.Column(db.Integer, db.ForeignKey('rankinglists.id'), nullable=False)
+    rankinglist_id = db.Column(db.Integer, db.ForeignKey('rankinglists.id', ondelete="CASCADE"), nullable=False)
     included_marks = db.Column(db.Integer, default=2)
     order = db.Column(db.String(4), default='desc')
     grouping = db.Column(db.String(5), default='rider')
     min_mark = db.Column(db.Float)
     rounding_precision = db.Column(db.Integer)
     mark_type = db.Column(db.String(4), default='mark') # Allowed values: {mark, time, comb}
-    tasks = db.relationship("Task", backref="test", lazy='dynamic')
+    tasks = db.relationship("Task", backref="test", lazy='dynamic', cascade="all, delete")
 
     ranking_results_cached = db.relationship("RankingResultsCache", backref="test", lazy="joined")
 
     @hybrid_property
     def included_tests(self):
-        tests = ['T1', 'T1', 'V1', 'F1']
+        tests = ['T1', 'T2', 'V1', 'F1']
         if self.testcode == 'C4':
             return tests
 
