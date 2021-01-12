@@ -217,6 +217,7 @@ class RankingListResource(Resource):
         self.reqparse.add_argument('grouping', type=str, required = False, location = 'json')
         self.reqparse.add_argument('min_mark', type=float, required = False, location = 'json')
         self.reqparse.add_argument('rounding_precision', type=int, required = False, location = 'json')
+        self.reqparse.add_argument('mark_type', type=str, required = False, location = 'json')
 
     def get(self, listname = None, testcode = None, id = None):
 
@@ -265,6 +266,9 @@ class RankingListResource(Resource):
         
         if 'rounding_precision' in args:
             test.rounding_precision = args['rounding_precision']
+        
+        if 'mark_type' in args:
+            test.mark_type = args['mark_type']
 
         try:
             db.session.commit()
