@@ -75,7 +75,7 @@ class Horse(db.Model, RestMixin):
 
         test = TestCatalog.query.filter_by(testcode = testcode).first()
         if test.order == 'asc':
-            query = query.order_by(Result.mark.asc())
+            query = query.filter(Result.mark > 0).order_by(Result.mark.asc())
         else:
             query = query.order_by(Result.mark.desc())
         
