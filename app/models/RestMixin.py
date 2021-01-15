@@ -10,7 +10,7 @@ class RestMixin(object):
         if not query:
             query = cls.query
 
-        filters = request.args.getlist('filter')
+        filters = request.args.getlist('filter[]')
 
         for filter in filters:
             pack = filter.split()
