@@ -3,9 +3,10 @@ import datetime, os
 from flask_restful import Resource, reqparse
 from flask import request, current_app
 import jwt
+from sqlalchemy.sql.expression import text
 from .. import db, cache
 from ..models import Competition, RankingList, RankingListTest, CompetitionSchema, TestCatalog, Test, TaskSchema, Result
-from sqlalchemy import not_, and_
+from sqlalchemy import func, not_
 from flask_jwt_extended import jwt_required
 
 competitions_schema = CompetitionSchema(many=True, exclude=("tests","include_in_ranking","tasks",))
@@ -29,7 +30,11 @@ class CompetitionsResource(Resource):
         query = Competition.query
 
         if noresults:
-            query = query.filter(not_(Competition.tests.any()))
+            res_count = func.count(Result.id).label('res_count')
+            subquery = Result.query.with_entities(res_count, Result.test_id, Test.competition_id).join(Result.test).group_by(Test.id)
+            subquery = subquery.with_entities(Test.competition_id)
+
+            query = query.filter(Competition.id.notin_(subquery))
 
         try:
             query = Competition.filter(query)

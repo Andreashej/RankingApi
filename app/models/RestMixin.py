@@ -27,7 +27,7 @@ class RestMixin(object):
 
             if hasattr(field, 'type'):
                 if (field.type == 'DATE'):
-                    value = datetime.datetime.strptime(value, '%d/%m/%Y')
+                    value = datetime.datetime.strptime(value, '%Y-%m-%d')
             
             if operator == 'contains':
                 query = query.filter(field.contains(value))
