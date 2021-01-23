@@ -59,23 +59,8 @@ class Result(db.Model, RestMixin):
             lines = contents.splitlines()
 
             if competition is None:
-                competition = Competition('', None, None, competition_id)
-
-                if competition_id[2] == "2" or competition_id[2] == "3":
-                    rsn = 'DRL'
-                
-                ranking = RankingList.query.filter_by(shortname=rsn).first()
-                competition.include_in_ranking.append(ranking)
-                db.session.add(competition)
-            else:
-                tests = Test.query.filter_by(competition=competition).all()
-                for test in tests:
-                    Result.query.filter_by(test=test).delete()
-                    db.session.delete(test)
-            
-            db.session.commit()
+                raise Exception('Competition does not exist')
 
             task = competition.launch_task('import_competition', 'Importing competition ' + competition_id, lines)
-            db.session.commit()
 
             return task

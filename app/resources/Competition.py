@@ -21,6 +21,7 @@ class CompetitionsResource(Resource):
         self.reqparse.add_argument('enddate', type=lambda x: datetime.datetime.strptime(x, '%d/%m/%Y'), required=True, location='json')
         self.reqparse.add_argument('ranking_scopes', type=str, action='append', location='json')
         self.reqparse.add_argument('tests', type=str, action='append', location='json')
+        self.reqparse.add_argument('country', type=str, location='json')
     
     def get(self):
         noresults = request.args.get('noresults', False, type=bool)
@@ -41,33 +42,46 @@ class CompetitionsResource(Resource):
 
         return {'status': 'OK', 'data': competitions}, 200
 
-    @jwt_required
+    # @jwt_required
     def post(self):        
         args = self.reqparse.parse_args()
 
         competition = Competition(args['name'], args['startdate'], args['enddate'])
-
-        if args['isirank']:
-            competition.isirank_id = args['isirank']
-
-        for ranking in args['ranking_scopes']:
-            rankinglist = RankingList.query.filter_by(shortname=ranking).first()
-
-            competition.include_in_ranking.append(rankinglist)
-
-        for testcode in args['tests']:
-            origtest = TestCatalog.query.filter_by(testcode = testcode).first()
-
-            test = Test(testcode)
-            test.rounding_precision = origtest.rounding_precision
-            test.order = origtest.order
-            competition.tests.append(test)
-
         try:
             db.session.add(competition)
             db.session.commit()
         except:
-            return {'status': 'ERROR'}, 500
+            db.session.rollback()
+            return { 'Something went wrong' },500
+
+        if args['isirank']:
+            competition.isirank_id = args['isirank']
+
+        else:
+            competition.isirank_id = competition.create_id()
+
+        if args['ranking_scopes']:
+            for ranking in args['ranking_scopes']:
+                rankinglist = RankingList.query.filter_by(shortname=ranking).first()
+
+                competition.include_in_ranking.append(rankinglist)
+
+        if args['tests']:
+            for testcode in args['tests']:
+                origtest = TestCatalog.query.filter_by(testcode = testcode).first()
+
+                test = Test(testcode)
+                test.rounding_precision = origtest.rounding_precision
+                test.order = origtest.order
+                competition.tests.append(test)
+
+        if args['country']:
+            competition.country = args['country']
+
+        try:
+            db.session.commit()
+        except Exception as e:
+            return {'message': str(e)}, 500
 
         competition = competition_schema.dump(competition)
         
@@ -128,6 +142,9 @@ class CompetitionResource(Resource):
                 rankinglist = RankingList.query.filter_by(shortname=ranking).one()
                 competition.include_in_ranking.append(rankinglist)
         
+        if args['country']:
+            competition.country = args['country']
+
         try:
             db.session.commit()
         except:

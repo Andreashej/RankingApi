@@ -1,9 +1,8 @@
 from flask_restful import Resource, reqparse
 from flask import request, current_app
 from flask_jwt_extended import jwt_required
-from sqlalchemy.log import echo_property
 from .. import db
-from ..models import Result, ResultSchema, TaskSchema
+from ..models import Result, ResultSchema, TaskSchema, Task
 
 import os
 
@@ -11,6 +10,7 @@ results_schema = ResultSchema(many=True)
 result_schema = ResultSchema()
 
 task_schema = TaskSchema()
+tasks_schema = TaskSchema(many=True)
 
 class ResultsResource(Resource):
     def __init__(self):
@@ -30,24 +30,31 @@ class ResultsResource(Resource):
 
         return { 'data': results }, 200
     
-    @jwt_required
+    # @jwt_required
     def post(self):
+        outlist = list()
         if request.files:
-            file = request.files['file']
+            for file in request.files.getlist('results[]'):
+                # print(name)
+                file.save(os.path.join(current_app.config["ISIRANK_FILES"], file.filename))
 
-            file.save(os.path.join(current_app.config["ISIRANK_FILES"], file.filename))
-
-            task = Result.load_from_file(file.filename)
+                try:
+                    task = Result.load_from_file(file.filename)
+                    out = task_schema.dump(task)
+                except Exception as e:
+                    out = { 'message': str(e) }
+                finally:
+                    outlist.append(out)
 
             try:
                 db.session.commit()
+                return { 'status': 'OK', 'data': outlist }
             except:
                 db.session.rollback()
 
-            task = task_schema.dump(task)
-            return {'status': 'OK', 'data': task}
+            return { 'message': 'Something went wrong' }, 500
         else:
-            return {'status': 'ERROR', 'message': 'File not found'},500
+            return { 'message': 'No files in request.' },500
 
     @jwt_required
     def delete(self):

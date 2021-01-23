@@ -21,6 +21,7 @@ class Competition(db.Model, RestMixin):
     isirank_id = db.Column(db.String(12), unique=True)
     first_date = db.Column(db.Date)
     last_date = db.Column(db.Date)
+    country = db.Column(db.String(2), default='DK')
     state = db.Column(db.String(12), default="NORMAL") # { NORMAL, BLOCKED, CANCELLED, UNLISTED }
     include_in_ranking = db.relationship('RankingList', secondary=competitions_rankinglists, lazy='dynamic', backref=db.backref('competitions', lazy=True))
     tests = db.relationship("Test", backref="competition", lazy='dynamic', cascade='all,delete')
@@ -28,9 +29,9 @@ class Competition(db.Model, RestMixin):
 
     def __init__(self, name='', startdate=None, enddate=None, isi_id = None):
         self.name = name
-        self.isirank_id = isi_id
         self.first_date = startdate
         self.last_date = enddate
+        self.isirank_id = isi_id
     
     def __repr__(self):
         return f'<Competition {self.name} from {self.first_date} to {self.last_date}>'
@@ -42,6 +43,9 @@ class Competition(db.Model, RestMixin):
         db.session.add(task)
 
         return task
+
+    def create_id(self):
+        return f'{self.country}{self.last_date.year}{self.id:06}'
 
     def get_tasks_in_progress(self):
         return Task.query.filter_by(competition=self, complete=False).all()
