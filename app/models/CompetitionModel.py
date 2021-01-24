@@ -1,7 +1,5 @@
-from marshmallow import fields
 from .. import db
-from sqlalchemy.ext.hybrid import hybrid_property, hybrid_method
-import csv
+from sqlalchemy.ext.hybrid import hybrid_property
 
 from flask import current_app
 
@@ -35,6 +33,10 @@ class Competition(db.Model, RestMixin):
     
     def __repr__(self):
         return f'<Competition {self.name} from {self.first_date} to {self.last_date}>'
+    
+    @hybrid_property
+    def tasks_in_progress(self):
+        return self.get_tasks_in_progress()
 
     def launch_task(self, name, descripton, *args, **kwargs):
         rq_job = current_app.task_queue.enqueue('app.tasks.' + name, self.id, *args, **kwargs)

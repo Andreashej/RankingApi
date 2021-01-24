@@ -71,10 +71,11 @@ class CompetitionSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Competition
         include_relationships = True
-        exclude = ["tests._results"]
+        exclude = ["tests._results", "tasks"]
 
     tests = ma.List(ma.Nested("TestSchema", exclude=("competition","results")))
     include_in_ranking = ma.List(ma.Nested("RankingListSchema", only=("shortname","listname","results_valid_days",)))
+    tasks_in_progress = ma.Nested("TaskSchema", many=True)
 
     _links = ma.Hyperlinks(
         {

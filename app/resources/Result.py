@@ -30,7 +30,7 @@ class ResultsResource(Resource):
 
         return { 'data': results }, 200
     
-    # @jwt_required
+    @jwt_required
     def post(self):
         outlist = list()
         if request.files:

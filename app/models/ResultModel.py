@@ -38,12 +38,16 @@ class Result(db.Model, RestMixin):
 
         return round(mark, self.test.rounding_precision)
     
-    @staticmethod
-    def load_from_file(filename):
+    @classmethod
+    def load_from_file(cls, filename):
         from ..models import Competition, Test, RankingList
         
         competition_id = filename.split('.')[0]
         competition = Competition.query.filter_by(isirank_id=competition_id).first()
+
+        to_be_deleted = cls.query.join(cls.test).filter(Test.competition_id==competition.id).with_entities(cls.id)
+
+        cls.query.filter(cls.id.in_(to_be_deleted)).delete(synchronize_session = False)
         
         task = None
         if competition is not None:
