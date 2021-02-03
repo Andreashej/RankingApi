@@ -10,7 +10,7 @@ from .models import Horse, Task
 def lookup_horse():
     """Lookup a horse"""
 
-    horses = Horse.query.filter_by(last_lookup=None).limit(10).with_entities('id').all()
+    horses = Horse.query.filter_by(last_lookup=None).limit(500).with_entities('id').all()
     
     rq_job = app.task_queue.enqueue('app.tasks.horse_lookup', [id for id, in horses])
 
