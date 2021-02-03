@@ -16,6 +16,11 @@ import os
 
 from . import config
 
+import requests
+from requests.packages.urllib3.exceptions import InsecureRequestWarning
+
+requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+
 class FixedApi(Api):
   def error_router(self, original_handler, e):
     if not isinstance(e, PyJWTError) and not isinstance(e, JWTExtendedException) and self._has_fr_route():
@@ -52,7 +57,7 @@ def create_app():
     jwt.init_app(app)
 
     with app.app_context():
-        from . import routes, models
+        from . import routes, models, commands
 
         db.create_all()
 

@@ -1,6 +1,9 @@
 from .. import db
 from sqlalchemy.ext.hybrid import hybrid_property, hybrid_method
 from sqlalchemy import func, and_
+import requests
+from xml.etree import ElementTree
+import re
 
 from datetime import datetime, timedelta
 
@@ -12,6 +15,8 @@ class Horse(db.Model, RestMixin):
     feif_id = db.Column(db.String(12), unique=True)
     horse_name = db.Column(db.String(250))
     results = db.relationship("Result", backref="horse", lazy="joined")
+    last_lookup = db.Column(db.DateTime)
+    log_items = db.relationship("Log", back_populates="horse")
 
     def __init__(self, feif_id, name):
         self.feif_id = feif_id
@@ -129,6 +134,40 @@ class Horse(db.Model, RestMixin):
             )
 
         return query.as_scalar()
+
+    def wf_lookup(self):
+        response = requests.get(f"https://www.worldfengur.com/bondiws/HorseInfo/?invoke=getHorseInfo&pUsername=DI_ws&pPassword=blEsi458&pHorseID={self.feif_id}", verify=False)
+
+        response = ElementTree.fromstring(response.content).find("{http://schemas.xmlsoap.org/soap/envelope/}Body/{http://is/bondi/webservices/fengur/WSFengur.wsdl}getHorseInfoResponse/return")
+
+        name = f"{response.find('name').text} {response.find('prefix').text} {response.find('origin').text}"
+
+        name_match = re.sub('[áðéíóúýþæöåäüßø]', '.+', response.find('name').text + " .{3,4} " + response.find('origin').text + '\s?I{0,}')
+
+        match = re.match(name_match, self.horse_name)
+        if not match:
+            match = re.match(self.horse_name + '\s?I{0,}', name)
+            isMatch = match.start() == 0 and match.end() == len(name) if match else False
+        else:
+            isMatch = match.start() == 0 and match.end() == len(self.horse_name)
+
+        if isMatch:
+            self.horse_name = name
+            self.last_lookup = datetime.utcnow()
+        else:
+            self.log(f'Horse name "{self.horse_name}" does not match WorldFengur "{name}"')
+
+        try:
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+
+    def log(self, message):
+        from ..models import Log
+        log = Log(message)
+        log.horse = self
+
+        db.session.add(log)
 
     def __repr__(self):
         return '<Horse {}>'.format(self.horse_name)

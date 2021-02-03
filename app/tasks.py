@@ -1,5 +1,4 @@
 from rq import get_current_job
-import sqlalchemy
 
 from flask import url_for
 
@@ -257,3 +256,19 @@ def import_aliases(aliases):
         app.logger.error(e, exc_info=sys.exc_info())
         _set_task_progress(100, True)
 
+def horse_lookup(horses = []):
+    try:
+        _set_task_progress(0)
+        horses = Horse.query.filter(Horse.id.in_(horses)).all()
+
+        for i, horse in enumerate(horses):
+            horse.wf_lookup()
+            
+            progress = i / len(horses) * 100
+            _set_task_progress(progress)
+        
+        _set_task_progress(100)
+    except Exception as e:
+        db.session.rollback()
+        app.logger.error(e, exc_info=sys.exc_info())
+        _set_task_progress(100, True)
