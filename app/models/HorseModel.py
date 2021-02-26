@@ -19,7 +19,7 @@ class Horse(db.Model, RestMixin):
     log_items = db.relationship("Log", back_populates="horse")
 
     def __init__(self, feif_id, name):
-        self.feif_id = feif_id
+        self.feif_id = feif_id.upper()
         self.horse_name = name
 
     @hybrid_property
@@ -136,9 +136,19 @@ class Horse(db.Model, RestMixin):
         return query.as_scalar()
 
     def wf_lookup(self):
-        response = requests.get(f"https://www.worldfengur.com/bondiws/HorseInfo/?invoke=getHorseInfo&pUsername=DI_ws&pPassword=blEsi458&pHorseID={self.feif_id}", verify=False)
+        response = requests.get(f"https://www.worldfengur.com/bondiws/HorseInfo/?invoke=getHorseInfo&pUsername=DI_ws&pPassword=blEsi458&pHorseID={self.feif_id.upper()}", verify=False)
+
 
         response = ElementTree.fromstring(response.content).find("{http://schemas.xmlsoap.org/soap/envelope/}Body/{http://is/bondi/webservices/fengur/WSFengur.wsdl}getHorseInfoResponse/return")
+
+        if response is None:
+            try:
+                self.log(f'FEIF-ID {self.feif_id} does not exist')
+                db.session.commit()
+            except:
+                db.session.rollback()
+            finally:
+                return
 
         name = f"{response.find('name').text} {response.find('prefix').text} {response.find('origin').text}"
 

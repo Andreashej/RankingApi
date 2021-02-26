@@ -12,7 +12,7 @@ SERVER_NAME = os.environ.get('SERVER_NAME') or 'localhost:5000'
 
 DB_USERNAME = os.environ.get('RDS_USERNAME') or 'andreas2_ranking'
 DB_PASSWORD = os.environ.get('RDS_PASSWORD') or 'V+Zr1cD09XiX'
-DB_HOSTNAME = os.environ.get('RDS_HOSTNAME') or 'cp02.azehosting.net'
+DB_HOSTNAME = os.environ.get('RDS_HOSTNAME') or 'cp06.azehosting.net'
 DB_PORT = os.environ.get('RDS_PORT') or '3306'
 DB_NAME = os.environ.get('RDS_DB_NAME') or 'andreas2_iceranking'
 
