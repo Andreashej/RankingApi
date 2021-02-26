@@ -169,9 +169,12 @@ def compute_ranking(test_id):
         finally:
             _set_task_progress(100)
         
-        # Get call to refresh browsercache
-        url = url_for('api.resultlist', listname=test.rankinglist.shortname, testcode=test.testcode)
-        requests.get(url, params={'clearcache': 1})
+        try:
+            # Get call to refresh browsercache
+            url = url_for('api.resultlist', listname=test.rankinglist.shortname, testcode=test.testcode)
+            requests.get(url, params={'clearcache': 1})
+        except:
+            pass
     except:
         _set_task_progress(100, True)
         app.logger.error("Unhandled exception", exc_info=sys.exc_info())
