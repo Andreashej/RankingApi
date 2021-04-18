@@ -1,6 +1,6 @@
-from flask import request
 from flask_restful import Resource, reqparse
 from flask_jwt_extended import jwt_required
+from requests import NullHandler
 from .. import db
 
 from ..models import Horse, HorseSchema, ResultSchema, TestSchema, RankingListResultSchema
@@ -24,7 +24,7 @@ class HorsesResource(Resource):
         try:
             horses = Horse.filter().all()
         except Exception as e:
-            return { 'message': str(e) }
+            return { 'message': str(e) }, 500
 
         horses = horses_schema.dump(horses)
 
@@ -63,8 +63,10 @@ class HorsesResource(Resource):
 class HorseResource(Resource):
     def __init__(self):
         self.reqparse = reqparse.RequestParser()
-        self.reqparse.add_argument('name', type=str, required=True, location='json')
-        self.reqparse.add_argument('feif_id', type=str, required=True, location='json')
+        self.reqparse.add_argument('name', type=str, required=False, location='json')
+        self.reqparse.add_argument('feif_id', type=str, required=False, location='json')
+        self.reqparse.add_argument('force_update', type=bool, required=False, location='json')
+        self.reqparse.add_argument('ignore_wf_error', type=bool, required=False, location='json')
     
     def get(self,horse_id):
         horse = Horse.query.get(horse_id)
@@ -75,6 +77,33 @@ class HorseResource(Resource):
         horse = horse_schema.dump(horse)
         
         return {'status': 'OK', 'data': horse},200
+    
+    @jwt_required
+    def patch(self, horse_id):
+        horse = Horse.query.get(horse_id)
+
+        if not horse:
+            return { 'message': f'Horse with id {horse_id} was not found' }, 404
+
+        args = self.reqparse.parse_args()
+
+        if args['name'] is not None:
+            horse.horse_name = args['name']
+        
+        if args['feif_id'] is not None:
+            horse.feif_id = args['feif_id']
+        
+        if args['force_update']:
+            horse.wf_lookup(True)
+        
+        if args['ignore_wf_error']:
+            horse.lookup_error = False
+        
+        horse.save()
+
+        return { 'data': horse_schema.dump(horse) }
+        
+
 
 class HorseResultResource(Resource):
     def __init__(self):

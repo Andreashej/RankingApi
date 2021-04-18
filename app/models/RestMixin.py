@@ -1,7 +1,7 @@
 
 import datetime
 from flask import request
-
+from .. import db
 
 class RestMixin(object):
 
@@ -55,3 +55,23 @@ class RestMixin(object):
             query = query.limit(limit)
 
         return query
+    
+    def save(self):
+        try:
+            db.session.commit()
+        except:
+            db.session.rollback()
+    
+    def add(self):
+        try:
+            db.session.add(self)
+            db.session.commit()
+        except:
+            db.session.rollback()
+
+    def remove(self):
+        try:
+            db.session.remove(self)
+            db.session.commit()
+        except:
+            db.session.rollback()

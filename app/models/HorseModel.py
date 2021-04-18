@@ -17,6 +17,7 @@ class Horse(db.Model, RestMixin):
     results = db.relationship("Result", backref="horse", lazy="joined")
     last_lookup = db.Column(db.DateTime)
     log_items = db.relationship("Log", back_populates="horse")
+    lookup_error = db.Column(db.Boolean, default=False)
 
     def __init__(self, feif_id, name):
         self.feif_id = feif_id.upper()
@@ -135,7 +136,7 @@ class Horse(db.Model, RestMixin):
 
         return query.as_scalar()
 
-    def wf_lookup(self):
+    def wf_lookup(self, force_update = False):
         response = requests.get(f"https://www.worldfengur.com/bondiws/HorseInfo/?invoke=getHorseInfo&pUsername=DI_ws&pPassword=blEsi458&pHorseID={self.feif_id.upper()}", verify=False)
 
 
@@ -151,6 +152,7 @@ class Horse(db.Model, RestMixin):
                 return
 
         name = f"{response.find('name').text} {response.find('prefix').text} {response.find('origin').text}"
+        horseID = response.find('horseID').text
 
         name_match = re.sub('[áðéíóúýþæöåäüßø]', '.+', response.find('name').text + " .{3,4} " + response.find('origin').text + '\s?I{0,}')
 
@@ -161,11 +163,15 @@ class Horse(db.Model, RestMixin):
         else:
             isMatch = match.start() == 0 and match.end() == len(self.horse_name)
 
-        if isMatch:
+        if isMatch or force_update:
             self.horse_name = name
-            self.last_lookup = datetime.utcnow()
+            self.feif_id = horseID
+            self.lookup_error = False
         else:
             self.log(f'Horse name "{self.horse_name}" does not match WorldFengur "{name}"')
+            self.lookup_error = True
+        
+        self.last_lookup = datetime.utcnow()
 
         try:
             db.session.commit()

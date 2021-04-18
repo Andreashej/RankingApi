@@ -13,4 +13,4 @@ from .RiderAliasModel import RiderAlias
 from .RevokedTokenModel import RevokedToken
 from .LogModel import Log
 
-from .schemas import RiderSchema, HorseSchema, ResultSchema, CompetitionSchema, TestSchema, RankingListSchema, RankingListTestSchema, TaskSchema, UserSchema, RankingListResultSchema, TestCatalogSchema
+from .schemas import RiderSchema, HorseSchema, ResultSchema, CompetitionSchema, TestSchema, RankingListSchema, RankingListTestSchema, TaskSchema, UserSchema, RankingListResultSchema, TestCatalogSchema, LogSchema

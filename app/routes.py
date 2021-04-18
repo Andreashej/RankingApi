@@ -1,3 +1,4 @@
+from .resources.Logs import LogsResource
 from .resources.Result import ResultsResource, ResultResource
 from .resources.Rider import RiderResource, RidersResource, RiderResultResource
 from .resources.Ranking import RankingResource, RankingsResource, RankingListResource, RankingListResultsResource, RankingListsResource
@@ -54,3 +55,5 @@ api.add_resource(SearchResource, '/search', endpoint='search')
 
 api.add_resource(TestCatalogResource, '/test-catalog', endpoint="test-catalog")
 api.add_resource(TestDefinitionResource, '/test-catalog/<string:testcode>', endpoint="test-definition")
+
+api.add_resource(LogsResource, "/logs", endpoint="logs")

@@ -1,6 +1,6 @@
 from .. import ma
 from marshmallow import fields
-from ..models import Rider, Horse, Result, Competition, Test, RankingList, Task, RankingListTest, User, RankingResultsCache, TestCatalog, RiderAlias
+from ..models import Rider, Horse, Result, Competition, Test, RankingList, Task, RankingListTest, User, RankingResultsCache, TestCatalog, RiderAlias, Log
 
 class UserSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
@@ -167,3 +167,7 @@ class TestCatalogSchema(ma.SQLAlchemyAutoSchema):
     #         "results": ma.URLFor("api.resultlist", listname="<rankinglist.shortname>", testcode="<testcode>")
     #     }
     # )
+
+class LogSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = Log
