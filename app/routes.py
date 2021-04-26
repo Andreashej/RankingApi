@@ -1,6 +1,6 @@
 from .resources.Logs import LogsResource
 from .resources.Result import ResultsResource, ResultResource
-from .resources.Rider import RiderResource, RidersResource, RiderResultResource
+from .resources.Rider import RiderAliasResource, RiderResource, RidersResource, RiderResultResource
 from .resources.Ranking import RankingResource, RankingsResource, RankingListResource, RankingListResultsResource, RankingListsResource
 from .resources.Competition import CompetitionsResource, CompetitionResource
 from .resources.Test import TestsResource, TestResource
@@ -18,6 +18,7 @@ api.add_resource(ResultResource, '/results/<int:result_id>', endpoint="result")
 api.add_resource(RidersResource, '/riders', endpoint='riders')
 api.add_resource(RiderResource, '/riders/<int:rider_id>', endpoint='rider')
 api.add_resource(RiderResultResource, '/riders/<int:rider_id>/results/<testcode>', endpoint='result_for_rider')
+api.add_resource(RiderAliasResource, '/riders/<int:rider_id>/aliases', endpoint='rider_alias')
 
 api.add_resource(HorsesResource, '/horses', endpoint='horses')
 api.add_resource(HorseResource, '/horses/<int:horse_id>', endpoint='horse')

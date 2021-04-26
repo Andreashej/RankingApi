@@ -3,7 +3,7 @@ import os
 from flask_restful import Resource, reqparse, current_app, request, url_for
 from flask_jwt_extended import jwt_required
 from .. import db
-from ..models import Rider, RiderSchema, ResultSchema, TestSchema, TaskSchema, RankingListResultSchema
+from ..models import Rider, RiderSchema, ResultSchema, TestSchema, TaskSchema, RankingListResultSchema, RiderAliasSchema, RiderAlias
 
 from sqlalchemy import and_
 
@@ -18,6 +18,8 @@ tests_schema = TestSchema(many=True, exclude=("results",))
 task_schema = TaskSchema()
 
 rankinglist_result_schema = RankingListResultSchema(only=("rank","test.rankinglist",))
+
+rider_alias_schema = RiderAliasSchema(many=True)
 
 class RidersResource(Resource):
     def __init__(self):
@@ -151,3 +153,54 @@ class RiderResultResource(Resource):
                 'best_rank': rankinglist_result_schema.dump(best_rank)
             }
         }
+
+class RiderAliasResource(Resource):
+    def __init__(self):
+        self.reqparse = reqparse.RequestParser()
+        self.reqparse.add_argument('alias', type = str, required = False, location = 'json')
+        self.reqparse.add_argument('rider', type = int, required = False, location = 'json')
+
+    def get(self, rider_id):
+        rider = Rider.query.get(rider_id)
+
+        if not rider:
+            return { 'message': 'Rider not found' }, 404
+        
+        return { 'data':  rider_alias_schema.dump(rider.aliases)}
+    
+    def post(self, rider_id):
+        rider = Rider.query.get(rider_id)
+
+        if not rider:
+            return { 'message': 'Rider not found' }, 404
+
+        args = self.reqparse.parse_args()
+        
+        if args['alias']:
+            existing = Rider.find_by_name(args['alias'])
+            if existing:
+                return { 'message': f'Cannot create alias that already exists for rider {existing.fullname} (ID: {existing.id}). Merge the riders instead by including an ID to merge from in the request body.' }, 409
+            alias = RiderAlias(args['alias'])
+
+            rider.aliases.append(alias)
+        
+        elif args['rider']:
+            merge = Rider.query.get(args['rider'])
+
+            if not merge:
+                return { 'message': f'Could not find rider with ID {args["rider"]} to merge from.'}, 404
+            
+            alias = RiderAlias(merge.fullname)
+            rider.aliases.append(alias)
+
+            for result in merge.results:
+                result.rider_id = rider.id
+        
+        try:
+            db.session.commit()
+            db.session.delete(merge)
+            db.session.commit()
+        except Exception as e:
+            return { 'message': str(e) }, 500
+
+        return { 'data':  rider_alias_schema.dump(rider.aliases)}
