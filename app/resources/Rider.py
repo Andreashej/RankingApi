@@ -115,6 +115,11 @@ class RiderResource(Resource):
 
         if args['lname'] is not None:
             rider.lastname = args['lname']
+
+        try:
+            rider.save()
+        except Exception as e:
+            return { 'messsage': str(e) }, 500
         
         rider = rider_schema.dump(rider)
         rider['results'] = {}
@@ -175,6 +180,7 @@ class RiderAliasResource(Resource):
             return { 'message': 'Rider not found' }, 404
 
         args = self.reqparse.parse_args()
+        merge = None
         
         if args['alias']:
             existing = Rider.find_by_name(args['alias'])
@@ -198,7 +204,8 @@ class RiderAliasResource(Resource):
         
         try:
             db.session.commit()
-            db.session.delete(merge)
+            if merge:
+                db.session.delete(merge)
             db.session.commit()
         except Exception as e:
             return { 'message': str(e) }, 500
