@@ -55,8 +55,10 @@ def import_competition(competition_id, lines):
             test = Test.query.filter_by(testcode=fields[1], competition=competition).first()
 
             if not test:
-                test = Test.create_from_catalog(fields[1])
-                competition.tests.append(test)
+                # Test is not ranked - do not process results
+                continue
+                # test = Test.create_from_catalog(fields[1])
+                # competition.tests.append(test)
 
             rider = Rider.query.filter_by(fullname = fields[0]).first()
             rider = Rider.find_by_name(fields[0])
@@ -71,9 +73,9 @@ def import_competition(competition_id, lines):
             
             feif_id = 'XX0000000000' if (fields[4] == 'nn' or fields[4] == 'NULL') else fields[3]
             horse_name = 'nn' if (fields[4] == 'nn' or fields[4] == 'NULL' or fields[4] == 'XX0000000000') else fields[4]
-            print(feif_id)
+
             horse = Horse.query.filter_by(feif_id=feif_id).first()
-            print(horse)
+
 
             if not horse:
                 horse = Horse(feif_id, horse_name)

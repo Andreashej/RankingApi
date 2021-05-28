@@ -73,11 +73,7 @@ class CompetitionsResource(Resource):
 
         if args['tests']:
             for testcode in args['tests']:
-                origtest = TestCatalog.query.filter_by(testcode = testcode).first()
-
-                test = Test(testcode)
-                test.rounding_precision = origtest.rounding_precision
-                test.order = origtest.order
+                test = Test.create_from_catalog(testcode)
                 competition.tests.append(test)
 
         if args['country']:
