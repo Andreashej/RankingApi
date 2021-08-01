@@ -10,7 +10,7 @@ from .resources.User import TokenRefresh, UserLogin, UserLogoutAccess, UserLogou
 from .resources.Search import SearchResource
 from .resources.TestCatalog import TestCatalogResource, TestDefinitionResource
 
-from . import api
+from . import api, graphql_bp
 
 api.add_resource(ResultsResource, '/results', endpoint="results")
 api.add_resource(ResultResource, '/results/<int:result_id>', endpoint="result")
@@ -58,3 +58,12 @@ api.add_resource(TestCatalogResource, '/test-catalog', endpoint="test-catalog")
 api.add_resource(TestDefinitionResource, '/test-catalog/<string:testcode>', endpoint="test-definition")
 
 api.add_resource(LogsResource, "/logs", endpoint="logs")
+
+from flask_graphql import GraphQLView
+from .graphql.schema import schema
+
+graphql_bp.add_url_rule('/', view_func=GraphQLView.as_view(
+    'graphql',
+    schema=schema,
+    graphiql=True
+))

@@ -38,6 +38,8 @@ db = SQLAlchemy()
 api_bp = Blueprint('api', __name__)
 api = FixedApi(api_bp)
 
+graphql_bp = Blueprint('graphql', __name__)
+
 cache = Cache()
 
 auth = HTTPBasicAuth()
@@ -66,14 +68,21 @@ def create_app():
         app.task_queue = rq.Queue(app.config['QUEUE'], connection=app.redis, default_timeout=-1)
 
         app.register_blueprint(api_bp, url_prefix='/api')
+        app.register_blueprint(graphql_bp, url_prefix='/graphql')
 
         os.makedirs(app.config['ISIRANK_FILES'], exist_ok=True)
         os.makedirs(app.config['IMAGE_FILES'], exist_ok=True)
 
-        @app.route('/')
         def healthcheck():
             return "Application is running"
 
+        app.add_url_rule('/', view_func=healthcheck)
+        
+        # @app.route('/graphql')
+        # def graphql():
+        #   from app.graphql.schema import schema
+        #   return 
+          
         return app
 
 from .models import RevokedToken

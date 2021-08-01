@@ -70,3 +70,8 @@ class RankingResultsCache(db.Model, RestMixin):
         results = results_schema.dump(results)
 
         return results
+    
+    @classmethod
+    @cache.memoize(timeout=1440)
+    def get_results_query(cls, test):
+        return cls.query.filter_by(test_id = test.id).order_by(cls.rank.asc())
