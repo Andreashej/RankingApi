@@ -10,7 +10,8 @@ class RankingResultsCache(SQLAlchemyObjectType):
         model = RankingResultsCacheModel
         interfaces = (relay.Node, )
 
-    marks = graphene.List(Result, page=graphene.Int(), pageLength=graphene.Int())
+    marks = graphene.List(Result)
 
-    def resolve_marks(self, info, page = 1, pageLength = 10):
-        return ResultModel.marks.offset(pageLength).limit(page).all()
+    # def resolve_marks(self, info):
+    #     query = RankingResultsCache.get_results_query()
+    #     return query.all()
