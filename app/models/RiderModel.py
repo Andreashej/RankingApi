@@ -109,9 +109,11 @@ class Rider(db.Model, RestMixin):
         if test.testcode == 'C4' or test.testcode == 'C5':
             queries['tolt'] = results_query.filter((Test.testcode == 'T1') | (Test.testcode == 'T2'))
 
-            queries['gait'] = results_query.filter((Test.testcode == 'V1') | (Test.testcode == 'F1'))
+            if (test.testcode == 'C4'):
+                queries['gait'] = results_query.filter(Test.testcode == 'V1')
 
             if (test.testcode == 'C5'):
+                queries['gait'] = results_query.filter(Test.testcode == 'F1')
                 queries['pace'] = results_query.filter((Test.testcode == 'PP1') | (Test.testcode == 'P1') | (Test.testcode == 'P2') | (Test.testcode == 'P3'))
         else:
             queries['all'] = results_query.filter_by(testcode=test.testcode)
