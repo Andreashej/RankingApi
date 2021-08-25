@@ -24,12 +24,11 @@ class RankingListTest(db.Model, RestMixin):
 
     @hybrid_property
     def included_tests(self):
-        tests = ['T1', 'T2', 'V1', 'F1']
         if self.testcode == 'C4':
-            return tests
+            return ['T1', 'T2', 'V1']
 
         if self.testcode == 'C5':
-            return tests + ['PP1', 'P1', 'P2', 'P3']
+            return ['T1', 'T2', 'F1', 'PP1', 'P1', 'P2', 'P3']
         
         return [self.testcode]
     
