@@ -1,6 +1,7 @@
 
 import datetime
 from flask import request
+from flask_restful.reqparse import RequestParser
 from .. import db
 
 class ApiResponse:
@@ -98,29 +99,47 @@ class RestMixin():
 
         return query
     
+    def update(self, reqparser: RequestParser):
+        args = reqparser.parse_args()
+        for attr in args:
+            value = args[attr]
+
+            print(f"{attr} = {value}")
+            print(hasattr(self, attr))
+
+            if value and hasattr(self, attr):
+                setattr(self, attr, value)
+    
     def save(self):
         try:
+            if not self.id:
+                db.session.add(self)
+                
             db.session.commit()
-        except:
+        except Exception as e:
             db.session.rollback()
+            raise e
     
     def add(self):
         try:
             db.session.add(self)
             db.session.commit()
-        except:
+        except Exception as e:
             db.session.rollback()
+            raise e
 
     def remove(self):
         try:
             db.session.remove(self)
             db.session.commit()
-        except:
+        except Exception as e:
             db.session.rollback()
+            raise e
 
     def delete(self):
         try:
             db.session.delete(self)
             db.session.commit()
-        except:
+        except Exception as e:
             db.session.rollback()
+            raise e

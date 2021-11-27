@@ -17,10 +17,9 @@ class CompetitionsResource(Resource):
         self.reqparse = reqparse.RequestParser()
         self.reqparse.add_argument('name', type=str, required=True, location='json')
         self.reqparse.add_argument('isirank', type=str, required=False, location='json')
-        self.reqparse.add_argument('startdate', type=lambda x: datetime.datetime.strptime(x, '%d/%m/%Y'), required=True, location='json')
-        self.reqparse.add_argument('enddate', type=lambda x: datetime.datetime.strptime(x, '%d/%m/%Y'), required=True, location='json')
+        self.reqparse.add_argument('first_date', type=lambda x: datetime.datetime.strptime(x, '%d/%m/%Y'), required=True, location='json')
+        self.reqparse.add_argument('last_date', type=lambda x: datetime.datetime.strptime(x, '%d/%m/%Y'), required=True, location='json')
         self.reqparse.add_argument('ranking_scopes', type=str, action='append', location='json')
-        self.reqparse.add_argument('tests', type=str, action='append', location='json')
         self.reqparse.add_argument('country', type=str, location='json')
     
     def get(self):
@@ -35,19 +34,14 @@ class CompetitionsResource(Resource):
     def post(self):        
         args = self.reqparse.parse_args()
 
-        competition = Competition(args['name'], args['startdate'], args['enddate'])
+        competition = Competition(args['name'], args['startdate'], args['enddate'], args['isirank_id'])
+
+        competition.update(self.reqparse)
+
         try:
-            db.session.add(competition)
-            db.session.commit()
-        except:
-            db.session.rollback()
-            return { 'Something went wrong' },500
-
-        if args['isirank']:
-            competition.isirank_id = args['isirank']
-
-        else:
-            competition.isirank_id = competition.create_id()
+            competition.save()
+        except Exception as e:
+            return ErrorResponse(str(e)).response()
 
         if args['ranking_scopes']:
             for ranking in args['ranking_scopes']:
@@ -55,16 +49,8 @@ class CompetitionsResource(Resource):
 
                 competition.include_in_ranking.append(rankinglist)
 
-        if args['tests']:
-            for testcode in args['tests']:
-                test = Test.create_from_catalog(testcode)
-                competition.tests.append(test)
-
-        if args['country']:
-            competition.country = args['country']
-
         try:
-            db.session.commit()
+            competition.save()
         except Exception as e:
             return ErrorResponse(str(e)).response()
         
@@ -78,15 +64,15 @@ class CompetitionsResource(Resource):
         except Exception as e:
             return ErrorResponse(str(e)).response()
         
-        return {}, 204
+        return ApiResponse(response_code=204).response()
 
 class CompetitionResource(Resource):
     def __init__(self):
         self.reqparse = reqparse.RequestParser()
         self.reqparse.add_argument('name', type=str, location='json')
-        self.reqparse.add_argument('isirank', type=str, location='json')
-        self.reqparse.add_argument('startdate', type=lambda x: datetime.datetime.strptime(x, '%Y-%m-%d'), location='json')
-        self.reqparse.add_argument('enddate', type=lambda x: datetime.datetime.strptime(x, '%Y-%m-%d'), location='json')
+        self.reqparse.add_argument('isirank_id', type=str, location='json')
+        self.reqparse.add_argument('first_date', type=lambda x: datetime.datetime.strptime(x, '%Y-%m-%d'), location='json')
+        self.reqparse.add_argument('last_date', type=lambda x: datetime.datetime.strptime(x, '%Y-%m-%d'), location='json')
         self.reqparse.add_argument('ranking_scopes', type=str, action='append', location='json')
 
     def get(self, competition_id):
@@ -100,8 +86,6 @@ class CompetitionResource(Resource):
     
     @jwt_required
     def patch(self, competition_id):
-        args = self.reqparse.parse_args()
-
         competition = None
 
         try:
@@ -109,32 +93,20 @@ class CompetitionResource(Resource):
         except ErrorResponse as e:
             return e.response()
 
-        if args['name'] is not None:
-            competition.name = args['name']
+        competition.update(self.reqparse)
         
-        if args['isirank'] is not None:
-            competition.isirank_id = args['isirank']
-        
-        if args['startdate'] is not None:
-            competition.first_date = args['startdate']
-        
-        if args['enddate'] is not None:
-            competition.last_date = args['enddate']
-        
+        args = self.reqparse.parse_args()
         if args['ranking_scopes'] is not None:
             for ranking in args['ranking_scopes']:
                 rankinglist = RankingList.query.filter_by(shortname=ranking).one()
                 competition.include_in_ranking.append(rankinglist)
-        
-        if args['country']:
-            competition.country = args['country']
 
         try:
-            db.session.commit()
+            competition.save()
         except Exception as e:
             return ErrorResponse(str(e), 500).response()
         
-        return ApiResponse(competition, competition_schema)
+        return ApiResponse(competition, competition_schema).response()
 
     @jwt_required
     def delete(self, competition_id):
@@ -178,18 +150,11 @@ class CompetitionTestsResource(Resource):
             competition.add_test(test)
         except ValueError as e:
             return ErrorResponse(str(e), 400).response()
-
-        if args['order']:
-            test.order = args['order']
         
-        if args['mark_type']:
-            test.mark_type = args['mark_type']
-        
-        if args['rounding_precision']:
-            test.rounding_precision = args['rounding_precision']
+        test.update(self.reqparse)
         
         try:
-            test.add()
+            test.save()
         except Exception as e:
             return ErrorResponse(str(e)).response()
 

@@ -6,7 +6,7 @@ from sqlalchemy.ext.hybrid import hybrid_property
 from .. import db
 from .TaskModel import Task
 
-from .RestMixin import RestMixin
+from .RestMixin import ErrorResponse, RestMixin
 
 class RankingList(db.Model, RestMixin):
     __tablename__ = 'rankinglists'
@@ -86,3 +86,10 @@ class RankingList(db.Model, RestMixin):
     
     def get_task_in_progress(self, name):
         return Task.query.filter_by(name=name, rankinglist=self, complete=False).first()
+    
+    def add_test(self, test):
+        print(test)
+        if test.testcode in [test.testcode for test in self.tests]:
+            raise ErrorResponse(f'Duplicate testcode {test.testcode} for rankinglist {self.shortname}')
+        
+        self.tests.append(test)

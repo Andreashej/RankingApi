@@ -29,7 +29,7 @@ class Competition(db.Model, RestMixin):
         self.name = name
         self.first_date = startdate
         self.last_date = enddate
-        self.isirank_id = isi_id
+        self.isirank_id = isi_id or self.create_id()
     
     def __repr__(self):
         return f'<Competition {self.name} from {self.first_date} to {self.last_date}>'
