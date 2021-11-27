@@ -38,6 +38,12 @@ db = SQLAlchemy()
 api_bp = Blueprint('api', __name__)
 api = FixedApi(api_bp)
 
+api_v2_bp = Blueprint('v2', __name__)
+api_v2 = FixedApi(api_v2_bp)
+
+auth_bp = Blueprint('auth', __name__)
+api_auth = FixedApi(auth_bp)
+
 graphql_bp = Blueprint('graphql', __name__)
 
 cache = Cache()
@@ -59,7 +65,10 @@ def create_app():
     jwt.init_app(app)
 
     with app.app_context():
-        from . import routes, models, commands
+        from app import models, commands
+        from app.v1 import routes as routes_v1
+        from app.v2 import routes as routes_v2
+        from app.auth import routes as routes_auth
 
         db.create_all()
 
@@ -68,6 +77,8 @@ def create_app():
         app.task_queue = rq.Queue(app.config['QUEUE'], connection=app.redis, default_timeout=-1)
 
         app.register_blueprint(api_bp, url_prefix='/api')
+        app.register_blueprint(api_v2_bp, url_prefix='/v2')
+        app.register_blueprint(auth_bp, url_prefix='/auth')
         app.register_blueprint(graphql_bp, url_prefix='/graphql')
 
         os.makedirs(app.config['ISIRANK_FILES'], exist_ok=True)

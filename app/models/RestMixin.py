@@ -3,7 +3,49 @@ import datetime
 from flask import request
 from .. import db
 
-class RestMixin(object):
+class ApiResponse:
+    def __init__(self, data = None, schema = None, response_code = 200):
+        self.data = data
+        self.schema = schema
+        self.response_code = response_code
+    
+    def response(self):
+        if not self.data:
+            return None, self.response_code
+
+        return {
+            'data': self.schema.dump(self.data),
+        }, self.response_code
+
+class ErrorResponse(Exception):
+    def __init__(self, message: str, response_code = 500):
+        self.error_message = message
+        self.response_code = response_code
+        super().__init__(self.error_message)
+    
+    def response(self):
+        return { 'message': self.error_message }, self.response_code
+
+class RestMixin():
+
+    @classmethod
+    def load(cls, instance_id = None):
+        query = cls.query
+
+        if instance_id:
+            instance = query.get(instance_id)
+
+            if not instance:
+                raise ErrorResponse(f'Could not find instance of {cls.__name__} with ID {instance_id}', 404)
+            
+            return instance
+        
+        try:
+            query = cls.filter(query)
+        except Exception as e:
+            raise ErrorResponse(str(e))
+        
+        return query.all()
 
     @classmethod
     def filter(cls, query = None):
@@ -72,6 +114,13 @@ class RestMixin(object):
     def remove(self):
         try:
             db.session.remove(self)
+            db.session.commit()
+        except:
+            db.session.rollback()
+
+    def delete(self):
+        try:
+            db.session.delete(self)
             db.session.commit()
         except:
             db.session.rollback()

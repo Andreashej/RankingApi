@@ -2,8 +2,8 @@ import os
 
 from flask_restful import Resource, reqparse, current_app, request, url_for
 from flask_jwt_extended import jwt_required
-from .. import db
-from ..models import Rider, RiderSchema, ResultSchema, TestSchema, TaskSchema, RankingListResultSchema, RiderAliasSchema, RiderAlias
+from app import db
+from app.models import Rider, RiderSchema, ResultSchema, TestSchema, TaskSchema, RankingListResultSchema, RiderAliasSchema, RiderAlias
 
 from sqlalchemy import and_
 

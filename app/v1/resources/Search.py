@@ -1,7 +1,7 @@
 from flask_restful import Resource, request
 from sqlalchemy import or_
 
-from ..models import RankingList, Rider, Horse, Competition, RankingListSchema, RiderSchema, HorseSchema, CompetitionSchema
+from app.models import RankingList, Rider, Horse, Competition, RankingListSchema, RiderSchema, HorseSchema, CompetitionSchema
 
 rankings_schema = RankingListSchema(many = True, exclude=('competitions',"tests",))
 riders_schema = RiderSchema(many = True, exclude=('results','aliases','testlist'))

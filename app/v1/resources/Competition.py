@@ -1,11 +1,10 @@
-import datetime, os
+import datetime
 
 from flask_restful import Resource, reqparse
-from flask import request, current_app
-import jwt
+from flask import request
 from sqlalchemy.sql.expression import text
-from .. import db, cache
-from ..models import Competition, RankingList, RankingListTest, CompetitionSchema, TestCatalog, Test, TaskSchema, Result
+from app import db, cache
+from app.models import Competition, RankingList, RankingListTest, CompetitionSchema, TestCatalog, Test, TaskSchema, Result
 from sqlalchemy import func, not_
 from flask_jwt_extended import jwt_required
 

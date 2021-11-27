@@ -3,6 +3,11 @@ from sqlalchemy.ext.hybrid import hybrid_property
 from .ResultModel import Result
 from .RestMixin import RestMixin
 
+tests_rankinglists = db.Table('tests_ranking_association',
+    db.Column('competition_id', db.Integer, db.ForeignKey('tests.id'), primary_key=True),
+    db.Column('rankinglist_id', db.Integer, db.ForeignKey('rankinglists.id'), primary_key=True)
+)
+
 class Test(db.Model, RestMixin):
     __tablename__ = 'tests'
     id = db.Column(db.Integer, primary_key=True)
@@ -12,9 +17,17 @@ class Test(db.Model, RestMixin):
     order = db.Column(db.String(4), default='desc')
     mark_type = db.Column(db.String(4), default='mark')
     _results = db.relationship('Result', backref='test', lazy='dynamic', cascade="all,delete")
+    # _include_in_ranking = db.relationship('RankingList', secondary=tests_rankinglists, lazy='dynamic', backref=db.backref('tests', lazy=True))
 
     def __init__(self, testcode):
         self.testcode = testcode
+    
+    # @hybrid_property
+    # def include_in_ranking(self):
+    #     if self._include_in_ranking: return self._include_in_ranking
+        
+    #     return self.join(Competition)
+
 
     @hybrid_property
     def results(self):
@@ -52,6 +65,6 @@ class Test(db.Model, RestMixin):
             test.mark_type = catalog.mark_type
             test.order = catalog.order
         except:
-            pass
+            raise ValueError(f"Testcode {testcode} does not exist in catalog")
 
         return test

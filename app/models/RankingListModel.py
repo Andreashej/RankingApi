@@ -1,7 +1,6 @@
 import csv
 
 from flask import current_app
-from flask_migrate import current
 from sqlalchemy.ext.hybrid import hybrid_property
 
 from .. import db

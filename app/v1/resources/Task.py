@@ -1,9 +1,9 @@
 from flask_restful import Resource, reqparse
 from flask import request
 from sqlalchemy import and_, not_
-from .. import db
+from app import db
 
-from ..models import Task, TaskSchema
+from app.models import Task, TaskSchema
 
 task_schema = TaskSchema()
 tasks_schema = TaskSchema(many=True)

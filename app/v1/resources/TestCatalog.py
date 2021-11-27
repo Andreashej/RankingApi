@@ -1,6 +1,6 @@
 from flask_restful import Resource, reqparse
 
-from ..models import TestCatalog, TestCatalogSchema
+from app.models import TestCatalog, TestCatalogSchema
 
 test_schema = TestCatalogSchema()
 tests_schema = TestCatalogSchema(many=True)

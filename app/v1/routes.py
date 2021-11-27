@@ -1,16 +1,16 @@
-from .resources.Logs import LogsResource
-from .resources.Result import ResultsResource, ResultResource
-from .resources.Rider import RiderAliasResource, RiderResource, RidersResource, RiderResultResource
-from .resources.Ranking import RankingResource, RankingsResource, RankingListResource, RankingListResultsResource, RankingListsResource
-from .resources.Competition import CompetitionsResource, CompetitionResource
-from .resources.Test import TestsResource, TestResource
-from .resources.Horse import HorsesResource, HorseResource, HorseResultResource
-from .resources.Task import TaskResource, TasksResource
-from .resources.User import TokenRefresh, UserLogin, UserLogoutAccess, UserLogoutRefresh, UsersResource, UserResource, ProfileResource
-from .resources.Search import SearchResource
-from .resources.TestCatalog import TestCatalogResource, TestDefinitionResource
+from app.v1.resources.Logs import LogsResource
+from app.v1.resources.Result import ResultsResource, ResultResource
+from app.v1.resources.Rider import RiderAliasResource, RiderResource, RidersResource, RiderResultResource
+from app.v1.resources.Ranking import RankingResource, RankingsResource, RankingListResource, RankingListResultsResource, RankingListsResource
+from app.v1.resources.Competition import CompetitionsResource, CompetitionResource
+from app.v1.resources.Test import TestsResource, TestResource
+from app.v1.resources.Horse import HorsesResource, HorseResource, HorseResultResource
+from app.v1.resources.Task import TaskResource, TasksResource
+from app.v1.resources.User import TokenRefresh, UserLogin, UserLogoutAccess, UserLogoutRefresh, UsersResource, UserResource, ProfileResource
+from app.v1.resources.Search import SearchResource
+from app.v1.resources.TestCatalog import TestCatalogResource, TestDefinitionResource
 
-from . import api, graphql_bp
+from app import api, graphql_bp
 
 api.add_resource(ResultsResource, '/results', endpoint="results")
 api.add_resource(ResultResource, '/results/<int:result_id>', endpoint="result")
@@ -60,7 +60,7 @@ api.add_resource(TestDefinitionResource, '/test-catalog/<string:testcode>', endp
 api.add_resource(LogsResource, "/logs", endpoint="logs")
 
 from flask_graphql import GraphQLView
-from .graphql.schema import schema
+from app.graphql.schema import schema
 
 graphql_bp.add_url_rule('/', view_func=GraphQLView.as_view(
     'graphql',

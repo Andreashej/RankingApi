@@ -1,9 +1,9 @@
 from flask.globals import request
 from flask_restful import Resource, reqparse
 from flask_jwt_extended import jwt_required
-from .. import db
+from app import db
 
-from ..models import Test, Competition, TestSchema
+from app.models import Test, Competition, TestSchema
 
 test_schema = TestSchema()
 tests_schema = TestSchema(many=True, exclude=("results",))

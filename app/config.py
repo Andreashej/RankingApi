@@ -6,7 +6,7 @@ JWT_SECRET_KEY = 'thisIs3xtremelyZcret'
 JWT_BLACKLIST_ENABLED = True
 JWT_BLACKLIST_TOKEN_CHECKS = ['access', 'refresh']
 
-SERVER_NAME = os.environ.get('SERVER_NAME') or '127.0.0.1:5000'
+SERVER_NAME = os.environ.get('SERVER_NAME') or 'localhost.localdomain:5000'
 
 # from dotenv import load_dotenv
 

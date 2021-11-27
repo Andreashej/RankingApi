@@ -1,3 +1,4 @@
+from flask_restful import Resource
 import redis
 import rq
 import datetime

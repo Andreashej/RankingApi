@@ -48,6 +48,12 @@ class Competition(db.Model, RestMixin):
 
     def create_id(self):
         return f'{self.country}{self.last_date.year}{self.id:06}'
+    
+    def add_test(self, test):
+        if test.testcode in [test.testcode for test in self.tests]:
+            raise ValueError(f"Duplicate testcode {test.testcode} for competition")
+            
+        self.tests.append(test)
 
     def get_tasks_in_progress(self):
         return Task.query.filter_by(competition=self, complete=False).all()

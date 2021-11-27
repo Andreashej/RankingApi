@@ -3,9 +3,9 @@ from flask_jwt_extended.utils import create_access_token, get_jwt_identity
 from flask_migrate import current
 from flask_restful import Resource, reqparse
 from flask_jwt_extended import jwt_required, jwt_refresh_token_required, get_raw_jwt, jwt_optional
-from .. import db
+from app import db
 
-from ..models import User, UserSchema, RevokedToken
+from app.models import User, UserSchema, RevokedToken
 
 user_schema = UserSchema()
 users_schema = UserSchema(many=True)

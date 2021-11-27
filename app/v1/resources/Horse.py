@@ -1,9 +1,9 @@
 from flask_restful import Resource, reqparse
 from flask_jwt_extended import jwt_required
 from requests import NullHandler
-from .. import db
+from app import db
 
-from ..models import Horse, HorseSchema, ResultSchema, TestSchema, RankingListResultSchema
+from app.models import Horse, HorseSchema, ResultSchema, TestSchema, RankingListResultSchema
 
 horses_schema = HorseSchema(many=True, exclude=("results","testlist",))
 horse_schema = HorseSchema(exclude=("results",))

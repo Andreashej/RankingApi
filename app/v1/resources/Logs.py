@@ -1,7 +1,7 @@
 from flask_restful import Resource
 from flask_jwt_extended import jwt_required
 
-from ..models import Log, LogSchema
+from app.models import Log, LogSchema
 
 logs_schema = LogSchema(many=True)
 
