@@ -1,4 +1,8 @@
-from .. import db, cache
+from sqlalchemy.ext.hybrid import hybrid_property
+from app.models.ResultModel import Result
+from app import db, cache
+
+from functools import reduce
 
 from .RestMixin import RestMixin
 
@@ -17,7 +21,7 @@ cached_results_based_on = db.Table('rank_result_marks',
     db.Column('competition_result_id', db.ForeignKey('results.id', ondelete='CASCADE'), primary_key=True)
 )
 
-class RankingResultsCache(db.Model, RestMixin):
+class RankingResults(db.Model, RestMixin):
     __tablename__ = 'results_cache'
     id = db.Column(db.Integer, primary_key=True)
     rank = db.Column(db.Integer)
@@ -28,28 +32,59 @@ class RankingResultsCache(db.Model, RestMixin):
     horses = db.relationship("Horse", secondary=horse_result, lazy='dynamic', backref=db.backref('ranking_results', lazy='dynamic'))
     marks = db.relationship("Result", secondary=cached_results_based_on, lazy='dynamic')
 
-    def __init__(self, results, test):
-        testcount = 2 if test.testcode == 'C4' else 3 if test.testcode == 'C5' else 1
-
-        if len(results) < test.included_marks * testcount:
-            raise Exception("Not enough marks to generate result")
-
-        final_mark = 0
-        self.test_id = test.id
+    def __init__(self, test, results = []):
+        self.test = test
 
         for result in results:
-            final_mark += result.get_mark(test.testcode == 'C5')
-            
-            if result.rider not in self.riders:
-                self.riders.append(result.rider)
+            self.add_result(result)
 
-            if result.horse not in self.horses:
-                self.horses.append(result.horse)
+    def add_result(self, result):
+        self.marks.append(result)
 
-            self.marks.append(result)
+        if result.rider not in self.riders:
+            self.riders.append(result.rider)
+
+        if result.horse not in self.horses:
+            self.horses.append(result.horse)
+    
+    def calculate_mark(self):
+        testcount = 2 if self.test.testcode == 'C4' else 3 if self.test.testcode == 'C5' else 1
+
+        number_of_marks = self.test.included_marks * testcount
+
+        if self.marks.count() < self.test.included_marks * testcount:
+            self.mark = None
+            self.rank = None
+            return
         
-        self.mark = round(final_mark / len(results), test.rounding_precision)
+        valid_marks_query = self.marks
+
+
+        if self.test.order == 'asc':
+            valid_marks_query = valid_marks_query.order_by(Result.mark).limit(number_of_marks)
+        else:
+            valid_marks_query = valid_marks_query.order_by(Result.mark.desc()).limit(number_of_marks)
         
+        valid_marks = valid_marks_query.all()
+
+        sum_of_marks = reduce(lambda sum, current: sum + current.get_mark(self.test.testcode == 'C5'), valid_marks, 0)
+
+        self.mark = round(sum_of_marks / number_of_marks, self.test.rounding_precision)
+        
+
+    @hybrid_property
+    def rider(self):
+        if self.test.grouping == 'rider':
+            return self.riders[0]
+        
+        return None
+    
+    @hybrid_property
+    def horse(self):
+        if self.test.grouping == 'horse':
+            return self.horses[0]
+        
+        return None
 
     def __repr__(self):
         return "<{}.{}>".format(self.__class__.__name__, self.id)
@@ -72,6 +107,5 @@ class RankingResultsCache(db.Model, RestMixin):
         return results
     
     @classmethod
-    @cache.memoize(timeout=1440)
     def get_results_query(cls, test):
         return cls.query.filter_by(test_id = test.id).order_by(cls.rank.asc())

@@ -88,15 +88,15 @@ class Horse(db.Model, RestMixin):
         return query.first()
     
     def get_best_rank(self, testcode):
-        from ..models import RankingResultsCache, TestCatalog, RankingListTest
+        from ..models import RankingResults, TestCatalog, RankingListTest
         
-        query = RankingResultsCache.query.filter(RankingResultsCache.horses.contains(self)).join(RankingResultsCache.test).filter(RankingListTest.testcode == testcode)
+        query = RankingResults.query.filter(RankingResults.horses.contains(self)).join(RankingResults.test).filter(RankingListTest.testcode == testcode)
 
         test = TestCatalog.query.filter_by(testcode = testcode).first()
         if test.order == 'asc':
-            query = query.order_by(RankingResultsCache.mark.asc())
+            query = query.order_by(RankingResults.mark.asc())
         else:
-            query = query.order_by(RankingResultsCache.mark.desc())
+            query = query.order_by(RankingResults.mark.desc())
 
         return query.first()
 

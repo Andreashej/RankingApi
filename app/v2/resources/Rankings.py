@@ -1,12 +1,15 @@
 from flask_restful import Resource
+from app.models.RankingResults import RankingResults
 from app.models.RankingListTestModel import RankingListTest
-from app.models.RestMixin import ErrorResponse, ApiResponse
-from app.models.schemas import RankingListTestSchema
+from app.models.RestMixin import ApiErrorResponse, ApiResponse
+from app.models.schemas import RankingListTestSchema, RankingListResultSchemaV2 as RankingListResultSchema, ResultSchema
 from flask_restful.reqparse import RequestParser
 from flask_jwt_extended import jwt_required
 
 tests_schema = RankingListTestSchema(many=True, exclude=("rankinglist","tasks_in_progress"))
 test_schema = RankingListTestSchema(exclude=("rankinglist","tasks_in_progress"))
+
+results_schema = RankingListResultSchema(many=True)
 
 class RankingsResource(Resource):
     def get(self):
@@ -14,7 +17,7 @@ class RankingsResource(Resource):
 
         try:
             tests = RankingListTest.load()
-        except ErrorResponse as e:
+        except ApiErrorResponse as e:
             return e.response()
         
         return ApiResponse(tests, tests_schema).response()
@@ -35,7 +38,7 @@ class RankingResource(Resource):
 
         try:
             test = RankingListTest.load(ranking_id)
-        except ErrorResponse as e:
+        except ApiErrorResponse as e:
             return e.response()
         
         return ApiResponse(test, test_schema).response()
@@ -46,7 +49,7 @@ class RankingResource(Resource):
 
         try:
             test = RankingListTest.load(ranking_id)
-        except ErrorResponse as e:
+        except ApiErrorResponse as e:
             return e.response()
         
         test.update(self.reqparse)
@@ -54,7 +57,7 @@ class RankingResource(Resource):
         try:
             test.save()
         except Exception as e:
-            return ErrorResponse(str(e)).response()
+            return ApiErrorResponse(str(e)).response()
         
         return ApiResponse(test, test_schema).response()
     
@@ -63,13 +66,28 @@ class RankingResource(Resource):
         try:
             test = RankingListTest.load(ranking_id)
             test.delete()
-        except ErrorResponse as e:
+        except ApiErrorResponse as e:
             return e.response()
         except Exception as e:
-            return ErrorResponse(str(e)).response()
+            return ApiErrorResponse(str(e)).response()
         
         return ApiResponse(response_code=204).response()
 
-def RankingResultsResource(Resource):
+class RankingResultsRankingResource(Resource):
     def __init__(self):
         pass
+
+    def get(self, ranking_id):
+        results = []
+
+        try:
+            query = RankingResults.query.filter_by(test_id=ranking_id).order_by(RankingResults.rank)
+            results = RankingResults.load(query=query)
+        except ApiErrorResponse as e:
+            return e.response()
+        except Exception as e:
+            return ApiErrorResponse(str(e)).response()
+
+        
+        return ApiResponse(results, results_schema).response()
+

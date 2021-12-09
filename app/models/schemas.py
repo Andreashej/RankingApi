@@ -1,6 +1,6 @@
 from .. import ma
 from marshmallow import fields
-from ..models import Rider, Horse, Result, Competition, Test, RankingList, Task, RankingListTest, User, RankingResultsCache, TestCatalog, RiderAlias, Log
+from ..models import Rider, Horse, Result, Competition, Test, RankingList, Task, RankingListTest, User, RankingResults, TestCatalog, RiderAlias, Log
 
 class UserSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
@@ -89,6 +89,7 @@ class TestSchema(ma.SQLAlchemyAutoSchema):
         include_relationships = True
         exclude = ["_results"]  
 
+    include_in_ranking = ma.Nested("RankingListSchema", many=True, only=("shortname","listname","results_valid_days",))
     competition = ma.Nested("CompetitionSchema", only=("name","last_date","first_date","id", "include_in_ranking"))
     results = ma.Nested("ResultSchema", only=("rider.id", "rider.fullname", "horse.id", "horse.horse_name", "horse.feif_id", "mark"), many=True)
 
@@ -135,7 +136,7 @@ class RankingListTestSchema(ma.SQLAlchemyAutoSchema):
 
 class RankingListResultSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
-        model = RankingResultsCache
+        model = RankingResults
 
         # exclude = ["test"]
 
@@ -143,6 +144,13 @@ class RankingListResultSchema(ma.SQLAlchemyAutoSchema):
     horses = ma.Nested("HorseSchema", many=True, only=("id","horse_name","feif_id",))
     marks = ma.Nested("ResultSchema", many=True, only=("id","mark","horse.horse_name","horse.feif_id","test.competition.name","test.competition.id", "test.testcode"))
     test = ma.Nested("RankingListTestSchema")
+
+class RankingListResultSchemaV2(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = RankingResults
+
+    rider = ma.Nested("RiderSchema", exclude=("results","number_of_results","testlist","aliases",))
+    horse = ma.Nested("HorseSchema", exclude=("results","number_of_results","testlist",))
 
 class TaskSchema(ma.SQLAlchemyAutoSchema):
     class Meta:

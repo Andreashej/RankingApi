@@ -1,7 +1,7 @@
 import datetime
 
 from flask_restful import Resource, reqparse
-from app.models.RestMixin import ErrorResponse, ApiResponse
+from app.models.RestMixin import ApiErrorResponse, ApiResponse
 from app import db
 from app.models import Competition, RankingList, CompetitionSchema, Test, TestSchema
 from flask_jwt_extended import jwt_required
@@ -25,7 +25,7 @@ class CompetitionsResource(Resource):
     def get(self):
         try:
             competitions = Competition.load()
-        except ErrorResponse as e:
+        except ApiErrorResponse as e:
             return e.response()
 
         return ApiResponse(competitions, competitions_schema).response()
@@ -41,7 +41,7 @@ class CompetitionsResource(Resource):
         try:
             competition.save()
         except Exception as e:
-            return ErrorResponse(str(e)).response()
+            return ApiErrorResponse(str(e)).response()
 
         if args['ranking_scopes']:
             for ranking in args['ranking_scopes']:
@@ -52,7 +52,7 @@ class CompetitionsResource(Resource):
         try:
             competition.save()
         except Exception as e:
-            return ErrorResponse(str(e)).response()
+            return ApiErrorResponse(str(e)).response()
         
         return ApiResponse(competition, competition_schema, 201).response()
     
@@ -62,7 +62,7 @@ class CompetitionsResource(Resource):
             Competition.filter().delete()
             db.session.commit()
         except Exception as e:
-            return ErrorResponse(str(e)).response()
+            return ApiErrorResponse(str(e)).response()
         
         return ApiResponse(response_code=204).response()
 
@@ -79,7 +79,7 @@ class CompetitionResource(Resource):
         competition = None
         try:
             competition = Competition.load(competition_id)
-        except ErrorResponse as e:
+        except ApiErrorResponse as e:
             return e.response()
 
         return ApiResponse(competition, competition_schema).response()
@@ -90,7 +90,7 @@ class CompetitionResource(Resource):
 
         try:
             competition = Competition.load(competition_id)
-        except ErrorResponse as e:
+        except ApiErrorResponse as e:
             return e.response()
 
         competition.update(self.reqparse)
@@ -104,7 +104,7 @@ class CompetitionResource(Resource):
         try:
             competition.save()
         except Exception as e:
-            return ErrorResponse(str(e), 500).response()
+            return ApiErrorResponse(str(e), 500).response()
         
         return ApiResponse(competition, competition_schema).response()
 
@@ -119,7 +119,7 @@ class CompetitionResource(Resource):
             db.session.delete(competition)
             db.session.commit()
         except Exception as e:
-            return ErrorResponse(str(e)).response()
+            return ApiErrorResponse(str(e)).response()
 
         return ApiResponse(response_code=204).response()
 
@@ -135,7 +135,7 @@ class CompetitionTestsResource(Resource):
         competition = None
         try:
             competition = Competition.load(competition_id)
-        except ErrorResponse as e:
+        except ApiErrorResponse as e:
             return e.response()
 
         return ApiResponse(competition.tests, tests_schema).response()
@@ -149,14 +149,14 @@ class CompetitionTestsResource(Resource):
             test = Test.create_from_catalog(args['testcode'])
             competition.add_test(test)
         except ValueError as e:
-            return ErrorResponse(str(e), 400).response()
+            return ApiErrorResponse(str(e), 400).response()
         
         test.update(self.reqparse)
         
         try:
             test.save()
         except Exception as e:
-            return ErrorResponse(str(e)).response()
+            return ApiErrorResponse(str(e)).response()
 
         return ApiResponse(test, test_schema).response()
 

@@ -1,18 +1,18 @@
 import graphene
 from graphene import relay
 from graphene_sqlalchemy import SQLAlchemyObjectType
-from app.models import RankingListTest as RankingListTestModel, RankingResultsCache as RankingResultsCacheModel
-from .RankingResultsCache import RankingResultsCache
+from app.models import RankingListTest as RankingListTestModel, RankingResults as RankingResultsModel
+from .RankingResults import RankingResults
 
 class RankingListTest(SQLAlchemyObjectType):
     class Meta:
         model = RankingListTestModel
         interfaces = (relay.Node, )
 
-    results = graphene.List(RankingResultsCache)
+    results = graphene.List(RankingResults)
 
     def resolve_results(self, info):
-        return RankingResultsCacheModel.get_results_query(self).all()
+        return RankingResultsModel.get_results_query(self).all()
 
 class RankingListTestInput(graphene.InputObjectType):
     testcode = graphene.String()

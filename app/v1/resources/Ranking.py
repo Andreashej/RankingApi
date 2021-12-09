@@ -4,7 +4,7 @@ from flask import request, current_app
 from flask_jwt_extended import jwt_required
 from flask_restful import Resource, reqparse
 from app import db, cache
-from app.models import RankingList, RankingListTest, RankingListSchema, RankingListSchema, RiderSchema, RankingListTestSchema, TaskSchema, RankingResultsCache, Competition, Task
+from app.models import RankingList, RankingListTest, RankingListSchema, RankingListSchema, RiderSchema, RankingListTestSchema, TaskSchema, RankingResults, Competition, Task
 
 ranking_lists_schema = RankingListSchema(many=True,exclude=("competitions",))
 ranking_list_schema = RankingListSchema(exclude=("competitions",))
@@ -297,9 +297,9 @@ class RankingListResultsResource(Resource):
         clear_cache = request.args.get('clearcache', None)
 
         if clear_cache:
-            cache.delete_memoized(RankingResultsCache.get_results, RankingResultsCache, test)
+            cache.delete_memoized(RankingResults.get_results, RankingResults, test)
 
-        results = RankingResultsCache.get_results(test)
+        results = RankingResults.get_results(test)
 
         return {'status': 'OK', 'data': results}
     

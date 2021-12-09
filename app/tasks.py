@@ -2,8 +2,8 @@ from rq import get_current_job
 
 from flask import url_for
 
-from . import db, create_app
-from .models import Task, Test, Result, Rider, Horse, Competition, RankingListTest, RankingResultsCache, RankingList, RiderAlias, TestCatalog
+from app import db, create_app
+from app.models import Task, Test, Result, Rider, Horse, Competition, RankingListTest, RankingResults, RankingList, RiderAlias, TestCatalog
 import datetime
 
 import requests
@@ -109,29 +109,28 @@ def import_competition(competition_id, lines):
         _set_task_progress(100, True)
         app.logger.error('Unhandled exception', exc_info=sys.exc_info())
 
-def compute_ranking(test_id):
+def flush_ranking(ranking_id):
     try:
         _set_task_progress(0)
-        test = RankingListTest.query.get(test_id)
+        ranking = RankingListTest.query.get(ranking_id)
 
-        RankingResultsCache.query.filter_by(test_id = test.id).delete()
+        RankingResults.query.filter_by(test_id = ranking.id).delete()
+        # db.session.commit()
 
-        try:
-            db.session.commit()
-        except:
-            db.session.rollback()
+        results = ranking.valid_competition_results
 
-        if test.grouping == 'rider':
-            group = Rider.query.filter(Rider.count_results_for_ranking(test) >= test.included_marks).all()
+        # if test.grouping == 'rider':
+        #     group = Rider.query.filter(Rider.count_results_for_ranking(test) >= test.included_marks).all()
 
-        if test.grouping == 'horse':
-            group = Horse.query.filter(Horse.count_results_for_ranking(test) >= test.included_marks).all()
+        # if test.grouping == 'horse':
+        #     group = Horse.query.filter(Horse.count_results_for_ranking(test) >= test.included_marks).all()
 
         for i, g in enumerate(group):
             results = g.get_results_for_ranking(test)
             result = None
             try:
-                result = RankingResultsCache(results, test)
+                result = RankingResults(test, results)
+                result.calculate_mark()
             except Exception as e:
                 app.logger.debug(e)
             
@@ -148,21 +147,9 @@ def compute_ranking(test_id):
             db.session.commit()
 
             if test.order == 'desc':
-                results = RankingResultsCache.query.filter_by(test_id = test.id).order_by(RankingResultsCache.mark.desc()).all()
+                results = RankingResults.query.filter_by(test_id = test.id).order_by(RankingResults.mark.desc()).all()
             else:
-                results = RankingResultsCache.query.filter_by(test_id = test.id).order_by(RankingResultsCache.mark.asc()).all()
-
-            rank = 0
-            prev_score = 0
-            for result in results:
-                if prev_score != result.mark:
-                    rank += 1
-                
-                result.rank = rank
-
-                prev_score = result.mark
-
-                _set_task_progress(50 + (50 * rank // len(results)))
+                results = RankingResults.query.filter_by(test_id = test.id).order_by(RankingResults.mark.asc()).all()
 
             db.session.commit()
         except Exception as e:
@@ -277,3 +264,9 @@ def horse_lookup(horses = []):
         db.session.rollback()
         app.logger.error(e, exc_info=sys.exc_info())
         _set_task_progress(100, True)
+
+def main():
+    flush_ranking(9)
+
+if __name__ == '__init__':
+    main()

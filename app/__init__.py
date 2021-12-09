@@ -101,3 +101,4 @@ from .models import RevokedToken
 def check_if_token_in_blacklist(decrypted_token):
     jti = decrypted_token['jti']
     return RevokedToken.is_jti_blacklisted(jti)
+    

@@ -5,7 +5,7 @@ from app.models.RankingListTestModel import RankingListTest
 from app.models.schemas import RankingListSchema, RankingListTestSchema, TaskSchema
 
 from app.models.RankingListModel import RankingList
-from app.models.RestMixin import ErrorResponse, ApiResponse
+from app.models.RestMixin import ApiErrorResponse, ApiResponse
 
 ranking_lists_schema = RankingListSchema(many=True,exclude=("competitions","tasks","tests"))
 ranking_list_schema = RankingListSchema(exclude=("competitions","tasks","tests"))
@@ -26,7 +26,7 @@ class RankingListsResource(Resource):
         ranking_lists = []
         try:
             ranking_lists = RankingList.load()
-        except ErrorResponse as e:
+        except ApiErrorResponse as e:
             return e.response()
         
         return ApiResponse(ranking_lists, ranking_lists_schema).response()
@@ -42,7 +42,7 @@ class RankingListsResource(Resource):
         try:
             rankinglist.save()
         except Exception as e:
-            return ErrorResponse(str(e)).response()
+            return ApiErrorResponse(str(e)).response()
         
         return ApiResponse(rankinglist, ranking_list_schema).response()
 
@@ -58,7 +58,7 @@ class RankingListResource(Resource):
 
         try:
             rankinglist = RankingList.load(rankinglist_id)
-        except ErrorResponse as e:
+        except ApiErrorResponse as e:
             return e.response()
         
         return ApiResponse(rankinglist, ranking_list_schema).response()
@@ -69,7 +69,7 @@ class RankingListResource(Resource):
 
         try:
             rankinglist = RankingList.load(rankinglist_id)
-        except ErrorResponse as e:
+        except ApiErrorResponse as e:
             return e.response()
         
         rankinglist.update(self.reqparse)
@@ -77,7 +77,7 @@ class RankingListResource(Resource):
         try:
             rankinglist.save()
         except Exception as e:
-            return ErrorResponse(str(e)).response()
+            return ApiErrorResponse(str(e)).response()
         
         return ApiResponse(rankinglist, ranking_list_schema).response()
     
@@ -88,10 +88,10 @@ class RankingListResource(Resource):
         try:
             rankinglist = RankingList.load(rankinglist_id)
             rankinglist.delete()
-        except ErrorResponse as e:
+        except ApiErrorResponse as e:
             return e.response()
         except Exception as e:
-            return ErrorResponse(str(e))
+            return ApiErrorResponse(str(e))
         
         return ApiResponse(response_code=204).response()
 
@@ -111,7 +111,7 @@ class RankingListTestsResource(Resource):
 
         try:
             rankinglist = RankingList.load(rankinglist_id)
-        except ErrorResponse as e:
+        except ApiErrorResponse as e:
             return e.response()
         
         return ApiResponse(rankinglist.tests, tests_schema).response()
@@ -122,7 +122,7 @@ class RankingListTestsResource(Resource):
 
         try:
             rankinglist = RankingList.load(rankinglist_id)
-        except ErrorResponse as e:
+        except ApiErrorResponse as e:
             return e.response()
 
         test = RankingListTest()
@@ -131,10 +131,10 @@ class RankingListTestsResource(Resource):
         try:
             rankinglist.add_test(test)
             test.save()
-        except ErrorResponse as e:
+        except ApiErrorResponse as e:
             return e.response()
         except Exception as e:
-            return ErrorResponse(str(e)).response()
+            return ApiErrorResponse(str(e)).response()
         
         return ApiResponse(test, test_schema).response()
 
@@ -144,7 +144,7 @@ class RankingListTasksResource(Resource):
 
         try:
             rankinglist = RankingList.load(rankinglist_id)
-        except ErrorResponse as e:
+        except ApiErrorResponse as e:
             return e.response()
         
         return ApiResponse(rankinglist.tasks, tasks_schema).response()

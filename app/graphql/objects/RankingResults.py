@@ -1,17 +1,17 @@
 import graphene
 from graphene import relay
 from graphene_sqlalchemy import SQLAlchemyObjectType
-from ...models import RankingResultsCache as RankingResultsCacheModel
+from ...models import RankingResults as RankingResultsModel
 from .Result import Result
 from ...models import ResultModel
 
-class RankingResultsCache(SQLAlchemyObjectType):
+class RankingResults(SQLAlchemyObjectType):
     class Meta:
-        model = RankingResultsCacheModel
+        model = RankingResultsModel
         interfaces = (relay.Node, )
 
     marks = graphene.List(Result)
 
     # def resolve_marks(self, info):
-    #     query = RankingResultsCache.get_results_query()
+    #     query = RankingResults.get_results_query()
     #     return query.all()

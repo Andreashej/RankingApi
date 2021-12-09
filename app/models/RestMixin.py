@@ -1,7 +1,9 @@
 
 import datetime
-from flask import request
+from flask import request, abort
 from flask_restful.reqparse import RequestParser
+from flask_sqlalchemy import Pagination
+from werkzeug.exceptions import HTTPException
 from .. import db
 
 class ApiResponse:
@@ -18,7 +20,7 @@ class ApiResponse:
             'data': self.schema.dump(self.data),
         }, self.response_code
 
-class ErrorResponse(Exception):
+class ApiErrorResponse(Exception):
     def __init__(self, message: str, response_code = 500):
         self.error_message = message
         self.response_code = response_code
@@ -30,23 +32,28 @@ class ErrorResponse(Exception):
 class RestMixin():
 
     @classmethod
-    def load(cls, instance_id = None):
-        query = cls.query
+    def load(cls, instance_id = None, query = None):
+        if query is None:
+            query = cls.query
 
         if instance_id:
             instance = query.get(instance_id)
 
             if not instance:
-                raise ErrorResponse(f'Could not find instance of {cls.__name__} with ID {instance_id}', 404)
+                raise ApiErrorResponse(f'Could not find instance of {cls.__name__} with ID {instance_id}', 404)
             
             return instance
         
         try:
             query = cls.filter(query)
         except Exception as e:
-            raise ErrorResponse(str(e))
+            raise ApiErrorResponse(str(e))
+
+        if request.args.get('per_page') or request.args.get('page'):
+            return query.paginate().items
         
         return query.all()
+        
 
     @classmethod
     def filter(cls, query = None):
@@ -103,9 +110,6 @@ class RestMixin():
         args = reqparser.parse_args()
         for attr in args:
             value = args[attr]
-
-            print(f"{attr} = {value}")
-            print(hasattr(self, attr))
 
             if value and hasattr(self, attr):
                 setattr(self, attr, value)
