@@ -32,17 +32,19 @@ class ApiErrorResponse(Exception):
 class RestMixin():
 
     @classmethod
-    def load(cls, instance_id = None, query = None):
+    def load_one(cls, instance_id):
+        instance = cls.query.get(instance_id)
+
+        if not instance:
+            raise ApiErrorResponse(f'Could not find instance of {cls.__name__} with ID {instance_id}', 404)
+        
+        return instance
+
+    @classmethod
+    def load_many(cls, query = None):
         if query is None:
             query = cls.query
 
-        if instance_id:
-            instance = query.get(instance_id)
-
-            if not instance:
-                raise ApiErrorResponse(f'Could not find instance of {cls.__name__} with ID {instance_id}', 404)
-            
-            return instance
         
         try:
             query = cls.filter(query)

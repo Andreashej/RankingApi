@@ -1,10 +1,13 @@
+import functools
+from flask.globals import g
+from flask.json import load
 from sqlalchemy.ext.hybrid import hybrid_property
 from app.models.ResultModel import Result
 from app import db, cache
 
 from functools import reduce
 
-from .RestMixin import RestMixin
+from .RestMixin import ApiErrorResponse, RestMixin
 
 rider_result = db.Table('rider_results', 
     db.Column('result_id', db.Integer, db.ForeignKey('results_cache.id', ondelete='CASCADE'), primary_key=True),
@@ -109,3 +112,36 @@ class RankingResults(db.Model, RestMixin):
     @classmethod
     def get_results_query(cls, test):
         return cls.query.filter_by(test_id = test.id).order_by(cls.rank.asc())
+
+def use_ranking_result(func):
+    """Load ranking to global flask variable"""
+    functools.wraps(func)
+
+    def load_ranking_result(*args, **kwargs):
+        ranking_result_id = kwargs.get("result_id")
+
+        if not ranking_result_id:
+            return ApiErrorResponse("No ranking with ID found in request", 400).response()
+
+        try:
+            g.ranking_result = RankingResults.load_one(ranking_result_id)
+        except ApiErrorResponse as e:
+            return e.response()
+
+        return func(*args, **kwargs)
+    
+    return load_ranking_result
+
+def use_ranking_results(func):
+    """Load rankings to global flask variable"""
+    functools.wraps(func)
+
+    def load_ranking_results(*args, **kwargs):
+        try:
+            g.ranking_results = RankingResults.load_many()
+        except ApiErrorResponse as e:
+            return e.response()
+        
+        return func(*args, **kwargs)
+    
+    return load_ranking_results

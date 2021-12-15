@@ -1,6 +1,8 @@
 import datetime
+from flask.globals import g
 
 from flask_restful import Resource, reqparse
+from app.models.CompetitionModel import use_competition, use_competitions
 from app.models.RestMixin import ApiErrorResponse, ApiResponse
 from app import db
 from app.models import Competition, RankingList, CompetitionSchema, Test, TestSchema
@@ -22,13 +24,9 @@ class CompetitionsResource(Resource):
         self.reqparse.add_argument('ranking_scopes', type=str, action='append', location='json')
         self.reqparse.add_argument('country', type=str, location='json')
     
+    @use_competitions
     def get(self):
-        try:
-            competitions = Competition.load()
-        except ApiErrorResponse as e:
-            return e.response()
-
-        return ApiResponse(competitions, competitions_schema).response()
+        return ApiResponse(g.competitions, competitions_schema).response()
 
     @jwt_required
     def post(self):        
@@ -74,49 +72,37 @@ class CompetitionResource(Resource):
         self.reqparse.add_argument('first_date', type=lambda x: datetime.datetime.strptime(x, '%Y-%m-%d'), location='json')
         self.reqparse.add_argument('last_date', type=lambda x: datetime.datetime.strptime(x, '%Y-%m-%d'), location='json')
         self.reqparse.add_argument('ranking_scopes', type=str, action='append', location='json')
+        self.reqparse.add_argument('country', type=str, location='json')
+        self.reqparse.add_argument('state', type=str, location='json')
 
+    @use_competition
     def get(self, competition_id):
-        competition = None
-        try:
-            competition = Competition.load(competition_id)
-        except ApiErrorResponse as e:
-            return e.response()
-
-        return ApiResponse(competition, competition_schema).response()
+        return ApiResponse(g.competition, competition_schema).response()
     
     @jwt_required
+    @use_competition
     def patch(self, competition_id):
-        competition = None
-
-        try:
-            competition = Competition.load(competition_id)
-        except ApiErrorResponse as e:
-            return e.response()
-
-        competition.update(self.reqparse)
+        g.competition.update(self.reqparse)
         
         args = self.reqparse.parse_args()
         if args['ranking_scopes'] is not None:
             for ranking in args['ranking_scopes']:
                 rankinglist = RankingList.query.filter_by(shortname=ranking).one()
-                competition.include_in_ranking.append(rankinglist)
+                g.competition.include_in_ranking.append(rankinglist)
 
         try:
-            competition.save()
+            g.competition.save()
         except Exception as e:
             return ApiErrorResponse(str(e), 500).response()
         
-        return ApiResponse(competition, competition_schema).response()
+        return ApiResponse(g.competition, competition_schema).response()
+
 
     @jwt_required
+    @use_competition
     def delete(self, competition_id):
-        competition = Competition.query.get(competition_id)
-
-        if competition is None:
-            return None, 404
-
         try:
-            db.session.delete(competition)
+            db.session.delete(g.competition)
             db.session.commit()
         except Exception as e:
             return ApiErrorResponse(str(e)).response()
@@ -131,23 +117,18 @@ class CompetitionTestsResource(Resource):
         self.reqparse.add_argument('mark_type', type=str, required=False, location='json')
         self.reqparse.add_argument('rounding_precision', type=str, required=False, location='json')
 
+    @use_competition
     def get(self, competition_id):
-        competition = None
-        try:
-            competition = Competition.load(competition_id)
-        except ApiErrorResponse as e:
-            return e.response()
-
-        return ApiResponse(competition.tests, tests_schema).response()
+        return ApiResponse(g.competition.tests, tests_schema).response()
     
     @jwt_required
+    @use_competition
     def post(self, competition_id):
-        competition = Competition.load(competition_id)
         args = self.reqparse.parse_args()
 
         try:
             test = Test.create_from_catalog(args['testcode'])
-            competition.add_test(test)
+            g.competition.add_test(test)
         except ValueError as e:
             return ApiErrorResponse(str(e), 400).response()
         

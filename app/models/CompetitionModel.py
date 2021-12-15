@@ -1,11 +1,14 @@
+import functools
+
 from .. import db
+from flask.globals import g
 from sqlalchemy.ext.hybrid import hybrid_property
 
 from flask import current_app
 
 from .TaskModel import Task
 
-from .RestMixin import RestMixin
+from .RestMixin import ApiErrorResponse, RestMixin
 
 competitions_rankinglists = db.Table('competition_ranking_association',
     db.Column('competition_id', db.Integer, db.ForeignKey('competitions.id'), primary_key=True),
@@ -60,3 +63,36 @@ class Competition(db.Model, RestMixin):
     
     def get_task_in_progress(self, name):
         return Task.query.filter_by(name=name, competition=self, complete=False).first()
+
+def use_competition(func):
+    """Load competition to global flask variable"""
+    functools.wraps(func)
+
+    def load_competition(*args, **kwargs):
+        competition_id = kwargs.get("competition_id")
+
+        if not competition_id:
+            return ApiErrorResponse("No competition ID found in request", 400).response()
+
+        try:
+            g.competition = Competition.load_one(competition_id)
+        except ApiErrorResponse as e:
+            return e.response()
+
+        return func(*args, **kwargs)
+    
+    return load_competition
+
+def use_competitions(func):
+    """Load competition list to global flask variable"""
+    functools.wraps(func)
+
+    def load_competitions(*args, **kwargs):
+        try:
+            g.competitions = Competition.load_many()
+        except ApiErrorResponse as e:
+            return e.response()
+        
+        return func(*args, **kwargs)
+    
+    return load_competitions

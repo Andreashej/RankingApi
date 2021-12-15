@@ -1,6 +1,8 @@
 import csv
+import functools
 
 from flask import current_app
+from flask.globals import g
 from sqlalchemy.ext.hybrid import hybrid_property
 
 from .. import db
@@ -97,3 +99,36 @@ class RankingList(db.Model, RestMixin):
         for test in self.tests:
             if result.test.testcode in test.included_tests:
                 test.register_result(result)
+
+def use_rankinglist(func):
+    """Load rankinglist to global flask variable"""
+    functools.wraps(func)
+
+    def load_rankinglist(*args, **kwargs):
+        rankinglist_id = kwargs.get("rankinglist_id")
+
+        if not rankinglist_id:
+            return ApiErrorResponse("No rankinglist ID found in request", 400).response()
+
+        try:
+            g.rankinglist = RankingList.load_one(rankinglist_id)
+        except ApiErrorResponse as e:
+            return e.response()
+
+        return func(*args, **kwargs)
+    
+    return load_rankinglist
+
+def use_rankinglists(func):
+    """Load ranking lists to global flask variable"""
+    functools.wraps(func)
+
+    def load_rankinglists(*args, **kwargs):
+        try:
+            g.rankinglists = RankingList.load_many()
+        except ApiErrorResponse as e:
+            return e.response()
+        
+        return func(*args, **kwargs)
+    
+    return load_rankinglists

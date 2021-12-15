@@ -1,4 +1,6 @@
 from datetime import datetime, timedelta
+import functools
+from flask.globals import g
 from sqlalchemy.ext.hybrid import hybrid_method, hybrid_property
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.sql.functions import rank
@@ -12,7 +14,7 @@ from flask import current_app
 
 from .TaskModel import Task
 
-from .RestMixin import RestMixin
+from .RestMixin import ApiErrorResponse, RestMixin
 
 class RankingListTest(db.Model, RestMixin):
     __tablename__ = 'rankinglist_tests'
@@ -127,3 +129,36 @@ class RankingListTest(db.Model, RestMixin):
             )\
             .all()
         print(results)
+
+def use_ranking(func):
+    """Load ranking to global flask variable"""
+    functools.wraps(func)
+
+    def load_ranking(*args, **kwargs):
+        ranking_id = kwargs.get("ranking_id")
+
+        if not ranking_id:
+            return ApiErrorResponse("No ranking with ID found in request", 400).response()
+
+        try:
+            g.ranking = RankingListTest.load_one(ranking_id)
+        except ApiErrorResponse as e:
+            return e.response()
+
+        return func(*args, **kwargs)
+    
+    return load_ranking
+
+def use_rankings(func):
+    """Load rankings to global flask variable"""
+    functools.wraps(func)
+
+    def load_rankinglists(*args, **kwargs):
+        try:
+            g.rankings = RankingListTest.load_many()
+        except ApiErrorResponse as e:
+            return e.response()
+        
+        return func(*args, **kwargs)
+    
+    return load_rankinglists
