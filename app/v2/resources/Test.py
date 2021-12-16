@@ -1,3 +1,4 @@
+from flask.globals import g
 from flask_jwt_extended.view_decorators import jwt_required
 from flask_restful import Resource, reqparse
 from app.models.RestMixin import ApiResponse, ApiErrorResponse
@@ -17,19 +18,15 @@ class TestsResource(Resource):
         self.reqparse.add_argument('testcode', type=str, required=True, location='json')
         self.reqparse.add_argument('competition_id')
 
+    @Test.from_request(many=True)
     def get(self):
-        tests = None
-        try:
-            tests = Test.load()
-        except ApiErrorResponse as e:
-            return e.response()
-        
-        return ApiResponse(tests, tests_schema).response()
+        return ApiResponse(g.tests, tests_schema).response()
     
     @jwt_required
+    @Test.from_request(many=True)
     def delete(self):
         try:
-            Competition.filter().delete()
+            g.tests.delete()
             db.session.commit()
         except Exception as e:
             return ApiErrorResponse(str(e))
@@ -44,50 +41,36 @@ class TestResource(Resource):
         self.reqparse.add_argument('mark_type', type=str, required=False, location='json')
         self.reqparse.add_argument('rounding_precision', type=int, required=False, location='json')
     
-    def get(self, test_id):
-        test = None
-        try:
-            test = Test.load(test_id)
-        except ApiErrorResponse as e:
-            return e.response()
-        
-        return ApiResponse(test, test_schema).response()
+    @Test.from_request
+    def get(self, id):
+        return ApiResponse(g.test, test_schema).response()
     
     @jwt_required
-    def patch(self, test_id):
-        test = None
-
-        try:
-            test = Test.load(test_id)
-        except ApiErrorResponse as e:
-            return e.response()
-
+    @Test.from_request
+    def patch(self, id):
         args = self.reqparse.parse_args()
 
         if args['order']:
-            test.order = args['order']
+            g.test.order = args['order']
 
         if args['mark_type']:
-            test.mark_type = args['mark_type']
+            g.test.mark_type = args['mark_type']
 
         if args['rounding_precision']:
-            test.rounding_precision = args['rounding_precision']
+            g.test.rounding_precision = args['rounding_precision']
 
         try:
-            test.save()
+            g.test.save()
         except Exception as e:
             return ApiErrorResponse(str(e)).response()
         
-        return ApiResponse(test, test_schema).response()
+        return ApiResponse(g.test, test_schema).response()
     
     @jwt_required
-    def delete(self, test_id):
-        test = None
+    @Test.from_request
+    def delete(self, id):
         try:
-            test = Test.load(test_id)
-            test.delete()
-        except ApiErrorResponse as e:
-            return e.response()
+            g.test.delete()
         except Exception as e:
             return ApiErrorResponse(str(e)).response()
         
@@ -101,33 +84,21 @@ class TestResultsResource(Resource):
         self.reqparse.add_argument('mark', type=float, required=True, location='json')
         self.reqparse.add_argument('state', type=str, required=False, location='json')
 
-    def get(self, test_id):
-        test = None
+    @Test.from_request
+    def get(self, id):        
+        return ApiResponse(g.test.results, results_schema).response()
 
-        try:
-            test = Test.load(test_id)
-        except ApiErrorResponse as e:
-            return e.response()
-        except Exception as e:
-            return ApiErrorResponse(str(e)).response()
-        
-        return ApiResponse(test.results, results_schema).response()
-    
-    def post(self, test_id):
-        test = None
-
-        try:
-            test = Test.load(test_id)
-        except ApiErrorResponse as e:
-            return e.response()
+    @jwt_required
+    @Test.from_request    
+    def post(self, id):
 
         args = self.reqparse.parse_args()
 
         result = None
         try:
-            rider = Rider.load(args['rider_id'])
-            horse = Horse.load(args['horse_id'])
-            result = test.add_result(rider, horse, args['mark'], args['state'])
+            rider = Rider.load_one(args['rider_id'])
+            horse = Horse.load_one(args['horse_id'])
+            result = g.test.add_result(rider, horse, args['mark'], args['state'])
         except ApiErrorResponse as e:
             return e.response()
         except Exception as e:

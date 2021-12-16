@@ -2,7 +2,7 @@ import datetime
 from flask.globals import g
 
 from flask_restful import Resource, reqparse
-from app.models.CompetitionModel import use_competition, use_competitions
+from app.graphql.objects.Rider import Rider
 from app.models.RestMixin import ApiErrorResponse, ApiResponse
 from app import db
 from app.models import Competition, RankingList, CompetitionSchema, Test, TestSchema
@@ -24,7 +24,7 @@ class CompetitionsResource(Resource):
         self.reqparse.add_argument('ranking_scopes', type=str, action='append', location='json')
         self.reqparse.add_argument('country', type=str, location='json')
     
-    @use_competitions
+    @Competition.from_request(many=True)
     def get(self):
         return ApiResponse(g.competitions, competitions_schema).response()
 
@@ -55,9 +55,10 @@ class CompetitionsResource(Resource):
         return ApiResponse(competition, competition_schema, 201).response()
     
     @jwt_required
+    @Competition.from_request(many=True)
     def delete(self):
         try:
-            Competition.filter().delete()
+            g.competitions.delete()
             db.session.commit()
         except Exception as e:
             return ApiErrorResponse(str(e)).response()
@@ -75,13 +76,13 @@ class CompetitionResource(Resource):
         self.reqparse.add_argument('country', type=str, location='json')
         self.reqparse.add_argument('state', type=str, location='json')
 
-    @use_competition
-    def get(self, competition_id):
+    @Competition.from_request
+    def get(self, id):
         return ApiResponse(g.competition, competition_schema).response()
     
     @jwt_required
-    @use_competition
-    def patch(self, competition_id):
+    @Competition.from_request
+    def patch(self, id):
         g.competition.update(self.reqparse)
         
         args = self.reqparse.parse_args()
@@ -99,8 +100,8 @@ class CompetitionResource(Resource):
 
 
     @jwt_required
-    @use_competition
-    def delete(self, competition_id):
+    @Competition.from_request
+    def delete(self, id):
         try:
             db.session.delete(g.competition)
             db.session.commit()
@@ -117,13 +118,13 @@ class CompetitionTestsResource(Resource):
         self.reqparse.add_argument('mark_type', type=str, required=False, location='json')
         self.reqparse.add_argument('rounding_precision', type=str, required=False, location='json')
 
-    @use_competition
-    def get(self, competition_id):
+    @Competition.from_request
+    def get(self, id):
         return ApiResponse(g.competition.tests, tests_schema).response()
     
     @jwt_required
-    @use_competition
-    def post(self, competition_id):
+    @Competition.from_request
+    def post(self, id):
         args = self.reqparse.parse_args()
 
         try:

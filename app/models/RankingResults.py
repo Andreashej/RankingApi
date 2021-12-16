@@ -25,6 +25,9 @@ cached_results_based_on = db.Table('rank_result_marks',
 )
 
 class RankingResults(db.Model, RestMixin):
+    RESOURCE_NAME = 'ranking_result'
+    RESOURCE_NAME_PLURAL = 'ranking_results'
+
     __tablename__ = 'results_cache'
     id = db.Column(db.Integer, primary_key=True)
     rank = db.Column(db.Integer)
@@ -112,36 +115,3 @@ class RankingResults(db.Model, RestMixin):
     @classmethod
     def get_results_query(cls, test):
         return cls.query.filter_by(test_id = test.id).order_by(cls.rank.asc())
-
-def use_ranking_result(func):
-    """Load ranking to global flask variable"""
-    functools.wraps(func)
-
-    def load_ranking_result(*args, **kwargs):
-        ranking_result_id = kwargs.get("result_id")
-
-        if not ranking_result_id:
-            return ApiErrorResponse("No ranking with ID found in request", 400).response()
-
-        try:
-            g.ranking_result = RankingResults.load_one(ranking_result_id)
-        except ApiErrorResponse as e:
-            return e.response()
-
-        return func(*args, **kwargs)
-    
-    return load_ranking_result
-
-def use_ranking_results(func):
-    """Load rankings to global flask variable"""
-    functools.wraps(func)
-
-    def load_ranking_results(*args, **kwargs):
-        try:
-            g.ranking_results = RankingResults.load_many()
-        except ApiErrorResponse as e:
-            return e.response()
-        
-        return func(*args, **kwargs)
-    
-    return load_ranking_results

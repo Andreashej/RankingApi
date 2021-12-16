@@ -17,6 +17,9 @@ from .TaskModel import Task
 from .RestMixin import ApiErrorResponse, RestMixin
 
 class RankingListTest(db.Model, RestMixin):
+    RESOURCE_NAME = 'ranking'
+    RESOURCE_NAME_PLURAL = 'rankings'
+
     __tablename__ = 'rankinglist_tests'
     id = db.Column(db.Integer, primary_key=True)
     testcode = db.Column(db.String(3))
@@ -129,36 +132,3 @@ class RankingListTest(db.Model, RestMixin):
             )\
             .all()
         print(results)
-
-def use_ranking(func):
-    """Load ranking to global flask variable"""
-    functools.wraps(func)
-
-    def load_ranking(*args, **kwargs):
-        ranking_id = kwargs.get("ranking_id")
-
-        if not ranking_id:
-            return ApiErrorResponse("No ranking with ID found in request", 400).response()
-
-        try:
-            g.ranking = RankingListTest.load_one(ranking_id)
-        except ApiErrorResponse as e:
-            return e.response()
-
-        return func(*args, **kwargs)
-    
-    return load_ranking
-
-def use_rankings(func):
-    """Load rankings to global flask variable"""
-    functools.wraps(func)
-
-    def load_rankinglists(*args, **kwargs):
-        try:
-            g.rankings = RankingListTest.load_many()
-        except ApiErrorResponse as e:
-            return e.response()
-        
-        return func(*args, **kwargs)
-    
-    return load_rankinglists

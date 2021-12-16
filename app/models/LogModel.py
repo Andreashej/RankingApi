@@ -4,6 +4,9 @@ from .RestMixin import RestMixin
 from datetime import datetime
 
 class Log(db.Model, RestMixin):
+    RESOURCE_NAME = 'log'
+    RESOURCE_NAME_PLURAL = 'logs'
+
     __tablename__ = 'logs'
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.String(250))

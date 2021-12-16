@@ -4,6 +4,9 @@ from flask import current_app
 from .RestMixin import RestMixin
 
 class Result(db.Model, RestMixin):
+    RESOURCE_NAME = 'result'
+    RESOURCE_NAME_PLURAL = 'results'
+
     __tablename__ = 'results'
     id = db.Column(db.Integer, primary_key=True)
     mark = db.Column(db.Float)

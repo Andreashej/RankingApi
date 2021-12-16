@@ -8,6 +8,9 @@ from flask_jwt_extended import create_access_token, create_refresh_token
 from .RestMixin import RestMixin
 
 class User(db.Model, RestMixin):
+    RESOURCE_NAME = 'user'
+    RESOURCE_NAME_PLURAL = 'users'
+
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(32), index=True)

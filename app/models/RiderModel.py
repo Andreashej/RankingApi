@@ -13,6 +13,9 @@ from .RiderAliasModel import RiderAlias
 from .RestMixin import RestMixin
 
 class Rider(db.Model, RestMixin):
+    RESOURCE_NAME = 'rider'
+    RESOURCE_NAME_PLURAL = 'riders'
+
     __tablename__ = 'riders'
     id = db.Column(db.Integer, primary_key=True)
     firstname = db.Column(db.String(250))

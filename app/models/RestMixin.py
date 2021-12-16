@@ -1,6 +1,7 @@
 
 import datetime
-from flask import request, abort
+from flask import request
+from flask.globals import g
 from flask_restful.reqparse import RequestParser
 from flask_sqlalchemy import Pagination
 from werkzeug.exceptions import HTTPException
@@ -30,6 +31,46 @@ class ApiErrorResponse(Exception):
         return { 'message': self.error_message }, self.response_code
 
 class RestMixin():
+
+    @classmethod
+    def from_request(cls, _func=None, *, many=False):
+        def load_decorator(func):
+            def load_wrapper(*args, **kwargs):
+                value = None
+                name = ""
+                if not many:
+                    id = kwargs.get("id")
+
+                    if not id:
+                        return ApiErrorResponse("No ID found in request", 400).response()
+                    
+                    name = cls.RESOURCE_NAME
+                    try:
+                        value = cls.load_one(id)
+                    except ApiErrorResponse as e:
+                        return e.response()
+                else:
+                    name = cls.RESOURCE_NAME_PLURAL
+                    try:
+                        value = cls.load_many()
+                    except ApiErrorResponse as e:
+                        return e.response()
+
+                try:
+                    setattr(g, name, value)
+                except ApiErrorResponse as e:
+                    return e.response()
+                except Exception as e:
+                    return ApiErrorResponse(str(e)).response()
+
+                return func(*args, **kwargs)
+            
+            return load_wrapper
+    
+        if _func is None:
+            return load_decorator
+        else:
+            return load_decorator(_func)
 
     @classmethod
     def load_one(cls, instance_id):

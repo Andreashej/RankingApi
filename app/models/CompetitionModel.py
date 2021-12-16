@@ -16,6 +16,9 @@ competitions_rankinglists = db.Table('competition_ranking_association',
 )
 
 class Competition(db.Model, RestMixin):
+    RESOURCE_NAME = 'competition'
+    RESOURCE_NAME_PLURAL = 'competitions'
+
     __tablename__ = 'competitions'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(250))
@@ -63,36 +66,3 @@ class Competition(db.Model, RestMixin):
     
     def get_task_in_progress(self, name):
         return Task.query.filter_by(name=name, competition=self, complete=False).first()
-
-def use_competition(func):
-    """Load competition to global flask variable"""
-    functools.wraps(func)
-
-    def load_competition(*args, **kwargs):
-        competition_id = kwargs.get("competition_id")
-
-        if not competition_id:
-            return ApiErrorResponse("No competition ID found in request", 400).response()
-
-        try:
-            g.competition = Competition.load_one(competition_id)
-        except ApiErrorResponse as e:
-            return e.response()
-
-        return func(*args, **kwargs)
-    
-    return load_competition
-
-def use_competitions(func):
-    """Load competition list to global flask variable"""
-    functools.wraps(func)
-
-    def load_competitions(*args, **kwargs):
-        try:
-            g.competitions = Competition.load_many()
-        except ApiErrorResponse as e:
-            return e.response()
-        
-        return func(*args, **kwargs)
-    
-    return load_competitions

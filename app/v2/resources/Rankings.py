@@ -1,10 +1,9 @@
 from flask.globals import g
 from flask_restful import Resource
-from app.models.RankingListTestModel import use_rankings, use_ranking
 from app.models.RankingResults import RankingResults
 from app.models.RankingListTestModel import RankingListTest
 from app.models.RestMixin import ApiErrorResponse, ApiResponse
-from app.models.schemas import RankingListTestSchema, RankingListResultSchemaV2 as RankingListResultSchema, ResultSchema
+from app.models.schemas import RankingListTestSchema, RankingListResultSchemaV2 as RankingListResultSchema
 from flask_restful.reqparse import RequestParser
 from flask_jwt_extended import jwt_required
 
@@ -14,7 +13,7 @@ test_schema = RankingListTestSchema(exclude=("rankinglist","tasks_in_progress"))
 results_schema = RankingListResultSchema(many=True)
 
 class RankingsResource(Resource):
-    @use_rankings
+    @RankingListTest.from_request(many=True)
     def get(self):        
         return ApiResponse(g.rankings, tests_schema).response()
     
@@ -29,13 +28,13 @@ class RankingResource(Resource):
         self.reqparse.add_argument('rounding_precision', type=int, required=False, location="json")
         self.reqparse.add_argument('mark_type', type=str, required=False, location="json")
     
-    @use_ranking
-    def get(self, ranking_id):
+    @RankingListTest.from_request
+    def get(self, id):
         return ApiResponse(g.test, test_schema).response()
     
     @jwt_required
-    @use_ranking
-    def patch(self, ranking_id):
+    @RankingListTest.from_request
+    def patch(self, id):
         g.ranking.update(self.reqparse)
 
         try:
@@ -46,8 +45,8 @@ class RankingResource(Resource):
         return ApiResponse(g.ranking, test_schema).response()
     
     @jwt_required
-    @use_ranking
-    def delete(self, ranking_id):
+    @RankingListTest.from_request
+    def delete(self, id):
         try:
             g.ranking.delete()
         except Exception as e:
@@ -59,11 +58,11 @@ class RankingResultsRankingResource(Resource):
     def __init__(self):
         pass
 
-    def get(self, ranking_id):
+    def get(self, id):
         results = []
 
         try:
-            query = RankingResults.query.filter_by(test_id=ranking_id).order_by(RankingResults.rank)
+            query = RankingResults.query.filter_by(test_id=id).order_by(RankingResults.rank)
             results = RankingResults.load_many(query=query)
         except ApiErrorResponse as e:
             return e.response()

@@ -9,6 +9,9 @@ tests_rankinglists = db.Table('tests_ranking_association',
 )
 
 class Test(db.Model, RestMixin):
+    RESOURCE_NAME = 'test'
+    RESOURCE_NAME_PLURAL = 'tests'
+
     __tablename__ = 'tests'
     id = db.Column(db.Integer, primary_key=True)
     testcode = db.Column(db.String(3))

@@ -10,6 +10,9 @@ from datetime import datetime, timedelta
 from .RestMixin import RestMixin
 
 class Horse(db.Model, RestMixin):
+    RESOURCE_NAME = 'horse'
+    RESOURCE_NAME_PLURAL = 'horses'
+
     __tablename__ = 'horses'
     id = db.Column(db.Integer, primary_key=True)
     feif_id = db.Column(db.String(12), unique=True)
