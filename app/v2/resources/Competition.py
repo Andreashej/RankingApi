@@ -2,8 +2,7 @@ import datetime
 from flask.globals import g
 
 from flask_restful import Resource, reqparse
-from app.graphql.objects.Rider import Rider
-from app.models.RestMixin import ApiErrorResponse, ApiResponse
+from app.Responses import ApiErrorResponse, ApiResponse
 from app import db
 from app.models import Competition, RankingList, CompetitionSchema, Test, TestSchema
 from flask_jwt_extended import jwt_required

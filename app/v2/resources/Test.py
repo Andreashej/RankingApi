@@ -1,7 +1,7 @@
 from flask.globals import g
 from flask_jwt_extended.view_decorators import jwt_required
 from flask_restful import Resource, reqparse
-from app.models.RestMixin import ApiResponse, ApiErrorResponse
+from app.Responses import ApiResponse, ApiErrorResponse
 from app.models.schemas import TestSchema, ResultSchema
 from app.models import Test, Result, Competition, Rider, Horse
 from app import db

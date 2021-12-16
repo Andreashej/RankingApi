@@ -3,32 +3,8 @@ import datetime
 from flask import request
 from flask.globals import g
 from flask_restful.reqparse import RequestParser
-from flask_sqlalchemy import Pagination
-from werkzeug.exceptions import HTTPException
+from app.Responses import ApiErrorResponse
 from .. import db
-
-class ApiResponse:
-    def __init__(self, data = None, schema = None, response_code = 200):
-        self.data = data
-        self.schema = schema
-        self.response_code = response_code
-    
-    def response(self):
-        if not self.data:
-            return None, self.response_code
-
-        return {
-            'data': self.schema.dump(self.data),
-        }, self.response_code
-
-class ApiErrorResponse(Exception):
-    def __init__(self, message: str, response_code = 500):
-        self.error_message = message
-        self.response_code = response_code
-        super().__init__(self.error_message)
-    
-    def response(self):
-        return { 'message': self.error_message }, self.response_code
 
 class RestMixin():
 

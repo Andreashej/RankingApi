@@ -2,7 +2,7 @@ from flask.globals import g
 from flask_restful import Resource
 from app.models.RankingResults import RankingResults
 from app.models.RankingListTestModel import RankingListTest
-from app.models.RestMixin import ApiErrorResponse, ApiResponse
+from app.Responses import ApiErrorResponse, ApiResponse
 from app.models.schemas import RankingListTestSchema, RankingListResultSchemaV2 as RankingListResultSchema
 from flask_restful.reqparse import RequestParser
 from flask_jwt_extended import jwt_required

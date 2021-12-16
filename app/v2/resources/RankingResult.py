@@ -1,6 +1,6 @@
 from flask.globals import g
 from flask_restful import Resource
-from app.models.RestMixin import ApiErrorResponse, ApiResponse
+from app.Responses import ApiErrorResponse, ApiResponse
 from app.models.RankingResults import RankingResults
 from app.models.schemas import ResultSchema, RankingListResultSchemaV2 as RankingListResultSchema
 

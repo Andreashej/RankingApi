@@ -6,7 +6,7 @@ from app.models.RankingListTestModel import RankingListTest
 from app.models.schemas import RankingListSchema, RankingListTestSchema, TaskSchema
 
 from app.models.RankingListModel import RankingList
-from app.models.RestMixin import ApiErrorResponse, ApiResponse
+from app.Responses import ApiErrorResponse, ApiResponse
 
 ranking_lists_schema = RankingListSchema(many=True,exclude=("competitions","tasks","tests"))
 ranking_list_schema = RankingListSchema(exclude=("competitions","tasks","tests"))
