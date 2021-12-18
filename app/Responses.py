@@ -1,5 +1,4 @@
-from flask.globals import request
-
+from flask.globals import request, g
 
 class ApiResponse:
     def __init__(
@@ -70,6 +69,23 @@ class ApiResponse:
         if not self.message: return { }
         return { 'message': self.message }
     
+    def get_pagination(self):
+        if not hasattr(g, 'pagination'): return { }
+
+        return {
+            'pagination': {
+                'page': g.pagination.page,
+                'total_pages': g.pagination.pages,
+                'per_page': g.pagination.per_page,
+                'has_next': g.pagination.has_next,
+                'has_previous': g.pagination.has_prev,
+                'previous_page': g.pagination.prev_num,
+                'next_page': g.pagination.next_num,
+                'total_items': g.pagination.total
+            } 
+        }
+
+    
     def response(self):
         response = {}
 
@@ -77,6 +93,7 @@ class ApiResponse:
         response.update(self.get_task())
         response.update(self.get_tasks())
         response.update(self.get_message())
+        response.update(self.get_pagination())
 
         return response, self.response_code
         

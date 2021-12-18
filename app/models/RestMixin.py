@@ -61,15 +61,17 @@ class RestMixin():
     def load_many(cls, query = None):
         if query is None:
             query = cls.query
-
-        
+     
         try:
             query = cls.filter(query)
         except Exception as e:
             raise ApiErrorResponse(str(e))
 
         if request.args.get('per_page') or request.args.get('page'):
-            return query.paginate().items
+            if request.args.get('limit') is not None:
+                raise ApiErrorResponse('Limit is not compatible with pagination', 400)
+            g.pagination = query.paginate()
+            return g.pagination.items
         
         return query.all()
         
