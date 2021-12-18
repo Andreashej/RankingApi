@@ -1,3 +1,4 @@
+from app.v2.resources.Rider import RidersResource, RiderResource
 from app.v2.resources.Rankings import RankingsResource, RankingResource, RankingResultsRankingResource
 from app.v2.resources.RankingList import RankingListsResource, RankingListResource, RankingListTestsResource, RankingListTasksResource
 from app.v2.resources.Competition import CompetitionResource, CompetitionsResource, CompetitionTestsResource
@@ -26,3 +27,5 @@ api.add_resource(RankingResultsResource, '/rankingresults', endpoint='ranking_re
 api.add_resource(RankingResultResource, '/rankingresults/<int:id>', endpoint='ranking_result')
 api.add_resource(RankingResultMarksResource, '/rankingresults/<int:id>/marks', endpoint='ranking_result_marks')
 
+api.add_resource(RidersResource, '/riders', endpoint='riders')
+api.add_resource(RiderResource, '/riders/<int:id>', endpoint='rider')

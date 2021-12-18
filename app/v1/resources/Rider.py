@@ -40,7 +40,6 @@ class RidersResource(Resource):
     
     @jwt_required
     def post(self):
-
         file = request.files.get('aliases')
         if file:
             file.save(os.path.join(current_app.config["ISIRANK_FILES"], file.filename))

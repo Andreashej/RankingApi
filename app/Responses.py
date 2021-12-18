@@ -1,27 +1,65 @@
+from flask.globals import request
+
+
 class ApiResponse:
-    def __init__(self, data = None, schema = None, response_code = 200, *, task = None, tasks = [], message = ""):
+    def __init__(
+        self,
+        data = None, 
+        Schema = None, 
+        response_code = 200, 
+        *, 
+        task = None, 
+        tasks = [], 
+        message = "", 
+        schema_options = { 
+            'many': False, 
+            'exclude': [],
+            'only': [] 
+        }
+    ):
         from app.models.schemas import TaskSchema
         self.task_schema = TaskSchema()
         self.tasks_schema = TaskSchema(many=True)
         self.data = data
-        self.schema = schema
         self.response_code = response_code
-        if (len(tasks) == 0):
-            self.task = task
-        else:
-            tasks.append(task)
+        self.task = task
         self.tasks = tasks
+        if task is not None and len(self.tasks) > 0:
+            self.tasks.append(self.task)
+            self.task = None
+        
         self.message = message
+        if Schema is not None:
+            self.define_schema(Schema, schema_options)
+
+    
+    def define_schema(self, Schema, schema_options):
+        fields = request.args.get('fields')
+        only = fields.split(",") if fields else schema_options['only'].copy() if 'only' in schema_options else None
+
+        default_exclude = schema_options['exclude'].copy() if 'exclude' in schema_options else []
+        excluded_fields = request.args.get('exclude')
+        exclude = excluded_fields.split(",") + default_exclude if excluded_fields else default_exclude
+
+        expanded_fields = request.args.get('expand')
+        for expanded_field in expanded_fields.split(",") if expanded_fields else []:
+            
+            if exclude is not None and len(exclude) > 0 and expanded_field in exclude: exclude.remove(expanded_field)
+            if only is not None and len(only) > 0: only.append(expanded_fields)
+        
+        many = isinstance(self.data, list)
+
+        self.schema = Schema(many=many, exclude=exclude, only=only)
     
     def get_data(self):
-        if not self.data: return { }
+        if self.data is None: return { }
         if self.schema:
             return { 'data': self.schema.dump(self.data) }
         
         return self.data
     
     def get_task(self):
-        if not self.task: return { }
+        if self.task is None: return { }
         return { 'task': self.task_schema.dump(self.task) }
     
     def get_tasks(self):

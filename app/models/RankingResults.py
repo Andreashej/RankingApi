@@ -1,4 +1,3 @@
-import functools
 from flask.globals import g
 from flask.json import load
 from sqlalchemy.ext.hybrid import hybrid_property

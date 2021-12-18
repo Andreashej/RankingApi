@@ -1,16 +1,19 @@
 from flask.globals import g
 from flask_jwt_extended.view_decorators import jwt_required
+from flask_marshmallow import schema
 from flask_restful import Resource, reqparse
 from app.Responses import ApiResponse, ApiErrorResponse
 from app.models.schemas import TestSchema, ResultSchema
 from app.models import Test, Result, Competition, Rider, Horse
 from app import db
 
-tests_schema = TestSchema(many=True, exclude=("results","competition"))
-test_schema = TestSchema(exclude=("results","competition"))
+test_schema_options = {
+    'exclude': ["results","competition"]
+}
 
-results_schema = ResultSchema(many=True, exclude=("test",))
-result_schema = ResultSchema(exclude=("test",))
+result_schema_options = {
+    'exclude': ["test"]
+}
 
 class TestsResource(Resource):
     def __init__(self):
@@ -20,7 +23,7 @@ class TestsResource(Resource):
 
     @Test.from_request(many=True)
     def get(self):
-        return ApiResponse(g.tests, tests_schema).response()
+        return ApiResponse(g.tests, TestSchema, schema_options=test_schema_options).response()
     
     @jwt_required
     @Test.from_request(many=True)
@@ -43,7 +46,7 @@ class TestResource(Resource):
     
     @Test.from_request
     def get(self, id):
-        return ApiResponse(g.test, test_schema).response()
+        return ApiResponse(g.test, TestSchema, schema_options=test_schema_options).response()
     
     @jwt_required
     @Test.from_request
@@ -64,7 +67,7 @@ class TestResource(Resource):
         except Exception as e:
             return ApiErrorResponse(str(e)).response()
         
-        return ApiResponse(g.test, test_schema).response()
+        return ApiResponse(g.test, TestSchema, schema_options=test_schema_options).response()
     
     @jwt_required
     @Test.from_request
@@ -86,7 +89,7 @@ class TestResultsResource(Resource):
 
     @Test.from_request
     def get(self, id):        
-        return ApiResponse(g.test.results, results_schema).response()
+        return ApiResponse(g.test.results, ResultSchema, schema_options=result_schema_options).response()
 
     @jwt_required
     @Test.from_request    
@@ -109,6 +112,6 @@ class TestResultsResource(Resource):
         except Exception as e:
             return ApiErrorResponse(str(e)).response()
         
-        return ApiResponse(result, result_schema).response()
+        return ApiResponse(result, ResultSchema, schema_options=result_schema_options).response()
 
         

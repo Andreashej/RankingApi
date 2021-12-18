@@ -1,14 +1,18 @@
 import csv
+from re import T
 
-from marshmallow import fields
+from sqlalchemy.sql.expression import distinct
+
 from .. import db
 from sqlalchemy.ext.hybrid import hybrid_property, hybrid_method
-from sqlalchemy import desc, func, and_
+from sqlalchemy import func, and_
 from flask import current_app
 
 from datetime import datetime, timedelta
 
 from .RiderAliasModel import RiderAlias
+from .ResultModel import Result
+from .TestModel import Test
 
 from .RestMixin import RestMixin
 
@@ -51,15 +55,16 @@ class Rider(db.Model, RestMixin):
 
     @hybrid_property
     def testlist(self):
-        t = []
-        for result in self.results:
-            if result.test.testcode in t:
-                continue
+        return map(
+            lambda test_tuple: test_tuple[0],
+            Result.query\
+            .filter_by(rider_id=self.id)\
+            .join(Result.test).order_by(Test.testcode)\
+            .with_entities(Test.testcode)\
+            .distinct()\
+            .all()
+        )
 
-            t.append(result.test.testcode)
-        t.sort()
-        return t
-    
     @testlist.expression
     def testlist(cls):
         return db.session.query('results.rider_id, results.test_id').filter_by(rider_id = cls.id).join('tests').order_by('tests.testcode').distinct('tests.testcode')

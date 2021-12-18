@@ -2,19 +2,19 @@ from flask.globals import g
 from flask_jwt_extended.view_decorators import jwt_required
 from flask_restful import Resource
 from flask_restful.reqparse import RequestParser
-from app.models.RankingListTestModel import RankingListTest
-from app.models.schemas import RankingListSchema, RankingListTestSchema, TaskSchema
+from app.models import RankingListTest, Task
+from app.models.schemas import RankingListSchema, RankingListTestSchema
 
 from app.models.RankingListModel import RankingList
 from app.Responses import ApiErrorResponse, ApiResponse
 
-ranking_lists_schema = RankingListSchema(many=True,exclude=("competitions","tasks","tests"))
-ranking_list_schema = RankingListSchema(exclude=("competitions","tasks","tests"))
+rankinglist_schema_options = {
+    'exclude': ["competitions","tasks","tests"]
+}
 
-tests_schema = RankingListTestSchema(many=True, exclude=("rankinglist","tasks_in_progress"))
-test_schema = RankingListTestSchema(exclude=("rankinglist","tasks_in_progress"))
-
-tasks_schema = TaskSchema(many=True)
+ranking_schema_options = {
+    'exclude': ["rankinglist","tasks_in_progress"]
+}
 
 class RankingListsResource(Resource):
     def __init__(self):
@@ -25,7 +25,7 @@ class RankingListsResource(Resource):
 
     @RankingList.from_request(many=True)
     def get(self):
-        return ApiResponse(g.rankinglists, ranking_lists_schema).response()
+        return ApiResponse(g.rankinglists, RankingListSchema, schema_options=rankinglist_schema_options).response()
     
     @jwt_required
     def post(self):
@@ -40,7 +40,7 @@ class RankingListsResource(Resource):
         except Exception as e:
             return ApiErrorResponse(str(e)).response()
         
-        return ApiResponse(rankinglist, ranking_list_schema).response()
+        return ApiResponse(rankinglist, RankingListSchema, schema_options=rankinglist_schema_options).response()
 
 class RankingListResource(Resource):
     def __init__(self):
@@ -51,7 +51,7 @@ class RankingListResource(Resource):
 
     @RankingList.from_request
     def get(self, id):
-        return ApiResponse(g.rankinglist, ranking_list_schema).response()
+        return ApiResponse(g.rankinglist, RankingListSchema, schema_options=rankinglist_schema_options).response()
     
     @jwt_required
     @RankingList.from_request
@@ -63,7 +63,7 @@ class RankingListResource(Resource):
         except Exception as e:
             return ApiErrorResponse(str(e)).response()
         
-        return ApiResponse(g.rankinglist, ranking_list_schema).response()
+        return ApiResponse(g.rankinglist, RankingListSchema, schema_options=rankinglist_schema_options).response()
     
     @jwt_required
     @RankingList.from_request
@@ -88,7 +88,7 @@ class RankingListTestsResource(Resource):
 
     @RankingList.from_request
     def get(self, id):        
-        return ApiResponse(g.rankinglist.tests, tests_schema).response()
+        return ApiResponse(g.rankinglist.tests, RankingListTestSchema, schema_options=ranking_schema_options).response()
     
     @jwt_required
     @RankingList.from_request
@@ -104,9 +104,9 @@ class RankingListTestsResource(Resource):
         except Exception as e:
             return ApiErrorResponse(str(e)).response()
         
-        return ApiResponse(test, test_schema).response()
+        return ApiResponse(test, RankingListTestSchema, schema_options=ranking_schema_options).response()
 
 class RankingListTasksResource(Resource):
     @RankingList.from_request
     def get(self, id):
-        return ApiResponse(g.rankinglist.tasks, tasks_schema).response()
+        return ApiResponse(tasks=Task.filter(g.rankinglist.tasks).all()).response()

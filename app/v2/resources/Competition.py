@@ -7,11 +7,13 @@ from app import db
 from app.models import Competition, RankingList, CompetitionSchema, Test, TestSchema
 from flask_jwt_extended import jwt_required
 
-competitions_schema = CompetitionSchema(many=True, exclude=("tests","include_in_ranking","tasks","tasks_in_progress"))
-competition_schema = CompetitionSchema(exclude=("tests","include_in_ranking","tasks","tasks_in_progress"))
+competition_schema_options = {
+    'exclude': ["tests","include_in_ranking","tasks","tasks_in_progress"]
+}
 
-tests_schema = TestSchema(many=True, exclude=("results","competition"))
-test_schema = TestSchema(exclude=("results","competition"))
+test_schema_options = {
+    'exclude': ["results","competition","_include_in_ranking","include_in_ranking"]
+}
 
 class CompetitionsResource(Resource):
     def __init__(self):
@@ -25,7 +27,7 @@ class CompetitionsResource(Resource):
     
     @Competition.from_request(many=True)
     def get(self):
-        return ApiResponse(g.competitions, competitions_schema).response()
+        return ApiResponse(g.competitions, CompetitionSchema, schema_options=competition_schema_options).response()
 
     @jwt_required
     def post(self):        
@@ -51,7 +53,7 @@ class CompetitionsResource(Resource):
         except Exception as e:
             return ApiErrorResponse(str(e)).response()
         
-        return ApiResponse(competition, competition_schema, 201).response()
+        return ApiResponse(competition, CompetitionSchema, 201, competition_schema_options).response()
     
     @jwt_required
     @Competition.from_request(many=True)
@@ -77,7 +79,7 @@ class CompetitionResource(Resource):
 
     @Competition.from_request
     def get(self, id):
-        return ApiResponse(g.competition, competition_schema).response()
+        return ApiResponse(g.competition, CompetitionSchema, schema_options=competition_schema_options).response()
     
     @jwt_required
     @Competition.from_request
@@ -95,7 +97,7 @@ class CompetitionResource(Resource):
         except Exception as e:
             return ApiErrorResponse(str(e), 500).response()
         
-        return ApiResponse(g.competition, competition_schema).response()
+        return ApiResponse(g.competition, CompetitionSchema,schema_options=competition_schema_options).response()
 
 
     @jwt_required
@@ -119,7 +121,7 @@ class CompetitionTestsResource(Resource):
 
     @Competition.from_request
     def get(self, id):
-        return ApiResponse(g.competition.tests, tests_schema).response()
+        return ApiResponse(Test.filter(g.competition.tests).all(), TestSchema, schema_options=test_schema_options).response()
     
     @jwt_required
     @Competition.from_request
@@ -134,10 +136,11 @@ class CompetitionTestsResource(Resource):
         
         test.update(self.reqparse)
         
+
         try:
             test.save()
         except Exception as e:
             return ApiErrorResponse(str(e)).response()
 
-        return ApiResponse(test, test_schema).response()
+        return ApiResponse(test, TestSchema, schema_options=test_schema_options).response()
 
