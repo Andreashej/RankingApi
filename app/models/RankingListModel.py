@@ -7,6 +7,7 @@ from sqlalchemy.ext.hybrid import hybrid_property
 
 from .. import db
 from .TaskModel import Task
+from .CompetitionModel import competitions_rankinglists
 
 from .RestMixin import ApiErrorResponse, RestMixin
 
@@ -22,6 +23,7 @@ class RankingList(db.Model, RestMixin):
     tests = db.relationship("RankingListTest", backref="rankinglist", lazy='dynamic', order_by="RankingListTest.testcode", cascade="all, delete")
     branding_image = db.Column(db.String(250))
     tasks = db.relationship("Task", backref="rankinglist", lazy='dynamic', cascade="all, delete")
+    competitions = db.relationship('Competition', secondary=competitions_rankinglists, lazy='dynamic', back_populates="include_in_ranking")
 
     def __init__(self, name, shortname):
         self.listname = name

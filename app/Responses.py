@@ -12,8 +12,8 @@ class ApiResponse:
         message = "", 
         schema_options = { 
             'many': False, 
-            'exclude': [],
-            'only': [] 
+            'exclude': None,
+            'only': None 
         }
     ):
         from app.models.schemas import TaskSchema
@@ -34,9 +34,9 @@ class ApiResponse:
     
     def define_schema(self, Schema, schema_options):
         fields = request.args.get('fields')
-        only = fields.split(",") if fields else schema_options['only'].copy() if 'only' in schema_options else None
+        only = fields.split(",") if fields else schema_options['only'].copy() if 'only' in schema_options and schema_options['only'] is not None else None
 
-        default_exclude = schema_options['exclude'].copy() if 'exclude' in schema_options else []
+        default_exclude = schema_options['exclude'].copy() if 'exclude' in schema_options and schema_options['exclude'] is not None else []
         excluded_fields = request.args.get('exclude')
         exclude = excluded_fields.split(",") + default_exclude if excluded_fields else default_exclude
 

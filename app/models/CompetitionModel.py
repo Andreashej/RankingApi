@@ -1,7 +1,4 @@
-import functools
-
 from .. import db
-from flask.globals import g
 from sqlalchemy.ext.hybrid import hybrid_property
 
 from flask import current_app
@@ -27,7 +24,7 @@ class Competition(db.Model, RestMixin):
     last_date = db.Column(db.Date)
     country = db.Column(db.String(2), default='DK')
     state = db.Column(db.String(12), default="NORMAL") # { NORMAL, BLOCKED, CANCELLED, UNLISTED }
-    include_in_ranking = db.relationship('RankingList', secondary=competitions_rankinglists, lazy='dynamic', backref=db.backref('competitions', lazy=True))
+    include_in_ranking = db.relationship('RankingList', secondary=competitions_rankinglists, lazy='dynamic', back_populates='competitions')
     tests = db.relationship("Test", backref="competition", lazy='dynamic', cascade='all,delete')
     tasks = db.relationship("Task", backref="competition", lazy='dynamic')
 

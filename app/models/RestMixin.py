@@ -5,6 +5,36 @@ from flask.globals import g
 from flask_restful.reqparse import RequestParser
 from app.Responses import ApiErrorResponse
 from .. import db
+import shlex
+import math
+
+def split(string, maxsplit=-1):
+    """ Split a string with shlex when possible, and add support for maxsplit. """
+    if maxsplit == -1:
+        try:
+            split_object = shlex.shlex(string, posix=True)
+            split_object.quotes = '"`'
+            split_object.whitespace_split = True
+            split_object.commenters = ""
+            return list(split_object)
+        except ValueError:
+            return string.split(" ", maxsplit)
+
+    split_object = shlex.shlex(string, posix=True)
+    split_object.quotes = '"`'
+    split_object.whitespace_split = True
+    split_object.commenters = ""
+    maxsplit_object = []
+    splits = 0
+
+    while splits < maxsplit:
+        maxsplit_object.append(next(split_object))
+
+        splits += 1
+
+    maxsplit_object.append(split_object.instream.read())
+
+    return maxsplit_object
 
 class RestMixin():
 
@@ -64,18 +94,79 @@ class RestMixin():
      
         try:
             query = cls.filter(query)
+
         except Exception as e:
             raise ApiErrorResponse(str(e))
 
-        if request.args.get('per_page') or request.args.get('page'):
+        per_page = request.args.get('per_page', 10)
+        if request.args.get('page'):
             if request.args.get('limit') is not None:
                 raise ApiErrorResponse('Limit is not compatible with pagination', 400)
-            g.pagination = query.paginate()
-            return g.pagination.items
+            try:
+                g.pagination = query.paginate(per_page=per_page)
+                return g.pagination.items
+            except Exception as e:
+                result_count = query.count()
+                max_page = math.ceil(result_count / per_page)
+                raise ApiErrorResponse(f'The requested page number was not found. You query resulted in {result_count} results, and the maximum page number is {max_page}.', 400)
         
         return query.all()
-        
+    
+    @classmethod
+    def join_by_mapper(cls, query, fields, parent_class, ):
+        field = getattr(parent_class, fields[0])
 
+        if len(fields) == 1:
+            return query, field
+        
+        if hasattr(field, 'property') and hasattr(field.property, 'mapper'):
+            relationship_class = field.property.mapper.class_
+        elif hasattr(field, 'class_'):
+            relationship_class = field.class_
+        else:
+            raise ApiErrorResponse(f'Field {field} is not joinable.', 400)
+
+
+        query = query.join(relationship_class)
+
+        return cls.join_by_mapper(query, fields[1:], relationship_class)
+
+    @classmethod
+    def apply_filter(cls, query, filter):
+        [fieldpath, operator, value] = split(filter, 2)
+
+        fields = fieldpath.split('.')
+        query, field = cls.join_by_mapper(query, fields, cls)
+        
+        if isinstance(field, str):
+            field = getattr(cls, field)
+
+        if hasattr(field, 'property') and hasattr(field.property, 'mapper'):
+            if " " in value:
+                relationship_class = field.property.mapper.class_
+                child_query = relationship_class.apply_filter(relationship_class.query, value)
+                value = child_query.first()
+                query.join(field)
+
+        if hasattr(field, 'type'):
+            if (field.type == 'DATE'):
+                value = datetime.datetime.strptime(value, '%Y-%m-%d')
+        
+        if operator == 'contains':
+            query = query.filter(field.contains(value))
+        elif operator == '<' :
+            query = query.filter(field < value)
+        elif operator == '>' :
+            query = query.filter(field > value)
+        elif operator == 'eq' or operator == '==':
+            query = query.filter(field == value)
+        elif operator == 'like':
+            query = query.filter(field.like(value))
+        else:
+            raise ApiErrorResponse(f"Unknown comparator {operator}", 400)
+        
+        return query
+        
     @classmethod
     def filter(cls, query = None):
         if not query:
@@ -84,32 +175,7 @@ class RestMixin():
         filters = request.args.getlist('filter[]')
 
         for filter in filters:
-            pack = filter.split()
-            [field, operator, value, mapper_field] = pack if len(pack) == 4 else pack + [None]
-
-            field = getattr(cls, field)
-
-            if hasattr(field, 'property') and hasattr(field.property, 'mapper'):
-                if mapper_field:
-                    relationship_class = field.property.mapper.class_
-                    mapper = getattr(relationship_class, mapper_field)
-                    value = relationship_class.query.filter(mapper == value).first()
-                    query.join(relationship_class, mapper==field)
-
-            if hasattr(field, 'type'):
-                if (field.type == 'DATE'):
-                    value = datetime.datetime.strptime(value, '%Y-%m-%d')
-            
-            if operator == 'contains':
-                query = query.filter(field.contains(value))
-            elif operator == '<' :
-                query = query.filter(field < value)
-            elif operator == '>' :
-                query = query.filter(field > value)
-            elif operator == 'eq' or operator == '==':
-                query = query.filter(field == value)
-            elif operator == 'like':
-                query = query.filter(field.like(value))
+            query = cls.apply_filter(query, filter)
         
         order = request.args.get('order_by')
 

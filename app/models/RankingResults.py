@@ -1,8 +1,10 @@
 from flask.globals import g
 from flask.json import load
 from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy.sql.expression import select
 from app.models.ResultModel import Result
 from app import db, cache
+from .RiderModel import Rider
 
 from functools import reduce
 
@@ -33,6 +35,13 @@ class RankingResults(db.Model, RestMixin):
     mark = db.Column(db.Float)
     
     test_id = db.Column(db.Integer, db.ForeignKey('rankinglist_tests.id'), nullable=False, index=True)
+
+    rider_id = db.Column(db.Integer, db.ForeignKey('riders.id'), index=True)
+    rider = db.relationship("Rider")
+
+    horse_id = db.Column(db.Integer, db.ForeignKey('horses.id'), index=True)
+    horse = db.relationship("Horse")
+
     riders = db.relationship("Rider", secondary=rider_result, lazy='dynamic', backref=db.backref('ranking_results', lazy='dynamic'))
     horses = db.relationship("Horse", secondary=horse_result, lazy='dynamic', backref=db.backref('ranking_results', lazy='dynamic'))
     marks = db.relationship("Result", secondary=cached_results_based_on, lazy='dynamic')
@@ -47,10 +56,19 @@ class RankingResults(db.Model, RestMixin):
         self.marks.append(result)
 
         if result.rider not in self.riders:
+            if self.test.grouping == 'rider':
+                if len(self.riders) > 0: raise ValueError('Result cannot have marks with different riders when test is grouped by rider')
+                self.rider_id = result.rider.id
+
             self.riders.append(result.rider)
 
         if result.horse not in self.horses:
+            if self.test.grouping == 'horse':
+                if len(self.horse) > 0: raise ValueError('Result cannot have marks with different horses when test is grouped by horse')
+                self.horse_id = result.horse.id
+
             self.horses.append(result.horse)
+            
     
     def calculate_mark(self):
         testcount = 2 if self.test.testcode == 'C4' else 3 if self.test.testcode == 'C5' else 1
@@ -75,21 +93,6 @@ class RankingResults(db.Model, RestMixin):
         sum_of_marks = reduce(lambda sum, current: sum + current.get_mark(self.test.testcode == 'C5'), valid_marks, 0)
 
         self.mark = round(sum_of_marks / number_of_marks, self.test.rounding_precision)
-        
-
-    @hybrid_property
-    def rider(self):
-        if self.test.grouping == 'rider':
-            return self.riders[0]
-        
-        return None
-    
-    @hybrid_property
-    def horse(self):
-        if self.test.grouping == 'horse':
-            return self.horses[0]
-        
-        return None
 
     def __repr__(self):
         return "<{}.{}>".format(self.__class__.__name__, self.id)

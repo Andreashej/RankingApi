@@ -4,10 +4,10 @@ from app.Responses import ApiErrorResponse, ApiResponse
 from app.models.RankingResults import RankingResults
 from app.models.schemas import ResultSchema, RankingListResultSchemaV2 as RankingListResultSchema
 
-marks_schema = ResultSchema(many=True, exclude=("test",))
 
-results_schema = RankingListResultSchema(many=True)
-result_schema = RankingListResultSchema()
+mark_schema_options = {
+    'exclude': ['test']
+}
 
 class RankingResultsResource(Resource):
     def __init__(self):
@@ -15,7 +15,7 @@ class RankingResultsResource(Resource):
     
     @RankingResults.from_request(many=True)
     def get(self):
-        return ApiResponse(g.ranking_results, results_schema).response()
+        return ApiResponse(g.ranking_results, RankingListResultSchema).response()
 
 class RankingResultResource(Resource):
     def __init__(self):
@@ -23,7 +23,7 @@ class RankingResultResource(Resource):
     
     @RankingResults.from_request
     def get(self, id):
-        return ApiResponse(g.ranking_result, result_schema).response()
+        return ApiResponse(g.ranking_result, RankingListResultSchema).response()
 
 class RankingResultMarksResource(Resource):
     def __init__(self):
@@ -31,4 +31,4 @@ class RankingResultMarksResource(Resource):
 
     @RankingResults.from_request
     def get(self, id):        
-        return ApiResponse(g.ranking_result.marks, marks_schema).response()
+        return ApiResponse(g.ranking_result.marks, ResultSchema, schema_options=mark_schema_options).response()

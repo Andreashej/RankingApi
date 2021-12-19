@@ -32,7 +32,7 @@ class Horse(db.Model, RestMixin):
     
     @number_of_results.expression
     def number_of_results(cls):
-        return db.session.query('results').filter_by(rider_id = cls.id).count()
+        return db.session.query('results').filter_by(horse_id = cls.id).count()
     
     @hybrid_property
     def testlist(self):
