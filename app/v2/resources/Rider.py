@@ -1,14 +1,9 @@
 from flask.globals import g
 from flask_restful import Resource, reqparse
 from app.Responses import ApiResponse, ApiErrorResponse
-from app.models.schemas import RiderSchema
 from app.models.RiderModel import Rider
 from flask_jwt_extended import jwt_required
 from app import db
-
-rider_schema_options = {
-    'exclude': ["results", "aliases", "testlist"]
-}
 
 class RidersResource(Resource):
     def __init__(self):
@@ -18,7 +13,7 @@ class RidersResource(Resource):
 
     @Rider.from_request(many=True)
     def get(self):
-        return ApiResponse(g.riders, RiderSchema, schema_options=rider_schema_options).response()
+        return ApiResponse(g.riders).response()
     
     @jwt_required
     def post(self):
@@ -30,7 +25,7 @@ class RidersResource(Resource):
         except Exception as e:
             return ApiErrorResponse(e.args, 403).response()
         
-        return ApiResponse(rider, RiderSchema, schema_options=rider_schema_options).response()
+        return ApiResponse(rider).response()
 
 class RiderResource(Resource):
     def __init__(self):
@@ -40,7 +35,7 @@ class RiderResource(Resource):
     
     @Rider.from_request
     def get(self, id):
-        return ApiResponse(g.rider, RiderSchema, schema_options=rider_schema_options).response()
+        return ApiResponse(g.rider).response()
     
     @jwt_required
     @Rider.from_request
@@ -52,7 +47,7 @@ class RiderResource(Resource):
         except Exception as e:
             return ApiErrorResponse(str(e)).response()
         
-        return ApiResponse(g.rider, RiderSchema, schema_options=rider_schema_options).response()
+        return ApiResponse(g.rider).response()
     
     @jwt_required
     @Rider.from_request

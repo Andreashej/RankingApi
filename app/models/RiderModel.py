@@ -1,7 +1,4 @@
 import csv
-from re import T
-
-from sqlalchemy.sql.expression import distinct
 
 from .. import db
 from sqlalchemy.ext.hybrid import hybrid_property, hybrid_method
@@ -106,10 +103,10 @@ class Rider(db.Model, RestMixin):
 
         results_query = Result.query.filter_by(rider_id = self.id)
 
-        if test.order == 'desc':
-            results_query = results_query.filter(Result.mark >= test.min_mark)
-        else:
-            results_query = results_query.filter(Result.mark > 0)
+        # if test.order == 'desc':
+        #     results_query = results_query.filter(Result.mark >= test.min_mark)
+        # else:
+        #     results_query = results_query.filter(Result.mark > 0)
 
         results_query = results_query.join(Test, Result.test_id == Test.id)
 
@@ -126,24 +123,29 @@ class Rider(db.Model, RestMixin):
         else:
             queries['all'] = results_query.filter_by(testcode=test.testcode)
 
-        results = list()
+        query = None
         
         for key in queries:
-            queries[key] = queries[key]\
-                .join(Competition).filter(Competition.last_date >= (datetime.now() - timedelta(days=test.rankinglist.results_valid_days)))\
-                .join(RankingList, Competition.include_in_ranking).filter_by(shortname=test.rankinglist.shortname)
-
-            if test.order == 'desc':
-                queries[key] = queries[key].order_by(Result.mark.desc())
+            queries[key] = queries[key].join(RankingList, Test.include_in_ranking).filter_by(shortname=test.rankinglist.shortname)
+            if query is None:
+                query = queries[key]
             else:
-                queries[key] = queries[key].order_by(Result.mark.asc())
+                query.union(query[key])
+            # queries[key] = queries[key]\
+            #     .join(Competition).filter(Competition.last_date >= (datetime.now() - timedelta(days=test.rankinglist.results_valid_days)))\
+            #     .join(RankingList, Competition.include_in_ranking).filter_by(shortname=test.rankinglist.shortname)
 
-            queries[key] = queries[key].limit(test.included_marks).all()
+            # if test.order == 'desc':
+            #     queries[key] = queries[key].order_by(Result.mark.desc())
+            # else:
+            #     queries[key] = queries[key].order_by(Result.mark.asc())
 
-            for result in queries[key]:
-                results.append(result)
+            # queries[key] = queries[key].all()
+
+            # for result in queries[key]:
+            #     results.append(result)
         
-        return results
+        return query.all()
     
     @hybrid_method
     def count_results_for_ranking(self, test):

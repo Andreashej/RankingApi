@@ -1,19 +1,9 @@
 from flask.globals import g
 from flask_jwt_extended.view_decorators import jwt_required
-from flask_marshmallow import schema
 from flask_restful import Resource, reqparse
 from app.Responses import ApiResponse, ApiErrorResponse
-from app.models.schemas import TestSchema, ResultSchema
-from app.models import Test, Result, Competition, Rider, Horse
+from app.models import Test, Result, Rider, Horse
 from app import db
-
-test_schema_options = {
-    'exclude': ["results","competition"]
-}
-
-result_schema_options = {
-    'exclude': ["test"]
-}
 
 class TestsResource(Resource):
     def __init__(self):
@@ -23,7 +13,7 @@ class TestsResource(Resource):
 
     @Test.from_request(many=True)
     def get(self):
-        return ApiResponse(g.tests, TestSchema, schema_options=test_schema_options).response()
+        return ApiResponse(g.tests).response()
     
     @jwt_required
     @Test.from_request(many=True)
@@ -46,7 +36,7 @@ class TestResource(Resource):
     
     @Test.from_request
     def get(self, id):
-        return ApiResponse(g.test, TestSchema, schema_options=test_schema_options).response()
+        return ApiResponse(g.test).response()
     
     @jwt_required
     @Test.from_request
@@ -67,7 +57,7 @@ class TestResource(Resource):
         except Exception as e:
             return ApiErrorResponse(str(e)).response()
         
-        return ApiResponse(g.test, TestSchema, schema_options=test_schema_options).response()
+        return ApiResponse(g.test).response()
     
     @jwt_required
     @Test.from_request
@@ -89,7 +79,7 @@ class TestResultsResource(Resource):
 
     @Test.from_request
     def get(self, id):        
-        return ApiResponse(g.test.results, ResultSchema, schema_options=result_schema_options).response()
+        return ApiResponse(Result.load_many(g.test.results)).response()
 
     @jwt_required
     @Test.from_request    
@@ -112,6 +102,6 @@ class TestResultsResource(Resource):
         except Exception as e:
             return ApiErrorResponse(str(e)).response()
         
-        return ApiResponse(result, ResultSchema, schema_options=result_schema_options).response()
+        return ApiResponse(result).response()
 
         

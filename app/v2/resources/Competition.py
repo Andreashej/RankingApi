@@ -1,39 +1,29 @@
 import datetime
 from flask.globals import g
-
 from flask_restful import Resource, reqparse
 from app.Responses import ApiErrorResponse, ApiResponse
 from app import db
-from app.models import Competition, RankingList, CompetitionSchema, Test, TestSchema
+from app.models import Competition, RankingList, Test
 from flask_jwt_extended import jwt_required
-
-competition_schema_options = {
-    'exclude': ["tests","include_in_ranking","tasks","tasks_in_progress"]
-}
-
-test_schema_options = {
-    'exclude': ["results","competition","_include_in_ranking","include_in_ranking"]
-}
 
 class CompetitionsResource(Resource):
     def __init__(self):
         self.reqparse = reqparse.RequestParser()
         self.reqparse.add_argument('name', type=str, required=True, location='json')
         self.reqparse.add_argument('isirank', type=str, required=False, location='json')
-        self.reqparse.add_argument('first_date', type=lambda x: datetime.datetime.strptime(x, '%d/%m/%Y'), required=True, location='json')
-        self.reqparse.add_argument('last_date', type=lambda x: datetime.datetime.strptime(x, '%d/%m/%Y'), required=True, location='json')
-        self.reqparse.add_argument('ranking_scopes', type=str, action='append', location='json')
-        self.reqparse.add_argument('country', type=str, location='json')
+        self.reqparse.add_argument('first_date', type=lambda x: datetime.datetime.strptime(x, '%d-%m-%Y'), required=True, location='json')
+        self.reqparse.add_argument('last_date', type=lambda x: datetime.datetime.strptime(x, '%d-%m-%Y'), required=True, location='json')
+        self.reqparse.add_argument('country', type=str, location='json', required=True)
     
     @Competition.from_request(many=True)
     def get(self):
-        return ApiResponse(g.competitions, CompetitionSchema, schema_options=competition_schema_options).response()
+        return ApiResponse(g.competitions).response()
 
     @jwt_required
     def post(self):        
         args = self.reqparse.parse_args()
 
-        competition = Competition(args['name'], args['startdate'], args['enddate'], args['isirank_id'])
+        competition = Competition(args['name'], args['first_date'], args['last_date'], args['isirank'], args['country'])
 
         competition.update(self.reqparse)
 
@@ -41,19 +31,8 @@ class CompetitionsResource(Resource):
             competition.save()
         except Exception as e:
             return ApiErrorResponse(str(e)).response()
-
-        if args['ranking_scopes']:
-            for ranking in args['ranking_scopes']:
-                rankinglist = RankingList.query.filter_by(shortname=ranking).first()
-
-                competition.include_in_ranking.append(rankinglist)
-
-        try:
-            competition.save()
-        except Exception as e:
-            return ApiErrorResponse(str(e)).response()
         
-        return ApiResponse(competition, CompetitionSchema, 201, competition_schema_options).response()
+        return ApiResponse(competition, 201).response()
     
     @jwt_required
     @Competition.from_request(many=True)
@@ -79,7 +58,7 @@ class CompetitionResource(Resource):
 
     @Competition.from_request
     def get(self, id):
-        return ApiResponse(g.competition, CompetitionSchema, schema_options=competition_schema_options).response()
+        return ApiResponse(g.competition).response()
     
     @jwt_required
     @Competition.from_request
@@ -97,7 +76,7 @@ class CompetitionResource(Resource):
         except Exception as e:
             return ApiErrorResponse(str(e), 500).response()
         
-        return ApiResponse(g.competition, CompetitionSchema,schema_options=competition_schema_options).response()
+        return ApiResponse(g.competition).response()
 
 
     @jwt_required
@@ -121,7 +100,7 @@ class CompetitionTestsResource(Resource):
 
     @Competition.from_request
     def get(self, id):
-        return ApiResponse(Test.filter(g.competition.tests).all(), TestSchema, schema_options=test_schema_options).response()
+        return ApiResponse(Test.load_many(g.competition.tests)).response()
     
     @jwt_required
     @Competition.from_request
@@ -142,5 +121,5 @@ class CompetitionTestsResource(Resource):
         except Exception as e:
             return ApiErrorResponse(str(e)).response()
 
-        return ApiResponse(test, TestSchema, schema_options=test_schema_options).response()
+        return ApiResponse(test).response()
 

@@ -1,7 +1,10 @@
+from app.models.CompetitionModel import Competition
+from app.models.RankingListModel import RankingList
 from .. import db
 from sqlalchemy.ext.hybrid import hybrid_property
 from .ResultModel import Result
 from .RestMixin import ApiErrorResponse, RestMixin
+from sqlalchemy import case, func
 
 tests_rankinglists = db.Table('tests_ranking_association',
     db.Column('test_id', db.Integer, db.ForeignKey('tests.id'), primary_key=True),
@@ -31,6 +34,12 @@ class Test(db.Model, RestMixin):
             return self._include_in_ranking
         
         return self.competition.include_in_ranking
+    
+    @include_in_ranking.expression
+    def include_in_ranking(cls):
+        # print(db.session.query(cls, func.count(RankingList.id)).join(Competition).join(Competition.include_in_ranking).all())
+        # return Competition.query.join(Test).filter(Test.id==cls.id).join(RankingList, Test.include_in_ranking)
+        return cls._include_in_ranking
 
     @hybrid_property
     def results(self):

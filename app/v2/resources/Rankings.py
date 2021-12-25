@@ -3,19 +3,13 @@ from flask_restful import Resource
 from app.models.RankingResults import RankingResults
 from app.models.RankingListTestModel import RankingListTest
 from app.Responses import ApiErrorResponse, ApiResponse
-from app.models.schemas import RankingListTestSchema, RankingListResultSchemaV2 as RankingListResultSchema
 from flask_restful.reqparse import RequestParser
 from flask_jwt_extended import jwt_required
-
-tests_schema = RankingListTestSchema(many=True, exclude=("rankinglist","tasks_in_progress"))
-test_schema = RankingListTestSchema(exclude=("rankinglist","tasks_in_progress"))
-
-results_schema = RankingListResultSchema(many=True)
 
 class RankingsResource(Resource):
     @RankingListTest.from_request(many=True)
     def get(self):        
-        return ApiResponse(g.rankings, tests_schema).response()
+        return ApiResponse(g.rankings).response()
     
 class RankingResource(Resource):
     def __init__(self) -> None:
@@ -30,7 +24,7 @@ class RankingResource(Resource):
     
     @RankingListTest.from_request
     def get(self, id):
-        return ApiResponse(g.test, test_schema).response()
+        return ApiResponse(g.ranking).response()
     
     @jwt_required
     @RankingListTest.from_request
@@ -42,7 +36,7 @@ class RankingResource(Resource):
         except Exception as e:
             return ApiErrorResponse(str(e)).response()
         
-        return ApiResponse(g.ranking, test_schema).response()
+        return ApiResponse(g.ranking).response()
     
     @jwt_required
     @RankingListTest.from_request
@@ -70,5 +64,5 @@ class RankingResultsRankingResource(Resource):
             return ApiErrorResponse(str(e)).response()
 
         
-        return ApiResponse(results, results_schema).response()
+        return ApiResponse(results).response()
 

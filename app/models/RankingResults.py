@@ -1,10 +1,8 @@
-from flask.globals import g
-from flask.json import load
-from sqlalchemy.ext.hybrid import hybrid_property
-from sqlalchemy.sql.expression import select
+from datetime import datetime, timedelta
+from app.models.CompetitionModel import Competition
+from app.models.TestModel import Test
 from app.models.ResultModel import Result
 from app import db, cache
-from .RiderModel import Rider
 
 from functools import reduce
 
@@ -56,15 +54,16 @@ class RankingResults(db.Model, RestMixin):
         self.marks.append(result)
 
         if result.rider not in self.riders:
+            print(result.rider)
             if self.test.grouping == 'rider':
-                if len(self.riders) > 0: raise ValueError('Result cannot have marks with different riders when test is grouped by rider')
+                if self.riders.count() > 0: raise ValueError('Result cannot have marks with different riders when test is grouped by rider')
                 self.rider_id = result.rider.id
 
             self.riders.append(result.rider)
 
         if result.horse not in self.horses:
             if self.test.grouping == 'horse':
-                if len(self.horse) > 0: raise ValueError('Result cannot have marks with different horses when test is grouped by horse')
+                if self.horses.count() > 0: raise ValueError('Result cannot have marks with different horses when test is grouped by horse')
                 self.horse_id = result.horse.id
 
             self.horses.append(result.horse)
@@ -75,13 +74,17 @@ class RankingResults(db.Model, RestMixin):
 
         number_of_marks = self.test.included_marks * testcount
 
-        if self.marks.count() < self.test.included_marks * testcount:
+
+        valid_marks_query = self.marks\
+            .filter(Result.mark > self.test.min_mark)\
+            .join(Result.test)\
+            .join(Test.competition)\
+            .filter(Competition.last_date >= (datetime.now() - timedelta(days=self.test.rankinglist.results_valid_days)))
+
+        if valid_marks_query.count() < number_of_marks:
             self.mark = None
             self.rank = None
             return
-        
-        valid_marks_query = self.marks
-
 
         if self.test.order == 'asc':
             valid_marks_query = valid_marks_query.order_by(Result.mark).limit(number_of_marks)

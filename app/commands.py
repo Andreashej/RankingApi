@@ -2,6 +2,7 @@ from flask import current_app as app
 from . import db
 import click
 from .models import Horse, Task, RankingListTest
+from app import create_app
 
 # app = create_app()
 # app.app_context().push()
@@ -23,10 +24,16 @@ def lookup_horse(limit = 500):
         db.session.rollback()
 
 @app.cli.command()
-def recompute_rankings():
+def flush_rankings():
     """Recompute all rankings"""
 
-    tests = RankingListTest.query.all()
+    test = RankingListTest.query.first()
 
-    for test in tests:
-        test.launch_task('compute_ranking', 'Recalculating {} ranking for {}'.format(test.testcode, test.rankinglist.shortname))
+    test.launch_task('flush_ranking', 'Flushing {} ranking for {}'.format(test.testcode, test.rankinglist.shortname))
+    # for test in tests:
+
+@app.cli.command()
+def recompute_rankings():
+    test = RankingListTest.query.first()
+
+    test.launch_task('recompute_ranking', 'Recalculating {} ranking for {}'.format(test.testcode, test.rankinglist.shortname))

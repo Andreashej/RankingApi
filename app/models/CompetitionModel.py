@@ -1,3 +1,4 @@
+from sqlalchemy.ext import hybrid
 from .. import db
 from sqlalchemy.ext.hybrid import hybrid_property
 
@@ -17,9 +18,9 @@ class Competition(db.Model, RestMixin):
     RESOURCE_NAME_PLURAL = 'competitions'
 
     __tablename__ = 'competitions'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(250))
-    isirank_id = db.Column(db.String(12), unique=True)
+    ext_id = db.Column('isirank_id', db.String(12), unique=True)
     first_date = db.Column(db.Date)
     last_date = db.Column(db.Date)
     country = db.Column(db.String(2), default='DK')
@@ -28,14 +29,27 @@ class Competition(db.Model, RestMixin):
     tests = db.relationship("Test", backref="competition", lazy='dynamic', cascade='all,delete')
     tasks = db.relationship("Task", backref="competition", lazy='dynamic')
 
-    def __init__(self, name='', startdate=None, enddate=None, isi_id = None):
+    def __init__(self, name='', startdate=None, enddate=None, isi_id = None, country='XX'):
         self.name = name
         self.first_date = startdate
         self.last_date = enddate
-        self.isirank_id = isi_id or self.create_id()
+        self.country = country
+
+        db.session.add(self)
+        db.session.flush()
+
+        self.ext_id = isi_id or self.create_id()
     
     def __repr__(self):
         return f'<Competition {self.name} from {self.first_date} to {self.last_date}>'
+
+    @hybrid_property
+    def isirank_id(self):
+        return self.ext_id
+    
+    @isirank_id.setter
+    def isirank_id(self, ext_id):
+        self.ext_id = ext_id
     
     @hybrid_property
     def tasks_in_progress(self):

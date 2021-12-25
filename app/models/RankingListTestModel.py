@@ -1,11 +1,11 @@
 from datetime import datetime, timedelta
-import functools
-from flask.globals import g
 from sqlalchemy.ext.hybrid import hybrid_method, hybrid_property
+from sqlalchemy.orm import base
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.sql.functions import rank
-from app.models.TestModel import Test
 from app.models.CompetitionModel import Competition
+from app.models.RankingListModel import RankingList
+from app.models.TestModel import Test
 from app.models.RankingResults import rider_result, horse_result, RankingResults
 from app.models.ResultModel import Result
 from .. import db
@@ -97,9 +97,6 @@ class RankingListTest(db.Model, RestMixin):
         ranking_result.calculate_mark()
         db.session.add(ranking_result)
 
-        self.compute_rank()
-
-
     def compute_rank(self):
         ordering = RankingResults.mark if self.order == 'asc' else RankingResults.mark.desc()
 
@@ -110,6 +107,7 @@ class RankingListTest(db.Model, RestMixin):
                 order_by=ordering
             ))\
             .filter(RankingResults.test_id==self.id)\
+            .filter(RankingResults.mark.isnot(None))\
             .all()
 
         mappings = [{ 'id': result[0], 'rank': result[1] } for result in ranked_results]
@@ -126,9 +124,14 @@ class RankingListTest(db.Model, RestMixin):
     
     @hybrid_property
     def valid_competition_results(self):
-        results = Result.query.join(Result.test).filter(Test.testcode==self.testcode)\
-            .filter(Test.competition.last_date >= (datetime.now() - timedelta(days=self.rankinglist.results_valid_days)),
-                Result.test.competition.rankinglist.shortname == self.rankinglist.shortname
-            )\
-            .all()
-        print(results)
+            # .filter(Test.competition.last_date >= (datetime.now() - timedelta(days=self.rankinglist.results_valid_days)),
+            #     Result.test.competition.rankinglist.shortname == self.rankinglist.shortname
+            # )\
+        base_query = Result.query.join(Result.test).filter(Test.testcode==self.testcode)
+        tests_query = base_query.join(RankingList, Test.include_in_ranking)
+        competitions_query = base_query.join(Competition).join(RankingList, Competition.include_in_ranking)\
+        
+        query = tests_query.union(competitions_query)
+
+        results = query.filter(RankingList.shortname==self.rankinglist.shortname).all()
+        return results

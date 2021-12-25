@@ -1,35 +1,20 @@
+from math import exp
 from flask.globals import request, g
 
 class ApiResponse:
     def __init__(
         self,
         data = None, 
-        Schema = None, 
         response_code = 200, 
         *, 
         task = None, 
-        tasks = [], 
         message = "", 
-        schema_options = { 
-            'many': False, 
-            'exclude': None,
-            'only': None 
-        }
     ):
-        from app.models.schemas import TaskSchema
-        self.task_schema = TaskSchema()
-        self.tasks_schema = TaskSchema(many=True)
         self.data = data
         self.response_code = response_code
         self.task = task
-        self.tasks = tasks
-        if task is not None and len(self.tasks) > 0:
-            self.tasks.append(self.task)
-            self.task = None
         
         self.message = message
-        if Schema is not None:
-            self.define_schema(Schema, schema_options)
 
     
     def define_schema(self, Schema, schema_options):
@@ -52,18 +37,24 @@ class ApiResponse:
     
     def get_data(self):
         if self.data is None: return { }
-        if self.schema:
-            return { 'data': self.schema.dump(self.data) }
+        data = {}
         
-        return self.data
+        fields = request.args.get('fields')
+        expanded_fields = request.args.get('expand')
+
+        fields = fields.split(',') if fields is not None else []
+        expanded_fields = expanded_fields.split(',') if expanded_fields is not None else []
+
+        if isinstance(self.data, list):
+            data = [item.to_json(fields=fields, expand=expanded_fields) for item in self.data]
+        else:
+            data = self.data.to_json(fields=fields, expand=expanded_fields)
+
+        return { 'data': data }
     
     def get_task(self):
         if self.task is None: return { }
-        return { 'task': self.task_schema.dump(self.task) }
-    
-    def get_tasks(self):
-        if len(self.tasks) == 0: return { }
-        return { 'tasks': self.tasks_schema.dump(self.tasks) }
+        return { 'task': self.task.to_json() }
     
     def get_message(self):
         if not self.message: return { }
@@ -91,7 +82,6 @@ class ApiResponse:
 
         response.update(self.get_data())
         response.update(self.get_task())
-        response.update(self.get_tasks())
         response.update(self.get_message())
         response.update(self.get_pagination())
 
