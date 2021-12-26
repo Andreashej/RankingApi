@@ -78,8 +78,13 @@ class TestResultsResource(Resource):
         self.reqparse.add_argument('state', type=str, required=False, location='json')
 
     @Test.from_request
-    def get(self, id):        
-        return ApiResponse(Result.load_many(g.test.results)).response()
+    def get(self, id):   
+        try:
+            results = Result.load_many(g.test.results)
+        except ApiErrorResponse as e:
+            return e.response()
+
+        return ApiResponse(results).response()
 
     @jwt_required
     @Test.from_request    

@@ -41,6 +41,9 @@ def split(string, maxsplit=-1):
     return maxsplit_object
 
 class RestMixin():
+    BLOCK_FROM_JSON = []
+    EXCLUDE_FROM_JSON = []
+    INCLUDE_IN_JSON = []
 
     @classmethod
     def from_request(cls, _func=None, *, many=False):
@@ -93,12 +96,12 @@ class RestMixin():
 
     @classmethod
     def load_many(cls, query = None):
+        
         if query is None:
             query = cls.query
      
         try:
             query = cls.filter(query)
-
         except Exception as e:
             raise ApiErrorResponse(str(e))
 
@@ -113,7 +116,7 @@ class RestMixin():
                 result_count = query.count()
                 max_page = math.ceil(result_count / per_page)
                 raise ApiErrorResponse(f'The requested page number was not found. You query resulted in {result_count} results, and the maximum page number is {max_page}.', 400)
-        
+
         return query.all()
     
     @classmethod
@@ -201,7 +204,7 @@ class RestMixin():
 
     @property
     def default_fields(self):
-        return [attr.key for attr in self.__mapper__.attrs if isinstance(attr, ColumnProperty)]
+        return [attr.key for attr in self.__mapper__.attrs if isinstance(attr, ColumnProperty) and attr.key not in self.EXCLUDE_FROM_JSON + self.BLOCK_FROM_JSON] + self.INCLUDE_IN_JSON
     
     @property
     def nested_fields(self):
@@ -213,7 +216,7 @@ class RestMixin():
         json = { }
 
 
-        valid_fields = [field for field in fields if hasattr(self, field)]
+        valid_fields = [field for field in fields if hasattr(self, field) and field not in self.BLOCK_FROM_JSON]
         
         for attr in valid_fields:
             value = getattr(self, attr)
@@ -224,13 +227,15 @@ class RestMixin():
             if isinstance(value, date):
                 value = datetime.strftime(value, '%Y-%m-%d')
             
+            if isinstance(value, map):
+                value = list(value)
 
             json.update({
                 attr: value
             })
 
         for field in expand:
-            if hasattr(self, field):
+            if hasattr(self, field) and field not in self.BLOCK_FROM_JSON:
                 attr = getattr(self, field)
 
                 if isinstance(attr, BaseQuery):
@@ -292,7 +297,10 @@ class RestMixin():
             value = args[attr]
 
             if value and hasattr(self, attr):
-                setattr(self, attr, value)
+                try:
+                    setattr(self, attr, value)
+                except Exception as e:
+                    raise ApiErrorResponse(str(e))
     
     def save(self):
         try:

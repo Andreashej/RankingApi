@@ -1,5 +1,7 @@
 from flask.globals import g
+from flask_jwt_extended.view_decorators import jwt_optional
 from flask_restful import Resource, reqparse
+from app.models.ResultModel import Result
 from app.Responses import ApiResponse, ApiErrorResponse
 from app.models.RiderModel import Rider
 from flask_jwt_extended import jwt_required
@@ -52,6 +54,9 @@ class RiderResource(Resource):
     @jwt_required
     @Rider.from_request
     def delete(self, id):
+        if len(g.rider.results) > 0:
+            return ApiErrorResponse("You cannot delete a rider that has results", 403)
+
         try:
             g.rider.delete()
             db.session.commit()
@@ -59,3 +64,13 @@ class RiderResource(Resource):
             return ApiErrorResponse(str(e)).response()
         
         return ApiResponse(response_code=204).response()
+
+class RiderResultsResource(Resource):
+    @Rider.from_request
+    def get(self, id):
+        try:
+            results = Result.load_many(g.rider.results)
+        except ApiErrorResponse as e:
+            return e.response()
+
+        return ApiResponse(results).response()

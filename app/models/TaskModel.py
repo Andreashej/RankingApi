@@ -15,6 +15,8 @@ class Task(db.Model, RestMixin):
     RESOURCE_NAME = 'task'
     RESOURCE_NAME_PLURAL = 'tasks'
 
+    INCLUDE_IN_JSON = ['state', 'progress']
+
     id = db.Column(db.String(36), primary_key=True)
     name = db.Column(db.String(128), index=True)
     description = db.Column(db.String(128))

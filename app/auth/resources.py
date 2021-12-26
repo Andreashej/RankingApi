@@ -1,13 +1,10 @@
-from flask.globals import request
+from flask.globals import request, g
 from flask_jwt_extended.utils import create_access_token, get_jwt_identity
 from flask_restful import Resource, reqparse
 from flask_jwt_extended import jwt_required, jwt_refresh_token_required, get_raw_jwt
+from app.Responses import ApiErrorResponse, ApiResponse
 
-from app.models import User, UserSchema, RevokedToken
-
-user_schema = UserSchema()
-users_schema = UserSchema(many=True)
-
+from app.models import User, RevokedToken
 
 class UserLogin(Resource):
     def __init__(self):
@@ -30,7 +27,7 @@ class UserLogin(Resource):
 
         if current_user.verify_password(password):
             return { 
-                'data': user_schema.dump(current_user),
+                'data': current_user.to_json(),
                 'access_token': current_user.create_access_token(),
                 'refresh_token': current_user.create_refresh_token()
             }
@@ -69,3 +66,57 @@ class TokenRefresh(Resource):
 
         access_token = create_access_token(identity=current_user)
         return { 'access_token': access_token }
+
+class ProfileResource(Resource):
+    @jwt_required
+    @User.with_profile
+    def get(self):
+        return ApiResponse(g.profile).response()
+
+class UsersResource(Resource):
+    def __init__(self) -> None:
+        self.reqparse = reqparse.RequestParser()
+        self.reqparse.add_argument('username', type=str, required=True, location='json')
+        self.reqparse.add_argument('password', type=str, required=True, location='json')
+        self.reqparse.add_argument('email', type=str, required=True, location='json')
+    
+    @User.from_request(many=True)
+    def get(self):
+        return ApiResponse(g.users).response()
+    
+    @jwt_required
+    def post(self):
+        user = User()
+        try:
+            user.update(self.reqparse)
+        except ApiErrorResponse as e:
+            return e.response()
+
+        return ApiResponse(user, 201).response()
+
+class UserResource(Resource):
+    def __init__(self) -> None:
+        self.reqparse = reqparse.RequestParser()
+        self.reqparse.add_argument('username', type=str, required=False, location='json')
+        self.reqparse.add_argument('password', type=str, required=False, location='json')
+        self.reqparse.add_argument('email', type=str, required=False, location='json')
+
+    @User.from_request
+    def get(self, id):
+        return ApiResponse(g.user).response()
+    
+    @jwt_required
+    @User.from_request
+    def patch(self, id):
+        args = self.reqparse.parse_args()
+        
+        if args['password'] is not None:
+            g.user.hash_password(args['password'])
+
+        try:
+            g.user.update(self.reqparse)
+            g.user.save()
+        except ApiErrorResponse as e:
+            return e.response()
+        
+        return ApiResponse(g.user).response()

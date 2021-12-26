@@ -77,8 +77,13 @@ class RankingListTestsResource(Resource):
         self.reqparse.add_argument('mark_type', type=str, required=True, location='json')
 
     @RankingList.from_request
-    def get(self, id):        
-        return ApiResponse(RankingListTest.load_many(g.rankinglist.tests)).response()
+    def get(self, id):     
+        try:
+            tests = RankingListTest.load_many(g.rankinglist.tests)
+        except ApiErrorResponse as e:
+            return e.response()
+
+        return ApiResponse(tests).response()
     
     @jwt_required
     @RankingList.from_request
@@ -99,4 +104,9 @@ class RankingListTestsResource(Resource):
 class RankingListTasksResource(Resource):
     @RankingList.from_request
     def get(self, id):
-        return ApiResponse(Task.load_many(g.rankinglist.tasks)).response()
+        try:
+            tasks = Task.load_many(g.rankinglist.tasks)
+        except ApiErrorResponse as e:
+            return e.response()
+
+        return ApiResponse(tasks).response()

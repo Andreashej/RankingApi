@@ -100,7 +100,12 @@ class CompetitionTestsResource(Resource):
 
     @Competition.from_request
     def get(self, id):
-        return ApiResponse(Test.load_many(g.competition.tests)).response()
+        try:
+            tests = Test.load_many(g.competition.tests)
+        except ApiErrorResponse as e:
+            return e.response()
+
+        return ApiResponse(tests).response()
     
     @jwt_required
     @Competition.from_request

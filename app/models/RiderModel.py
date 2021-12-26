@@ -17,11 +17,13 @@ class Rider(db.Model, RestMixin):
     RESOURCE_NAME = 'rider'
     RESOURCE_NAME_PLURAL = 'riders'
 
+    INCLUDE_IN_JSON = ['fullname', 'number_of_results']
+
     __tablename__ = 'riders'
     id = db.Column(db.Integer, primary_key=True)
     firstname = db.Column(db.String(250))
     lastname = db.Column(db.String(250))
-    results = db.relationship("Result", backref="rider", lazy="joined")
+    results = db.relationship("Result", backref="rider", lazy="dynamic")
     aliases = db.relationship("RiderAlias", backref="rider", lazy="dynamic")
 
     def __init__(self, first, last):
@@ -44,7 +46,7 @@ class Rider(db.Model, RestMixin):
 
     @hybrid_property
     def number_of_results(self):
-        return len(self.results)
+        return self.results.count()
 
     @number_of_results.expression
     def number_of_results(cls):

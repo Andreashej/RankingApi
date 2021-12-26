@@ -1,4 +1,7 @@
-from .. import db
+from app.models.ResultModel import Result
+from app.models.TestModel import Test
+from app.Responses import ApiErrorResponse
+from app import db
 from sqlalchemy.ext.hybrid import hybrid_property, hybrid_method
 from sqlalchemy import func, and_
 import requests
@@ -13,11 +16,13 @@ class Horse(db.Model, RestMixin):
     RESOURCE_NAME = 'horse'
     RESOURCE_NAME_PLURAL = 'horses'
 
+    INCLUDE_IN_JSON = ['number_of_results', 'testlist']
+
     __tablename__ = 'horses'
     id = db.Column(db.Integer, primary_key=True)
     feif_id = db.Column(db.String(12), unique=True)
     horse_name = db.Column(db.String(250))
-    results = db.relationship("Result", backref="horse", lazy="joined")
+    results = db.relationship("Result", backref="horse", lazy="dynamic")
     last_lookup = db.Column(db.DateTime)
     log_items = db.relationship("Log", back_populates="horse")
     lookup_error = db.Column(db.Boolean, default=False)
@@ -28,7 +33,7 @@ class Horse(db.Model, RestMixin):
 
     @hybrid_property
     def number_of_results(self):
-        return len(self.results)
+        return self.results.count()
     
     @number_of_results.expression
     def number_of_results(cls):
@@ -36,14 +41,15 @@ class Horse(db.Model, RestMixin):
     
     @hybrid_property
     def testlist(self):
-        t = []
-        for result in self.results:
-            if result.test.testcode in t:
-                continue
-
-            t.append(result.test.testcode)
-        t.sort()
-        return t
+        return map(
+            lambda test_tuple: test_tuple[0],
+            Result.query\
+            .filter_by(horse_id=self.id)\
+            .join(Result.test).order_by(Test.testcode)\
+            .with_entities(Test.testcode)\
+            .distinct()\
+            .all()
+        )
     
     @testlist.expression
     def testlist(cls):
@@ -152,7 +158,7 @@ class Horse(db.Model, RestMixin):
             except:
                 db.session.rollback()
             finally:
-                return
+                raise ApiErrorResponse(f'FEIF-ID {self.feif_id} does not exist')
 
         name = f"{response.find('name').text} {response.find('prefix').text} {response.find('origin').text}"
         horseID = response.find('horseID').text

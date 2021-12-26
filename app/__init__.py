@@ -75,7 +75,7 @@ def create_app():
         app.redis = Redis.from_url(app.config['REDIS_URL'])
         
         app.task_queue = rq.Queue(app.config['QUEUE'], connection=app.redis, default_timeout=-1)
-
+        app.before_request(models.UserModel.User.load_profile)
         app.register_blueprint(api_bp, url_prefix='/api')
         app.register_blueprint(api_v2_bp, url_prefix='/v2')
         app.register_blueprint(auth_bp, url_prefix='/auth')
@@ -88,11 +88,6 @@ def create_app():
             return "Application is running"
 
         app.add_url_rule('/', view_func=healthcheck)
-        
-        # @app.route('/graphql')
-        # def graphql():
-        #   from app.graphql.schema import schema
-        #   return 
           
         return app
 

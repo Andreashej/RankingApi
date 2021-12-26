@@ -1,5 +1,6 @@
 from flask.globals import g
 from flask_restful import Resource
+from app.Responses import ApiErrorResponse
 from app.models.ResultModel import Result
 from app.Responses import ApiResponse
 from app.models.RankingResults import RankingResults
@@ -26,4 +27,9 @@ class RankingResultMarksResource(Resource):
 
     @RankingResults.from_request
     def get(self, id):        
-        return ApiResponse(Result.load_many(g.ranking_result.marks)).response()
+        try:
+            results = Result.load_many(g.ranking_result.marks)
+        except ApiErrorResponse as e:
+            return e.response()
+
+        return ApiResponse(results).response()
