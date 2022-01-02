@@ -1,5 +1,6 @@
 #Ignore virtual env
 env/
+venv/
 **/__pycache__/
 .vscode/
 # Elastic Beanstalk Files
@@ -8,3 +9,5 @@ env/
 !.elasticbeanstalk/*.global.yml
 
 app/files/*
+
+.DS_Store
