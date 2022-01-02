@@ -1,4 +1,4 @@
-from flask import Flask, g
+from flask import Flask, g, request
 from flask import Blueprint
 from flask_cors import CORS
 from flask_restful import Api
@@ -13,6 +13,7 @@ from jwt import PyJWTError
 from redis import Redis
 import rq
 import os
+from app.utils import camel_to_snake
 
 from . import config
 
@@ -20,6 +21,10 @@ import requests
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+
+def request_camel_to_snake(*args, **kwargs):
+  for key in request.json:
+    request.json[camel_to_snake(key)] = request.json.pop(key)
 
 class FixedApi(Api):
   def error_router(self, original_handler, e):
@@ -75,6 +80,7 @@ def create_app():
         app.redis = Redis.from_url(app.config['REDIS_URL'])
         
         app.task_queue = rq.Queue(app.config['QUEUE'], connection=app.redis, default_timeout=-1)
+        app.before_request(request_camel_to_snake)
         app.before_request(models.UserModel.User.load_profile)
         app.register_blueprint(api_bp, url_prefix='/api')
         app.register_blueprint(api_v2_bp, url_prefix='/v2')

@@ -15,25 +15,6 @@ class ApiResponse:
         self.task = task
         
         self.message = message
-
-    
-    def define_schema(self, Schema, schema_options):
-        fields = request.args.get('fields')
-        only = fields.split(",") if fields else schema_options['only'].copy() if 'only' in schema_options and schema_options['only'] is not None else None
-
-        default_exclude = schema_options['exclude'].copy() if 'exclude' in schema_options and schema_options['exclude'] is not None else []
-        excluded_fields = request.args.get('exclude')
-        exclude = excluded_fields.split(",") + default_exclude if excluded_fields else default_exclude
-
-        expanded_fields = request.args.get('expand')
-        for expanded_field in expanded_fields.split(",") if expanded_fields else []:
-            
-            if exclude is not None and len(exclude) > 0 and expanded_field in exclude: exclude.remove(expanded_field)
-            if only is not None and len(only) > 0: only.append(expanded_fields)
-        
-        many = isinstance(self.data, list)
-
-        self.schema = Schema(many=many, exclude=exclude, only=only)
     
     def get_data(self):
         if self.data is None: return { }
@@ -66,13 +47,13 @@ class ApiResponse:
         return {
             'pagination': {
                 'page': g.pagination.page,
-                'total_pages': g.pagination.pages,
-                'per_page': g.pagination.per_page,
-                'has_next': g.pagination.has_next,
-                'has_previous': g.pagination.has_prev,
-                'previous_page': g.pagination.prev_num,
-                'next_page': g.pagination.next_num,
-                'total_items': g.pagination.total
+                'totalPages': g.pagination.pages,
+                'perPage': g.pagination.per_page,
+                'hasNext': g.pagination.has_next,
+                'hasPrevious': g.pagination.has_prev,
+                'previousPage': g.pagination.prev_num,
+                'nextPage': g.pagination.next_num,
+                'totalItems': g.pagination.total
             } 
         }
 

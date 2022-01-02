@@ -5,40 +5,12 @@ from flask.globals import g
 from flask_restful.reqparse import RequestParser
 from app.Responses import ApiErrorResponse
 from .. import db
-import shlex
 import math
 from sqlalchemy.orm.properties import ColumnProperty
 from sqlalchemy.orm.relationships import RelationshipProperty
 from flask_sqlalchemy import BaseQuery
 from datetime import date, datetime
-
-def split(string, maxsplit=-1):
-    """ Split a string with shlex when possible, and add support for maxsplit. """
-    if maxsplit == -1:
-        try:
-            split_object = shlex.shlex(string, posix=True)
-            split_object.quotes = '"`'
-            split_object.whitespace_split = True
-            split_object.commenters = ""
-            return list(split_object)
-        except ValueError:
-            return string.split(" ", maxsplit)
-
-    split_object = shlex.shlex(string, posix=True)
-    split_object.quotes = '"`'
-    split_object.whitespace_split = True
-    split_object.commenters = ""
-    maxsplit_object = []
-    splits = 0
-
-    while splits < maxsplit:
-        maxsplit_object.append(next(split_object))
-
-        splits += 1
-
-    maxsplit_object.append(split_object.instream.read())
-
-    return maxsplit_object
+from app.utils import split, camel_to_snake, snake_to_camel
 
 class RestMixin():
     BLOCK_FROM_JSON = []
@@ -105,7 +77,7 @@ class RestMixin():
         except Exception as e:
             raise ApiErrorResponse(str(e))
 
-        per_page = request.args.get('per_page', 10, int)
+        per_page = request.args.get('perPage', 10, int)
         if request.args.get('page'):
             if request.args.get('limit') is not None:
                 raise ApiErrorResponse('Limit is not compatible with pagination', 400)
@@ -142,7 +114,7 @@ class RestMixin():
     def apply_filter(cls, query, filter):
         [fieldpath, operator, value] = split(filter, 2)
 
-        fields = fieldpath.split('.')
+        fields = [camel_to_snake(field) for field in fieldpath.split('.')]
         query, field = cls.join_by_mapper(query, fields, cls)
         
         if isinstance(field, str):
@@ -187,9 +159,13 @@ class RestMixin():
         order = request.args.get('order_by')
 
         if order:
-            [field, direction] = order.split()
-            fields = field.split('.')
+            [fieldpath, direction] = order.split()
+            fields = [camel_to_snake(field) for field in fieldpath.split('.')]
             query, field = cls.join_by_mapper(query, fields, cls)
+
+            if isinstance(field, str):
+                field = getattr(cls, field)
+
             if direction == 'desc':
                 query = query.order_by(field.desc())
             else:
@@ -213,13 +189,15 @@ class RestMixin():
     def to_json(self, fields = [], expand = []):
         if len(fields) == 0: fields = self.default_fields
 
-        json = { }
+        fields = camel_to_snake(fields)
+        expand = camel_to_snake(expand)
 
+        json = { }
 
         valid_fields = [field for field in fields if hasattr(self, field) and field not in self.BLOCK_FROM_JSON]
         
-        for attr in valid_fields:
-            value = getattr(self, attr)
+        for field in valid_fields:
+            value = getattr(self, field)
 
             if isinstance(value, datetime):
                 value = value.isoformat()
@@ -231,7 +209,7 @@ class RestMixin():
                 value = list(value)
 
             json.update({
-                attr: value
+                snake_to_camel(field): value
             })
 
         for field in expand:
@@ -247,7 +225,7 @@ class RestMixin():
                     expand_obj = [item.to_json() for item in attr]
 
                 json.update({
-                    field: expand_obj
+                    snake_to_camel(field): expand_obj
                 })
 
 
