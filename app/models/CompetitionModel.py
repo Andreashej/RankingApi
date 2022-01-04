@@ -26,7 +26,7 @@ class Competition(db.Model, RestMixin):
     country = db.Column(db.String(2), default='DK')
     state = db.Column(db.String(12), default="NORMAL") # { NORMAL, BLOCKED, CANCELLED, UNLISTED }
     include_in_ranking = db.relationship('RankingList', secondary=competitions_rankinglists, lazy='dynamic', back_populates='competitions')
-    tests = db.relationship("Test", backref="competition", lazy='dynamic', cascade='all,delete')
+    tests = db.relationship("Test", backref="competition", lazy='dynamic', cascade='all,delete', order_by='Test.testcode')
     tasks = db.relationship("Task", backref="competition", lazy='dynamic')
 
     def __init__(self, name='', startdate=None, enddate=None, isi_id = None, country='XX'):

@@ -23,8 +23,9 @@ from requests.packages.urllib3.exceptions import InsecureRequestWarning
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 def request_camel_to_snake(*args, **kwargs):
-  for key in request.json:
-    request.json[camel_to_snake(key)] = request.json.pop(key)
+  if request.json is not None:
+    for key in request.json:
+      request.json[camel_to_snake(key)] = request.json.pop(key)
 
 class FixedApi(Api):
   def error_router(self, original_handler, e):

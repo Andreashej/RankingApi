@@ -156,7 +156,7 @@ class RestMixin():
         for filter in filters:
             query = cls.apply_filter(query, filter)
         
-        order = request.args.get('order_by')
+        order = request.args.get('orderBy')
 
         if order:
             [fieldpath, direction] = order.split()
@@ -199,11 +199,8 @@ class RestMixin():
         for field in valid_fields:
             value = getattr(self, field)
 
-            if isinstance(value, datetime):
-                value = value.isoformat()
-                
             if isinstance(value, date):
-                value = datetime.strftime(value, '%Y-%m-%d')
+                value = value.isoformat()
             
             if isinstance(value, map):
                 value = list(value)
