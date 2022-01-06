@@ -1,11 +1,15 @@
 from .. import db
 from flask import current_app
+from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy.sql.functions import rank
 
 from .RestMixin import RestMixin
 
 class Result(db.Model, RestMixin):
     RESOURCE_NAME = 'result'
     RESOURCE_NAME_PLURAL = 'results'
+
+    INCLUDE_IN_JSON = ['rank']
 
     __tablename__ = 'results'
     id = db.Column(db.Integer, primary_key=True)
@@ -21,6 +25,10 @@ class Result(db.Model, RestMixin):
     
     def __repr__(self):
         return '<Result {} {} {} >'.format(self.test.testcode, self.mark, self.rider.firstname)
+    
+    @hybrid_property
+    def rank(self):
+        return self.test.ranks[self.id]
 
     def get_mark(self, convertTime = False):
         mark = None

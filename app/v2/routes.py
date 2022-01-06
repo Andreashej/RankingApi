@@ -6,6 +6,8 @@ from app.v2.resources.RankingList import RankingListsResource, RankingListResour
 from app.v2.resources.Competition import CompetitionResource, CompetitionsResource, CompetitionTestsResource
 from app.v2.resources.Test import TestsResource, TestResource, TestResultsResource
 from app.v2.resources.RankingResult import RankingResultResource, RankingResultMarksResource,RankingResultsResource
+from app.v2.resources.Auth import TokenRefresh, UserLogin, UserLogoutAccess, UserLogoutRefresh, ProfileResource, UsersResource, UserResource
+
 from app import api_v2 as api
 
 api.add_resource(CompetitionsResource, '/competitions', endpoint='competitions')
@@ -39,3 +41,11 @@ api.add_resource(HorseResultsResource, '/horses/<int:id>/results', endpoint='hor
 
 api.add_resource(TasksResource, '/tasks', endpoint='tasks')
 api.add_resource(TaskResource, '/tasks/<string:id>', endpoint='task')
+
+api.add_resource(UserLogin, '/login', endpoint='login')
+api.add_resource(UserLogoutAccess, '/logout/access', endpoint='logoutaccess')
+api.add_resource(UserLogoutRefresh, '/logout/refresh', endpoint='logoutrefresh')
+api.add_resource(TokenRefresh, '/token/refresh', endpoint='tokenrefresh')
+api.add_resource(ProfileResource, '/profile', endpoint='profile')
+api.add_resource(UsersResource, '/users', endpoint='users')
+api.add_resource(UserResource, '/users/<int:id>', endpoint='user')

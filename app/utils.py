@@ -1,4 +1,22 @@
 import re, shlex
+from sqlalchemy.ext.hybrid import hybrid_property
+
+_missing = object()   # sentinel object for missing values
+
+
+class cached_hybrid_property(hybrid_property):
+    def __get__(self, instance, owner):
+        if instance is None:
+            # getting the property for the class
+            return self.expr(owner)
+        else:
+            # getting the property for an instance
+            name = self.fget.__name__
+            value = instance.__dict__.get(name, _missing)
+            if value is _missing:
+                value = self.fget(instance)
+                instance.__dict__[name] = value
+            return value
 
 camel_expr = re.compile('((?<=[a-z0-9])[A-Z]|(?!^)[A-Z](?=[a-z]))')
 

@@ -1,3 +1,4 @@
+from app.utils import cached_hybrid_property
 from app.models.CompetitionModel import Competition
 from app.models.RankingListModel import RankingList
 from .. import db
@@ -5,6 +6,7 @@ from sqlalchemy.ext.hybrid import hybrid_property
 from .ResultModel import Result
 from .RestMixin import ApiErrorResponse, RestMixin
 from sqlalchemy import case, func
+from sqlalchemy.sql.functions import rank
 
 tests_rankinglists = db.Table('tests_ranking_association',
     db.Column('test_id', db.Integer, db.ForeignKey('tests.id'), primary_key=True),
@@ -49,6 +51,20 @@ class Test(db.Model, RestMixin):
             return query.filter(Result.mark > 0).order_by(Result.mark.asc())
         else:
             return query.order_by(Result.mark.desc())
+    
+    @cached_hybrid_property
+    def ranks(self):
+        ordering = Result.mark if self.order == 'asc' else Result.mark.desc()
+
+        query = db.session.query(
+            Result.id, 
+            rank().over(
+                partition_by=Result.test_id,
+                order_by=ordering
+            ).label('rank'))\
+            .filter(Result.test_id==self.id)\
+
+        return { id: rank for (id, rank) in query.all() }
 
     def add_result(self, rider, horse, mark, state = None, **kwargs):
     
