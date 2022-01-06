@@ -28,8 +28,8 @@ class UserLogin(Resource):
         if current_user.verify_password(password):
             return { 
                 'data': current_user.to_json(),
-                'access_token': current_user.create_access_token(),
-                'refresh_token': current_user.create_refresh_token()
+                'accessToken': current_user.create_access_token(),
+                'refreshToken': current_user.create_refresh_token()
             }
         
         return { 'message': "Wrong credentials" }
