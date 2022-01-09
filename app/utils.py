@@ -1,5 +1,6 @@
 import re, shlex
 from sqlalchemy.ext.hybrid import hybrid_property
+from datetime import datetime
 
 _missing = object()   # sentinel object for missing values
 

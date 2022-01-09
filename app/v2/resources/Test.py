@@ -9,7 +9,7 @@ class TestsResource(Resource):
     def __init__(self):
         self.reqparse = reqparse.RequestParser()
         self.reqparse.add_argument('testcode', type=str, required=True, location='json')
-        self.reqparse.add_argument('competition_id')
+        self.reqparse.add_argument('competitionId')
 
     @Test.from_request(many=True)
     def get(self):
@@ -31,8 +31,8 @@ class TestResource(Resource):
     def __init__(self):
         self.reqparse = reqparse.RequestParser()
         self.reqparse.add_argument('order', type=str, required=False, location='json')
-        self.reqparse.add_argument('mark_type', type=str, required=False, location='json')
-        self.reqparse.add_argument('rounding_precision', type=int, required=False, location='json')
+        self.reqparse.add_argument('markType', type=str, required=False, location='json')
+        self.reqparse.add_argument('roundingPrecision', type=int, required=False, location='json')
     
     @Test.from_request
     def get(self, id):
@@ -43,14 +43,7 @@ class TestResource(Resource):
     def patch(self, id):
         args = self.reqparse.parse_args()
 
-        if args['order']:
-            g.test.order = args['order']
-
-        if args['mark_type']:
-            g.test.mark_type = args['mark_type']
-
-        if args['rounding_precision']:
-            g.test.rounding_precision = args['rounding_precision']
+        g.test.update(self.reqparse)
 
         try:
             g.test.save()
@@ -72,8 +65,8 @@ class TestResource(Resource):
 class TestResultsResource(Resource):
     def __init__(self):
         self.reqparse = reqparse.RequestParser()
-        self.reqparse.add_argument('rider_id', type=int, required=True, location='json')
-        self.reqparse.add_argument('horse_id', type=int, required=True, location='json')
+        self.reqparse.add_argument('riderId', type=int, required=True, location='json')
+        self.reqparse.add_argument('horseId', type=int, required=True, location='json')
         self.reqparse.add_argument('mark', type=float, required=True, location='json')
         self.reqparse.add_argument('state', type=str, required=False, location='json')
 
@@ -94,8 +87,8 @@ class TestResultsResource(Resource):
 
         result = None
         try:
-            rider = Rider.load_one(args['rider_id'])
-            horse = Horse.load_one(args['horse_id'])
+            rider = Rider.load_one(args['riderId'])
+            horse = Horse.load_one(args['horseId'])
             result = g.test.add_result(rider, horse, args['mark'], args['state'])
         except ApiErrorResponse as e:
             return e.response()

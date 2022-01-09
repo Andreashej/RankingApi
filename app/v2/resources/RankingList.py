@@ -11,7 +11,7 @@ class RankingListsResource(Resource):
         self.reqparse = RequestParser()
         self.reqparse.add_argument('listname', type=str, required=True, location='json')
         self.reqparse.add_argument('shortname', type=str, required=True, location='json')
-        self.reqparse.add_argument('results_valid_days', type=str, required=False, location='json')
+        self.reqparse.add_argument('resultsValidDays', type=str, required=False, location='json')
 
     @RankingList.from_request(many=True)
     def get(self):
@@ -37,7 +37,7 @@ class RankingListResource(Resource):
         self.reqparse = RequestParser()
         self.reqparse.add_argument('listname', type=str, required=False, location='json')
         self.reqparse.add_argument('shortname', type=str, required=False, location='json')
-        self.reqparse.add_argument('results_valid_days', type=str, required=False, location='json')
+        self.reqparse.add_argument('resultsValidDays', type=str, required=False, location='json')
 
     @RankingList.from_request
     def get(self, id):
@@ -69,12 +69,12 @@ class RankingListTestsResource(Resource):
     def __init__(self):
         self.reqparse = RequestParser()
         self.reqparse.add_argument('testcode', type=str, required=True, location='json')
-        self.reqparse.add_argument('included_marks', type=int, required=True, location='json')
+        self.reqparse.add_argument('includedMarks', type=int, required=True, location='json')
         self.reqparse.add_argument('order', type=str, required=True, location='json')
         self.reqparse.add_argument('grouping', type=str, required=True, location='json')
-        self.reqparse.add_argument('min_mark', type=float, required=True, location='json')
-        self.reqparse.add_argument('rounding_precision', type=int, required=True, location='json')
-        self.reqparse.add_argument('mark_type', type=str, required=True, location='json')
+        self.reqparse.add_argument('minMark', type=float, required=True, location='json')
+        self.reqparse.add_argument('roundingPrecision', type=int, required=True, location='json')
+        self.reqparse.add_argument('markType', type=str, required=True, location='json')
 
     @RankingList.from_request
     def get(self, id):     

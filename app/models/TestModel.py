@@ -62,7 +62,8 @@ class Test(db.Model, RestMixin):
                 partition_by=Result.test_id,
                 order_by=ordering
             ).label('rank'))\
-            .filter(Result.test_id==self.id)\
+            .filter(Result.test_id==self.id, Result.mark > 0)\
+
 
         return { id: rank for (id, rank) in query.all() }
 

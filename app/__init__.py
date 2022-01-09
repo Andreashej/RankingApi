@@ -24,8 +24,12 @@ requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 def request_camel_to_snake(*args, **kwargs):
   if request.json is not None:
+    new_json = { }
     for key in request.json:
-      request.json[camel_to_snake(key)] = request.json.pop(key)
+      print(key)
+      new_json[camel_to_snake(key)] = request.json[key]
+    request.json = new_json
+    print ("Done")
 
 class FixedApi(Api):
   def error_router(self, original_handler, e):
@@ -77,7 +81,7 @@ def create_app():
         app.redis = Redis.from_url(app.config['REDIS_URL'])
         
         app.task_queue = rq.Queue(app.config['QUEUE'], connection=app.redis, default_timeout=-1)
-        app.before_request(request_camel_to_snake)
+        # app.before_request(request_camel_to_snake)
         app.before_request(models.UserModel.User.load_profile)
         app.register_blueprint(api_bp, url_prefix='/api')
         app.register_blueprint(api_v2_bp, url_prefix='/v2')

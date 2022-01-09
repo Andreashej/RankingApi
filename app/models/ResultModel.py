@@ -28,7 +28,7 @@ class Result(db.Model, RestMixin):
     
     @hybrid_property
     def rank(self):
-        return self.test.ranks[self.id]
+        return self.test.ranks[self.id] if self.id in self.test.ranks else None
 
     def get_mark(self, convertTime = False):
         mark = None

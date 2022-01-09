@@ -1,6 +1,6 @@
 import datetime
 from flask.globals import g
-from flask_restful import Resource, reqparse
+from flask_restful import Resource, reqparse, inputs
 from app.Responses import ApiErrorResponse, ApiResponse
 from app import db
 from app.models import Competition, RankingList, Test
@@ -11,8 +11,8 @@ class CompetitionsResource(Resource):
         self.reqparse = reqparse.RequestParser()
         self.reqparse.add_argument('name', type=str, required=True, location='json')
         self.reqparse.add_argument('isirank', type=str, required=False, location='json')
-        self.reqparse.add_argument('first_date', type=lambda x: datetime.datetime.strptime(x, '%d-%m-%Y'), required=True, location='json')
-        self.reqparse.add_argument('last_date', type=lambda x: datetime.datetime.strptime(x, '%d-%m-%Y'), required=True, location='json')
+        self.reqparse.add_argument('firstDate', type=lambda x: inputs.datetime_from_iso8601, required=True, location='json')
+        self.reqparse.add_argument('lastDate', type=lambda x: inputs.datetime_from_iso8601, required=True, location='json')
         self.reqparse.add_argument('country', type=str, location='json', required=True)
     
     @Competition.from_request(many=True)
@@ -49,10 +49,10 @@ class CompetitionResource(Resource):
     def __init__(self):
         self.reqparse = reqparse.RequestParser()
         self.reqparse.add_argument('name', type=str, location='json')
-        self.reqparse.add_argument('isirank_id', type=str, location='json')
-        self.reqparse.add_argument('first_date', type=lambda x: datetime.datetime.strptime(x, '%Y-%m-%d'), location='json')
-        self.reqparse.add_argument('last_date', type=lambda x: datetime.datetime.strptime(x, '%Y-%m-%d'), location='json')
-        self.reqparse.add_argument('ranking_scopes', type=str, action='append', location='json')
+        self.reqparse.add_argument('extId', type=str, location='json')
+        self.reqparse.add_argument('firstDate', type=lambda x: datetime.datetime.strptime(x, '%Y-%m-%d'), location='json')
+        self.reqparse.add_argument('lastDate', type=lambda x: datetime.datetime.strptime(x, '%Y-%m-%d'), location='json')
+        self.reqparse.add_argument('rankingScopes', type=str, action='append', location='json')
         self.reqparse.add_argument('country', type=str, location='json')
         self.reqparse.add_argument('state', type=str, location='json')
 
@@ -66,8 +66,8 @@ class CompetitionResource(Resource):
         g.competition.update(self.reqparse)
         
         args = self.reqparse.parse_args()
-        if args['ranking_scopes'] is not None:
-            for ranking in args['ranking_scopes']:
+        if args['rankingScopes'] is not None:
+            for ranking in args['rankingScopes']:
                 rankinglist = RankingList.query.filter_by(shortname=ranking).one()
                 g.competition.include_in_ranking.append(rankinglist)
 
@@ -95,8 +95,8 @@ class CompetitionTestsResource(Resource):
         self.reqparse = reqparse.RequestParser()
         self.reqparse.add_argument('testcode', type=str, required=True, location='json')
         self.reqparse.add_argument('order', type=str, required=False, location='json')
-        self.reqparse.add_argument('mark_type', type=str, required=False, location='json')
-        self.reqparse.add_argument('rounding_precision', type=str, required=False, location='json')
+        self.reqparse.add_argument('markType', type=str, required=False, location='json')
+        self.reqparse.add_argument('roundingPrecision', type=str, required=False, location='json')
 
     @Competition.from_request
     def get(self, id):

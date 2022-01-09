@@ -15,12 +15,12 @@ class RankingResource(Resource):
     def __init__(self) -> None:
         self.reqparse = RequestParser()
         self.reqparse.add_argument('testcode', type=str, required=False, location="json")
-        self.reqparse.add_argument('included_marks', type=int, required=False, location="json")
+        self.reqparse.add_argument('includedMarks', type=int, required=False, location="json")
         self.reqparse.add_argument('order', type=str, required=False, location="json")
         self.reqparse.add_argument('grouping', type=str, required=False, location="json")
-        self.reqparse.add_argument('min_mark', type=int, required=False, location="json")
-        self.reqparse.add_argument('rounding_precision', type=int, required=False, location="json")
-        self.reqparse.add_argument('mark_type', type=str, required=False, location="json")
+        self.reqparse.add_argument('minMark', type=int, required=False, location="json")
+        self.reqparse.add_argument('roundingPrecision', type=int, required=False, location="json")
+        self.reqparse.add_argument('markType', type=str, required=False, location="json")
     
     @RankingListTest.from_request
     def get(self, id):

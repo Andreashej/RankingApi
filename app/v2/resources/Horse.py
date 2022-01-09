@@ -11,8 +11,8 @@ from app import db
 class HorsesResource(Resource):
     def __init__(self) -> None:
         self.reqparse = reqparse.RequestParser()
-        self.reqparse.add_argument('feif_id', type=str, required=True, location='json')
-        self.reqparse.add_argument('horse_name', type=str, required=False, default='', location='json')
+        self.reqparse.add_argument('feifId', type=str, required=True, location='json')
+        self.reqparse.add_argument('horseName', type=str, required=False, default='', location='json')
     
     @Horse.from_request(many=True)
     def get(self):
@@ -22,7 +22,7 @@ class HorsesResource(Resource):
     def post(self):
         args = self.reqparse.parse_args()
 
-        horse = Horse(args['feif_id'], args['horse_name'])
+        horse = Horse(args['feifId'], args['horseName'])
 
         try:
             horse.wf_lookup(True)
@@ -37,8 +37,8 @@ class HorsesResource(Resource):
 class HorseResource(Resource):
     def __init__(self):
         self.reqparse = reqparse.RequestParser()
-        self.reqparse.add_argument('feif_id', type=str, required=False, location='json')
-        self.reqparse.add_argument('horse_name', type=str, required=False, default='', location='json')
+        self.reqparse.add_argument('feifId', type=str, required=False, location='json')
+        self.reqparse.add_argument('horseName', type=str, required=False, default='', location='json')
     
     @Horse.from_request
     def get(self, id):

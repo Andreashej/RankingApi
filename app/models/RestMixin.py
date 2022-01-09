@@ -271,9 +271,11 @@ class RestMixin():
         for attr in args:
             value = args[attr]
 
-            if value and hasattr(self, attr):
+            prop = camel_to_snake(attr)
+
+            if value and hasattr(self, prop):
                 try:
-                    setattr(self, attr, value)
+                    setattr(self, prop, value)
                 except Exception as e:
                     raise ApiErrorResponse(str(e))
     
