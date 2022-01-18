@@ -76,8 +76,6 @@ def create_app():
         from app.v1 import routes as routes_v1
         from app.v2 import routes as routes_v2
 
-        db.create_all()
-
         app.redis = Redis.from_url(app.config['REDIS_URL'])
         
         app.task_queue = rq.Queue(app.config['QUEUE'], connection=app.redis, default_timeout=-1)

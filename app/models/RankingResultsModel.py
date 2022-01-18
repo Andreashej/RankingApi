@@ -55,7 +55,6 @@ class RankingResults(db.Model, RestMixin):
         
     @hybrid_property
     def rank(self):
-        print (self.id)
         rank = self.test.ranks[self.id] if self.id in self.test.ranks else None
         return rank
 

@@ -1,0 +1,31 @@
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: icecompass-api-rq-worker
+  labels:
+    app: icecompass-api-rq-worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: icecompass-api-rq-worker
+  template:
+    metadata:
+      labels:
+        app: icecompass-api-rq-worker
+    spec:
+      containers:
+        - name: icecompass-api-rq-worker
+          image: iceranking-api
+          imagePullPolicy: Never
+          env:
+            - name: SERVER_NAME
+              value: localhost.localdomain:8000
+            - name: REDIS_URL
+              value: redis://redis-master:6379/0
+          command: ["venv/bin/rq"]
+          args: ['worker', '-u', 'redis://redis-master:6379/0', 'iceranking-tasks']
+
+---
