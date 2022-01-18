@@ -1,4 +1,6 @@
 from datetime import datetime, timedelta
+
+from sqlalchemy.ext.hybrid import hybrid_property
 from app.models.CompetitionModel import Competition
 from app.models.TestModel import Test
 from app.models.ResultModel import Result
@@ -6,7 +8,7 @@ from app import db, cache
 
 from functools import reduce
 
-from .RestMixin import ApiErrorResponse, RestMixin
+from .RestMixin import RestMixin
 
 rider_result = db.Table('rider_results', 
     db.Column('result_id', db.Integer, db.ForeignKey('results_cache.id', ondelete='CASCADE'), primary_key=True),
@@ -27,9 +29,10 @@ class RankingResults(db.Model, RestMixin):
     RESOURCE_NAME = 'ranking_result'
     RESOURCE_NAME_PLURAL = 'ranking_results'
 
+    INCLUDE_IN_JSON = ['rank']
+
     __tablename__ = 'results_cache'
     id = db.Column(db.Integer, primary_key=True)
-    rank = db.Column(db.Integer)
     mark = db.Column(db.Float)
     
     test_id = db.Column(db.Integer, db.ForeignKey('rankinglist_tests.id'), nullable=False, index=True)
@@ -49,12 +52,17 @@ class RankingResults(db.Model, RestMixin):
 
         for result in results:
             self.add_result(result)
+        
+    @hybrid_property
+    def rank(self):
+        print (self.id)
+        rank = self.test.ranks[self.id] if self.id in self.test.ranks else None
+        return rank
 
     def add_result(self, result):
         self.marks.append(result)
 
         if result.rider not in self.riders:
-            print(result.rider)
             if self.test.grouping == 'rider':
                 if self.riders.count() > 0: raise ValueError('Result cannot have marks with different riders when test is grouped by rider')
                 self.rider_id = result.rider.id
@@ -70,32 +78,36 @@ class RankingResults(db.Model, RestMixin):
             
     
     def calculate_mark(self):
-        testcount = 2 if self.test.testcode == 'C4' else 3 if self.test.testcode == 'C5' else 1
-
-        number_of_marks = self.test.included_marks * testcount
-
-
         valid_marks_query = self.marks\
             .filter(Result.mark > self.test.min_mark)\
             .join(Result.test)\
             .join(Test.competition)\
             .filter(Competition.last_date >= (datetime.now() - timedelta(days=self.test.rankinglist.results_valid_days)))
 
-        if valid_marks_query.count() < number_of_marks:
-            self.mark = None
-            self.rank = None
-            return
+        ordering = Result.mark if self.test.order == 'asc' else Result.mark.desc()
 
-        if self.test.order == 'asc':
-            valid_marks_query = valid_marks_query.order_by(Result.mark).limit(number_of_marks)
-        else:
-            valid_marks_query = valid_marks_query.order_by(Result.mark.desc()).limit(number_of_marks)
+        valid_marks_query = valid_marks_query.order_by(ordering)
+
+        valid_group_marks = None
+        for testgroup in self.test.testgroups:
+            q = valid_marks_query.filter(Test.testcode.in_(testgroup)).limit(self.test.included_marks)
+            print (q.count(), self.test.included_marks)
+            if q.count() < self.test.included_marks:
+                self.mark = None
+                return
+
+            if valid_group_marks is None:
+                valid_group_marks = q
+            else:
+                valid_group_marks.union(q)
         
-        valid_marks = valid_marks_query.all()
+        valid_marks = valid_group_marks.all()
+
+        print (valid_marks)
 
         sum_of_marks = reduce(lambda sum, current: sum + current.get_mark(self.test.testcode == 'C5'), valid_marks, 0)
 
-        self.mark = round(sum_of_marks / number_of_marks, self.test.rounding_precision)
+        self.mark = round(sum_of_marks / valid_group_marks.count(), self.test.rounding_precision)
 
     def __repr__(self):
         return "<{}.{}>".format(self.__class__.__name__, self.id)
@@ -103,7 +115,7 @@ class RankingResults(db.Model, RestMixin):
     @classmethod
     @cache.memoize(timeout=1440)
     def get_results(cls, test):
-        from ..models import RankingListResultSchema
+        from . import RankingListResultSchema
         
         if test.grouping == 'rider':
             results_schema = RankingListResultSchema(many=True, exclude=("horses",))

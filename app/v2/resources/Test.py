@@ -30,6 +30,7 @@ class TestsResource(Resource):
 class TestResource(Resource):
     def __init__(self):
         self.reqparse = reqparse.RequestParser()
+        self.reqparse.add_argument('testcode', type=str, required=False, location='json')
         self.reqparse.add_argument('order', type=str, required=False, location='json')
         self.reqparse.add_argument('markType', type=str, required=False, location='json')
         self.reqparse.add_argument('roundingPrecision', type=int, required=False, location='json')

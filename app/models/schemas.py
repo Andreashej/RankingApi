@@ -139,7 +139,7 @@ class RankingListResultSchema(ma.SQLAlchemyAutoSchema):
         model = RankingResults
 
         # exclude = ["test"]
-
+    rank = ma.Integer()
     riders = ma.Nested("RiderSchema", many=True, only=("id","fullname",))
     horses = ma.Nested("HorseSchema", many=True, only=("id","horse_name","feif_id",))
     marks = ma.Nested("ResultSchema", many=True, only=("id","mark","horse.horse_name","horse.feif_id","test.competition.name","test.competition.id", "test.testcode"))

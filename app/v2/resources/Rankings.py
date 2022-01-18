@@ -1,6 +1,6 @@
 from flask.globals import g
 from flask_restful import Resource
-from app.models.RankingResults import RankingResults
+from app.models.RankingResultsModel import RankingResults
 from app.models.RankingListTestModel import RankingListTest
 from app.Responses import ApiErrorResponse, ApiResponse
 from flask_restful.reqparse import RequestParser
@@ -52,12 +52,12 @@ class RankingResultsRankingResource(Resource):
     def __init__(self):
         pass
 
+    @RankingListTest.from_request
     def get(self, id):
         results = []
 
         try:
-            query = RankingResults.query.filter_by(test_id=id).order_by(RankingResults.rank)
-            results = RankingResults.load_many(query=query)
+            results = RankingResults.load_many(g.ranking.results)
         except ApiErrorResponse as e:
             return e.response()
         except Exception as e:

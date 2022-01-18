@@ -1,11 +1,8 @@
 from app.utils import cached_hybrid_property
-from app.models.CompetitionModel import Competition
-from app.models.RankingListModel import RankingList
 from .. import db
 from sqlalchemy.ext.hybrid import hybrid_property
 from .ResultModel import Result
 from .RestMixin import ApiErrorResponse, RestMixin
-from sqlalchemy import case, func
 from sqlalchemy.sql.functions import rank
 
 tests_rankinglists = db.Table('tests_ranking_association',
@@ -24,7 +21,7 @@ class Test(db.Model, RestMixin):
     rounding_precision = db.Column(db.Integer, default=2)
     order = db.Column(db.String(4), default='desc')
     mark_type = db.Column(db.String(4), default='mark')
-    _results = db.relationship('Result', backref='test', lazy='dynamic', cascade="all,delete")
+    _results = db.relationship('Result', backref='test', lazy='dynamic')
     _include_in_ranking = db.relationship('RankingList', secondary=tests_rankinglists, lazy='dynamic')
 
     def __init__(self, testcode):
@@ -63,7 +60,6 @@ class Test(db.Model, RestMixin):
                 order_by=ordering
             ).label('rank'))\
             .filter(Result.test_id==self.id, Result.mark > 0)\
-
 
         return { id: rank for (id, rank) in query.all() }
 

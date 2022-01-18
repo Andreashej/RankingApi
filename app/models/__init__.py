@@ -7,7 +7,7 @@ from .HorseModel import Horse
 from .TaskModel import Task
 from .RankingListTestModel import RankingListTest
 from .UserModel import User
-from .RankingResults import RankingResults
+from .RankingResultsModel import RankingResults
 from .TestCatalogModel import TestCatalog
 from .RiderAliasModel import RiderAlias
 from .RevokedTokenModel import RevokedToken

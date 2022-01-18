@@ -1,7 +1,6 @@
 from .. import db
 from flask import current_app
 from sqlalchemy.ext.hybrid import hybrid_property
-from sqlalchemy.sql.functions import rank
 
 from .RestMixin import RestMixin
 

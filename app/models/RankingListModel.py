@@ -15,6 +15,9 @@ class RankingList(db.Model, RestMixin):
     RESOURCE_NAME = 'rankinglist'
     RESOURCE_NAME_PLURAL = 'rankinglists'
 
+    INCLUDE_IN_JSON = ['logo_url']
+    EXCLUDE_FROM_JSON = ['branding_image']
+
     __tablename__ = 'rankinglists'
     id = db.Column(db.Integer, primary_key=True)
     listname = db.Column(db.String(250))
@@ -30,7 +33,7 @@ class RankingList(db.Model, RestMixin):
         self.shortname = shortname
 
     @hybrid_property
-    def logo(self):
+    def logo_url(self):
         if self.branding_image:
             return '//' + current_app.config['SERVER_NAME'] + '/images/' + self.branding_image
         

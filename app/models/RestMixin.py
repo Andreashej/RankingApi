@@ -130,6 +130,9 @@ class RestMixin():
         if hasattr(field, 'type'):
             if (field.type == 'DATE'):
                 value = datetime.datetime.strptime(value, '%Y-%m-%d')
+            
+            if (field.type == 'BOOL'):
+                value = value.lower() != 'true'
         
         if operator == 'contains':
             query = query.filter(field.contains(value))

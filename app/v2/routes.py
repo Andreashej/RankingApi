@@ -8,6 +8,7 @@ from app.v2.resources.Competition import CompetitionResource, CompetitionsResour
 from app.v2.resources.Test import TestsResource, TestResource, TestResultsResource
 from app.v2.resources.RankingResult import RankingResultResource, RankingResultMarksResource,RankingResultsResource
 from app.v2.resources.Auth import TokenRefresh, UserLogin, UserLogoutAccess, UserLogoutRefresh, ProfileResource, UsersResource, UserResource
+from app.v2.resources.TestCatalog import TestCatalogResource
 
 from app import api_v2 as api
 
@@ -53,3 +54,5 @@ api.add_resource(TokenRefresh, '/token/refresh', endpoint='tokenrefresh')
 api.add_resource(ProfileResource, '/profile', endpoint='profile')
 api.add_resource(UsersResource, '/users', endpoint='users')
 api.add_resource(UserResource, '/users/<int:id>', endpoint='user')
+
+api.add_resource(TestCatalogResource, '/test-catalog', endpoint='test_catalog')

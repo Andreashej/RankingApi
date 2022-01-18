@@ -117,10 +117,9 @@ def flush_ranking(ranking_id):
         results = ranking.valid_competition_results
 
         for i, result in enumerate(results):
+            print(result)
             ranking.register_result(result)
             _set_task_progress(100 * i // len(results))
-        
-        ranking.compute_rank()
 
         try:
             db.session.commit()
@@ -139,14 +138,12 @@ def recompute_ranking(ranking_id):
         _set_task_progress(0)
         ranking = RankingListTest.query.get(ranking_id)
 
-        ranking_results = RankingResults.query.filter_by(test_id = ranking.id).all()
+        results = RankingResults.query.filter_by(test_id = ranking.id).filter(RankingResults.mark.isnot(None)).all()
 
-        for i, result in enumerate(ranking_results):
+        for i, result in enumerate(results):
+            print(result)
             result.calculate_mark()
-
-            _set_task_progress(i * 100 // len(ranking_results))
-        
-        ranking.compute_rank()
+            _set_task_progress(100 * i // len(results))
 
         try:
             db.session.commit()
@@ -256,7 +253,3 @@ def horse_lookup(horses = []):
         db.session.rollback()
         app.logger.error(e, exc_info=sys.exc_info())
         _set_task_progress(100, True)
-
-    
-if __name__ == '__main__':
-    recompute_ranking(1)

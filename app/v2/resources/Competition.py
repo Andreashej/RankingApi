@@ -11,8 +11,8 @@ class CompetitionsResource(Resource):
         self.reqparse = reqparse.RequestParser()
         self.reqparse.add_argument('name', type=str, required=True, location='json')
         self.reqparse.add_argument('isirank', type=str, required=False, location='json')
-        self.reqparse.add_argument('firstDate', type=lambda x: inputs.datetime_from_iso8601, required=True, location='json')
-        self.reqparse.add_argument('lastDate', type=lambda x: inputs.datetime_from_iso8601, required=True, location='json')
+        self.reqparse.add_argument('firstDate', type=lambda x: datetime.datetime.strptime(x, '%Y-%m-%d'), required=True, location='json')
+        self.reqparse.add_argument('lastDate', type=lambda x: datetime.datetime.strptime(x, '%Y-%m-%d'), required=True, location='json')
         self.reqparse.add_argument('country', type=str, location='json', required=True)
     
     @Competition.from_request(many=True)
@@ -23,7 +23,7 @@ class CompetitionsResource(Resource):
     def post(self):        
         args = self.reqparse.parse_args()
 
-        competition = Competition(args['name'], args['first_date'], args['last_date'], args['isirank'], args['country'])
+        competition = Competition(args['name'], args['firstDate'], args['lastDate'], args['isirank'], args['country'])
 
         competition.update(self.reqparse)
 

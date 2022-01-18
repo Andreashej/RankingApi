@@ -1,20 +1,20 @@
 from datetime import datetime, timedelta
 from sqlalchemy.ext.hybrid import hybrid_method, hybrid_property
-from sqlalchemy.orm import base
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.sql.functions import rank
 from app.models.CompetitionModel import Competition
 from app.models.RankingListModel import RankingList
 from app.models.TestModel import Test
-from app.models.RankingResults import rider_result, horse_result, RankingResults
+from app.models.RankingResultsModel import rider_result, horse_result, RankingResults
 from app.models.ResultModel import Result
+from app.utils import cached_hybrid_property
 from .. import db
 
 from flask import current_app
 
 from .TaskModel import Task
 
-from .RestMixin import ApiErrorResponse, RestMixin
+from .RestMixin import RestMixin
 
 class RankingListTest(db.Model, RestMixin):
     RESOURCE_NAME = 'ranking'
@@ -32,7 +32,16 @@ class RankingListTest(db.Model, RestMixin):
     mark_type = db.Column(db.String(4), default='mark') # Allowed values: {mark, time, comb}
     tasks = db.relationship("Task", backref="test", lazy='dynamic', cascade="all, delete")
 
-    ranking_results_cached = db.relationship("RankingResults", backref="test", lazy="joined", order_by="RankingResults.rank")
+    _results = db.relationship("RankingResults", backref="test", lazy="dynamic")
+
+    @hybrid_property
+    def results(self):
+        query = self._results.join(RankingListTest).filter(RankingResults.mark.isnot(None))
+        
+        if self.order == 'asc':
+            return query.filter(RankingResults.mark > 0).order_by(RankingResults.mark.asc())
+        else:
+            return query.order_by(RankingResults.mark.desc())
 
     @hybrid_property
     def included_tests(self):
@@ -43,6 +52,26 @@ class RankingListTest(db.Model, RestMixin):
             return ['T1', 'T2', 'F1', 'PP1', 'P1', 'P2', 'P3']
         
         return [self.testcode]
+    
+    @hybrid_property
+    def testgroups(self):
+        if self.testcode == 'C4':
+            return [
+                ['T1', 'T2'],
+                ['V1']
+            ]
+        
+        if self.testcode == 'C5':
+            return [
+                ['T1', 'T2'],
+                ['V1', 'F1'],
+                ['PP1', 'P1', 'P2']
+            ]
+        
+        return [
+            [self.testcode]
+        ]
+
     
     @hybrid_property
     def tasks_in_progress(self):
@@ -85,10 +114,10 @@ class RankingListTest(db.Model, RestMixin):
             
         elif self.grouping == 'horse':
             try:
-                ranking_result = db.session.query(horse_result)\
-                    .filter(horse_result.c.horse_id==result.horse_id)\
-                    .join(RankingResults, RankingResults.id==horse_result.c.result_id)\
+                ranking_result = RankingResults.query\
                     .filter(RankingResults.test_id==self.id)\
+                    .join(horse_result, RankingResults.id==horse_result.c.horse_id)\
+                    .filter(horse_result.c.horse_id==result.horse_id)\
                     .one()
             except NoResultFound as e:
                 ranking_result = RankingResults(self)
@@ -97,22 +126,36 @@ class RankingListTest(db.Model, RestMixin):
         ranking_result.calculate_mark()
         db.session.add(ranking_result)
 
-    def compute_rank(self):
+    # def compute_rank(self):
+    #     ordering = RankingResults.mark if self.order == 'asc' else RankingResults.mark.desc()
+
+    #     ranked_results = RankingResults.query.with_entities(
+    #         RankingResults.id, 
+    #         rank().over(
+    #             partition_by=RankingResults.test_id,
+    #             order_by=ordering
+    #         ))\
+    #         .filter(RankingResults.test_id==self.id)\
+    #         .filter(RankingResults.mark.isnot(None))\
+    #         .all()
+
+    #     mappings = [{ 'id': result[0], 'rank': result[1] } for result in ranked_results]
+    #     db.session.bulk_update_mappings(RankingResults, mappings)
+    #     db.session.commit()
+    
+    @cached_hybrid_property
+    def ranks(self):
         ordering = RankingResults.mark if self.order == 'asc' else RankingResults.mark.desc()
 
-        ranked_results = RankingResults.query.with_entities(
+        query = db.session.query(
             RankingResults.id, 
             rank().over(
                 partition_by=RankingResults.test_id,
                 order_by=ordering
-            ))\
-            .filter(RankingResults.test_id==self.id)\
-            .filter(RankingResults.mark.isnot(None))\
-            .all()
+            ).label('rank'))\
+            .filter(RankingResults.test_id==self.id, RankingResults.mark.isnot(None))\
 
-        mappings = [{ 'id': result[0], 'rank': result[1] } for result in ranked_results]
-        db.session.bulk_update_mappings(RankingResults, mappings)
-        db.session.commit()
+        return { id: rank for (id, rank) in query.all() }
     
     @hybrid_method
     def result_is_valid(self, result):
@@ -124,10 +167,7 @@ class RankingListTest(db.Model, RestMixin):
     
     @hybrid_property
     def valid_competition_results(self):
-            # .filter(Test.competition.last_date >= (datetime.now() - timedelta(days=self.rankinglist.results_valid_days)),
-            #     Result.test.competition.rankinglist.shortname == self.rankinglist.shortname
-            # )\
-        base_query = Result.query.join(Result.test).filter(Test.testcode==self.testcode)
+        base_query = Result.query.join(Result.test).filter(Test.testcode.in_(self.included_tests))
         tests_query = base_query.join(RankingList, Test.include_in_ranking)
         competitions_query = base_query.join(Competition).join(RankingList, Competition.include_in_ranking)\
         
@@ -135,3 +175,9 @@ class RankingListTest(db.Model, RestMixin):
 
         results = query.filter(RankingList.shortname==self.rankinglist.shortname).all()
         return results
+    
+    def flush(self):
+        return self.launch_task('flush_ranking', 'Flushing {} ranking for {}'.format(self.testcode, self.rankinglist.shortname))
+
+    def recompute(self):
+        return self.launch_task('recompute_ranking', 'Recomputing {} ranking for {}'.format(self.testcode, self.rankinglist.shortname))
