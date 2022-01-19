@@ -6,7 +6,7 @@ metadata:
   name: icecompass-api
   namespace: production
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: icecompass-api
@@ -21,15 +21,7 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 5050
-          livenessProbe:
-            httpGet:
-              path: /
-              port: 5050
-            initialDelaySeconds: 10
-            periodSeconds: 60
           env:
-            - name: SERVER_NAME
-              value: api.icecompass.com
             - name: REDIS_URL
               value: redis://redis-master:6379/0
             - name: RDS_DB_NAME
@@ -50,33 +42,50 @@ spec:
                   key: rdsUser
       imagePullSecrets:
         - name: regcred
+
 ---
 
 apiVersion: v1
 kind: Service
 metadata:
   namespace: production
-  name: icecompass-api-service
+  name: flask-service
   annotations:
-    service.beta.kubernetes.io/aws-load-balancer-type: "alb"
-    service.beta.kubernetes.io/aws-load-balancer-ssl-cert: arn:aws:acm:eu-central-1:670211327818:certificate/f3eb57a8-c0ee-4f9e-a6fc-472667fa990c
-    service.beta.kubernetes.io/aws-load-balancer-backend-protocol: http
-    service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "443"
-    external-dns.alpha.kubernetes.io/hostname: api.icecompass.com
-  labels:
-    app: icecompass-api-service
+    alb.ingress.kubernetes.io/target-type: ip
 spec:
-  type: LoadBalancer
   ports:
-  - name: http
-    protocol: TCP
-    port: 80
-    targetPort: 5050
-  - name: https
-    protocol: TCP
-    port: 443
-    targetPort: 5050
+    - port: 80
+      targetPort: 5050
+      protocol: TCP
+  type: NodePort
   selector:
     app: icecompass-api
 
 ---
+
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  namespace: production
+  name: flask-ingress
+  annotations:
+    kubernetes.io/ingress.class: alb
+    external-dns.alpha.kubernetes.io/hostname: api.icecompass.com
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:eu-central-1:670211327818:certificate/f3eb57a8-c0ee-4f9e-a6fc-472667fa990c
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
+    alb.ingress.kubernetes.io/actions.ssl-redirect: '{"Type": "redirect", "RedirectConfig": { "Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_301"}}'
+spec:
+  rules:
+    - host: api.icecompass.com
+      http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: ssl-redirect
+              servicePort: use-annotation
+          - path: /*
+            pathType: Prefix
+            backend:
+              serviceName: flask-service
+              servicePort: 80
