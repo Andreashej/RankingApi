@@ -24,7 +24,7 @@ class TasksResource(Resource):
             ranking = RankingListTest.query.get(args['rankingId'])
 
             if ranking is None:
-                return ApiErrorResponse(f"Ranking with ID {args['rankingId']} does not exist", 400)
+                return ApiErrorResponse(f"Ranking with ID {args['rankingId']} does not exist", 400).response()
 
             if args['taskName'] == 'flush':
                 task = ranking.flush()
@@ -32,7 +32,7 @@ class TasksResource(Resource):
                 task = ranking.recompute()
             
             if task is None:
-                return ApiErrorResponse(f"Task with name {args['taskName']} does not exist for rankings")
+                return ApiErrorResponse(f"Task with name {args['taskName']} does not exist for rankings").response()
         
         return ApiResponse(task, 201).response()
     
