@@ -4,6 +4,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: icecompass-api-rq-worker
+  namespace: production
   labels:
     app: icecompass-api-rq-worker
 spec:
@@ -17,15 +18,33 @@ spec:
         app: icecompass-api-rq-worker
     spec:
       containers:
-        - name: icecompass-api-rq-worker
-          image: iceranking-api
-          imagePullPolicy: Never
-          env:
-            - name: SERVER_NAME
-              value: localhost.localdomain:8000
-            - name: REDIS_URL
-              value: redis://redis-master:6379/0
+        - name: icecompass-api
+          image: 670211327818.dkr.ecr.eu-central-1.amazonaws.com/icecompass:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5050
           command: ["venv/bin/rq"]
           args: ['worker', '-u', 'redis://redis-master:6379/0', 'iceranking-tasks']
+          env:
+            - name: SERVER_NAME
+              value: api.icecompass.com
+            - name: REDIS_URL
+              value: redis://redis-master:6379/0
+            - name: RDS_DB_NAME
+              value: iceranking
+            - name: RDS_HOSTNAME
+              value: iceranking-qa.c8fmxoomvwpn.eu-central-1.rds.amazonaws.com
+            - name: RDS_PASSWORD
+              valueFrom:
+                  secretKeyRef:
+                    name: rdsdb
+                    key: rdsPassword
+            - name: RDS_PORT
+              value: '3306'
+            - name: RDS_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: rdsdb
+                  key: rdsUser
 
 ---

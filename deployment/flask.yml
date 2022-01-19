@@ -4,6 +4,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: icecompass-api
+  namespace: production
 spec:
   replicas: 1
   selector:
@@ -16,26 +17,60 @@ spec:
     spec:
       containers:
         - name: icecompass-api
-          image: iceranking-api
-          imagePullPolicy: Never
+          image: 670211327818.dkr.ecr.eu-central-1.amazonaws.com/icecompass:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 5050
           env:
             - name: SERVER_NAME
-              value: localhost.localdomain:8000
+              value: api.icecompass.com
             - name: REDIS_URL
               value: redis://redis-master:6379/0
+            - name: RDS_DB_NAME
+              value: iceranking
+            - name: RDS_HOSTNAME
+              value: iceranking-qa.c8fmxoomvwpn.eu-central-1.rds.amazonaws.com
+            - name: RDS_PASSWORD
+              valueFrom:
+                  secretKeyRef:
+                    name: rdsdb
+                    key: rdsPassword
+            - name: RDS_PORT
+              value: '3306'
+            - name: RDS_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: rdsdb
+                  key: rdsUser
+      imagePullSecrets:
+        - name: regcred
 ---
 
 apiVersion: v1
 kind: Service
 metadata:
-  name: flask-service
+  namespace: production
+  name: icecompass-api-service
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: "alb"
+    service.beta.kubernetes.io/aws-load-balancer-ssl-cert: arn:aws:acm:eu-central-1:670211327818:certificate/f3eb57a8-c0ee-4f9e-a6fc-472667fa990c
+    service.beta.kubernetes.io/aws-load-balancer-backend-protocol: http
+    service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "443"
+    external-dns.alpha.kubernetes.io/hostname: api.icecompass.com
+  labels:
+    app: icecompass-api-service
 spec:
+  type: LoadBalancer
   ports:
-  - port: 8000
+  - name: http
     protocol: TCP
+    port: 80
+    targetPort: 5050
+  - name: https
+    protocol: TCP
+    port: 443
     targetPort: 5050
   selector:
     app: icecompass-api
-  type: LoadBalancer
+
+---
