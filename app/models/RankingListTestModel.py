@@ -106,18 +106,16 @@ class RankingListTest(db.Model, RestMixin):
             try:
                 ranking_result = RankingResults.query\
                     .filter(RankingResults.test_id==self.id)\
-                    .join(rider_result, RankingResults.id==rider_result.c.result_id)\
-                    .filter(rider_result.c.rider_id==result.rider_id)\
+                    .filter(RankingResults.rider_id==result.rider_id)\
                     .one()
             except NoResultFound as e:
                 ranking_result = RankingResults(self)
             
-        elif self.grouping == 'horse':
+        if self.grouping == 'horse':
             try:
                 ranking_result = RankingResults.query\
                     .filter(RankingResults.test_id==self.id)\
-                    .join(horse_result, RankingResults.id==horse_result.c.horse_id)\
-                    .filter(horse_result.c.horse_id==result.horse_id)\
+                    .filter(RankingResults.horse_id==result.horse_id)\
                     .one()
             except NoResultFound as e:
                 ranking_result = RankingResults(self)
@@ -125,23 +123,6 @@ class RankingListTest(db.Model, RestMixin):
         ranking_result.add_result(result)
         ranking_result.calculate_mark()
         db.session.add(ranking_result)
-
-    # def compute_rank(self):
-    #     ordering = RankingResults.mark if self.order == 'asc' else RankingResults.mark.desc()
-
-    #     ranked_results = RankingResults.query.with_entities(
-    #         RankingResults.id, 
-    #         rank().over(
-    #             partition_by=RankingResults.test_id,
-    #             order_by=ordering
-    #         ))\
-    #         .filter(RankingResults.test_id==self.id)\
-    #         .filter(RankingResults.mark.isnot(None))\
-    #         .all()
-
-    #     mappings = [{ 'id': result[0], 'rank': result[1] } for result in ranked_results]
-    #     db.session.bulk_update_mappings(RankingResults, mappings)
-    #     db.session.commit()
     
     @cached_hybrid_property
     def ranks(self):
@@ -174,6 +155,7 @@ class RankingListTest(db.Model, RestMixin):
         query = tests_query.union(competitions_query)
 
         results = query.filter(RankingList.shortname==self.rankinglist.shortname).all()
+        print (len(results))
         return results
     
     def flush(self):
