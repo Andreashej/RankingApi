@@ -10,3 +10,8 @@ data:
       groups:
         - system:bootstrappers
         - system:nodes
+  mapUsers: |
+    - userarn: arn:aws:iam::670211327818:user/icecompass-cicd
+      username: icecompass-cicd
+      groups:
+        - system:masters
