@@ -1,7 +1,7 @@
 import csv
 import functools
 
-from flask import current_app
+from flask import current_app, url_for
 from flask.globals import g
 from sqlalchemy.ext.hybrid import hybrid_property
 
@@ -35,9 +35,8 @@ class RankingList(db.Model, RestMixin):
     @hybrid_property
     def logo_url(self):
         if self.branding_image:
-            return '//' + current_app.config['SERVER_NAME'] + '/images/' + self.branding_image
-        
-        # return '//' + current_app.config['SERVER_NAME'] + '/images/default.png'
+            return url_for('static', filename=f"/images/{self.branding_image}",_external=True)
+    
         return 'https://via.placeholder.com/150'
 
     def import_competitions(self, filename):
