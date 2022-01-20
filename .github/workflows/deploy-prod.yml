@@ -41,9 +41,16 @@ jobs:
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
     
-    - name: Deploy to EKS                                                                           
+    - name: Deploy API
       uses: kodermax/kubectl-aws-eks@master                                                                         
       env:                                                                                                          
         RELEASE_IMAGE: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
       with:                                                                                                         
         args: set image deployment/icecompass-api icecompass-api=$RELEASE_IMAGE -n $KUBE_NAMESPACE
+
+    - name: Deploy RQ Worker
+      uses: kodermax/kubectl-aws-eks@master                                                                         
+      env:                                                                                                          
+        RELEASE_IMAGE: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
+      with:                                                                                                         
+        args: set image deployment/icecompass-api-rq-worker icecompass-api=$RELEASE_IMAGE -n $KUBE_NAMESPACE
