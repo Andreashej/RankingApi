@@ -46,16 +46,16 @@ jobs:
       env:                                                                                                          
         RELEASE_IMAGE: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
       with:                                                                                                         
-        args: set image deployment/icecompass-api icecompass-api=$RELEASE_IMAGE
+        args: set image deployment/icecompass-api icecompass-api=$RELEASE_IMAGE -n $KUBE_NAMESPACE
 
     - name: Deploy RQ Worker                                                                            
       uses: kodermax/kubectl-aws-eks@master                                                                         
       env:                                                                                                          
         RELEASE_IMAGE: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
       with:                                                                                                         
-        args: set image deployment/icecompass-api-rq-worker icecompass-api=$RELEASE_IMAGE
+        args: set image deployment/icecompass-api-rq-worker icecompass-api=$RELEASE_IMAGE -n $KUBE_NAMESPACE
     
     - name: Verify Kubernetes deployment                               
       uses: kodermax/kubectl-aws-eks@master                            
       with:                                                            
-        args: rollout status deploy my-pod -n $KUBE_NAMESPACE 
+        args: rollout status deploy  -n $KUBE_NAMESPACE 
