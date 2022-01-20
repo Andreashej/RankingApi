@@ -97,7 +97,7 @@ class RankingResults(db.Model, RestMixin):
             if valid_group_marks is None:
                 valid_group_marks = q
             else:
-                valid_group_marks.union(q)
+                valid_group_marks = valid_group_marks.union(q)
         
         valid_marks = valid_group_marks.all()
 

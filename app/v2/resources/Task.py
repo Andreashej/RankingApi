@@ -4,6 +4,7 @@ from app.models.TaskModel import Task
 from app.Responses import ApiResponse
 from flask.globals import g
 from app.models.RankingListTestModel import RankingListTest
+from flask_jwt_extended import jwt_required
 
 class TasksResource(Resource):
     def __init__(self):
@@ -15,6 +16,7 @@ class TasksResource(Resource):
     def get(self):
         return ApiResponse(g.tasks).response()
     
+    @jwt_required
     def post(self):
         args = self.reqparse.parse_args()
 
