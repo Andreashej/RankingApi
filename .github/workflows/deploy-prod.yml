@@ -1,4 +1,4 @@
-name: Deploy to ECR
+name: Deploy to ECR + EKS
 
 on:
   push:
@@ -10,8 +10,8 @@ env:
   ECR_REPOSITORY: icecompass
 
 jobs:
-  build:
-    name: Build Image
+  release:
+    name: Release
     runs-on: ubuntu-latest
     steps:
     - name: Cancel Previous Runs               
@@ -40,6 +40,9 @@ jobs:
       run: |
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+    
+    - name: Check caller ID
+      run: aws sts get-caller-identity
     
     - name: Deploy to Kubernetes cluster                                                                            
       uses: kodermax/kubectl-aws-eks@master                                                                         
