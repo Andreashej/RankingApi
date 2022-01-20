@@ -138,7 +138,8 @@ def recompute_ranking(ranking_id):
         _set_task_progress(0)
         ranking = RankingListTest.query.get(ranking_id)
 
-        results = RankingResults.query.filter_by(test_id = ranking.id).filter(RankingResults.mark.isnot(None)).all()
+        # results = RankingResults.query.filter_by(test_id = ranking.id).filter(RankingResults.mark.isnot(None)).all()
+        results = RankingResults.query.filter_by(test_id = ranking.id).all()
 
         for i, result in enumerate(results):
             print(result)

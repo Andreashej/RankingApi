@@ -90,7 +90,6 @@ class RankingResults(db.Model, RestMixin):
         valid_group_marks = None
         for testgroup in self.test.testgroups:
             q = valid_marks_query.filter(Test.testcode.in_(testgroup)).limit(self.test.included_marks)
-            print (q.count(), self.test.included_marks)
             if q.count() < self.test.included_marks:
                 self.mark = None
                 return
@@ -101,8 +100,6 @@ class RankingResults(db.Model, RestMixin):
                 valid_group_marks.union(q)
         
         valid_marks = valid_group_marks.all()
-
-        print (valid_marks)
 
         sum_of_marks = reduce(lambda sum, current: sum + current.get_mark(self.test.testcode == 'C5'), valid_marks, 0)
 
