@@ -1,20 +1,17 @@
 import os
 
-SECRET_KEY = 'verySecretKey#noGuess'
+# Always supply secret key from environment var in production!
+SECRET_KEY = os.environ.get('SECRET_KEY') or "thisIs3xtremelyZcret"
 
-JWT_SECRET_KEY = 'thisIs3xtremelyZcret'
+JWT_SECRET_KEY = SECRET_KEY
 JWT_BLACKLIST_ENABLED = True
 JWT_BLACKLIST_TOKEN_CHECKS = ['access', 'refresh']
 
-# from dotenv import load_dotenv
-
-DB_USERNAME = os.environ.get('RDS_USERNAME') or 'andreas2_ranking_dev'
-DB_PASSWORD = os.environ.get('RDS_PASSWORD') or 'vfj3cf!U3ACA'
-DB_HOSTNAME = os.environ.get('RDS_HOSTNAME') or 'cp06.azehosting.net'
+DB_USERNAME = os.environ.get('RDS_USERNAME')
+DB_PASSWORD = os.environ.get('RDS_PASSWORD')
+DB_HOSTNAME = os.environ.get('RDS_HOSTNAME')
+DB_NAME = os.environ.get('RDS_DB_NAME')
 DB_PORT = os.environ.get('RDS_PORT') or '3306'
-DB_NAME = os.environ.get('RDS_DB_NAME') or 'andreas2_iceranking'
-
-# You need to replace the next values with the appropriate values for your configuration
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 SQLALCHEMY_ECHO = False
@@ -27,8 +24,6 @@ SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://' + DB_USERNAME + ':' + DB_PASSWORD +
 
 ISIRANK_FILES = basedir + '/files/'
 IMAGE_FILES = basedir + '/static/images/'
-
-RIDERS_PER_PAGE = 100
 
 API_VERSION = "0.1.0"
 

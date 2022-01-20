@@ -40,6 +40,11 @@ spec:
                 secretKeyRef:
                   name: rdsdb
                   key: rdsUser
+            - name: SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: secretkey
+                  key: secretKey
       imagePullSecrets:
         - name: regcred
 
