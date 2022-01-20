@@ -89,7 +89,7 @@ def create_app():
         os.makedirs(app.config['IMAGE_FILES'], exist_ok=True)
 
         def healthcheck():
-            return "Application is running"
+            return "I am healthy :)"
 
         app.add_url_rule('/', view_func=healthcheck)
           

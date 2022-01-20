@@ -10,6 +10,12 @@ data:
       groups:
         - system:bootstrappers
         - system:nodes
+    - rolearn: arn:aws:iam::670211327818:role/eksctl-icecompass-cluster-FargatePodExecutionRole-CHGL9T7AWHUA
+      groups:
+      - system:bootstrappers
+      - system:node-proxier
+      - system:nodes
+      username: system:node:{{SessionName}}
   mapUsers: |
     - userarn: arn:aws:iam::670211327818:user/icecompass-cicd
       username: icecompass-cicd
