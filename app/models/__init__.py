@@ -9,6 +9,6 @@ from .RankingListTestModel import RankingListTest
 from .UserModel import User
 from .RankingResultsModel import RankingResults
 from .TestCatalogModel import TestCatalog
-from .RiderAliasModel import RiderAlias
+from .PersonAliasModel import PersonAlias
 from .RevokedTokenModel import RevokedToken
 from .LogModel import Log

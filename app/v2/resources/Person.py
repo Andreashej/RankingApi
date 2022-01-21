@@ -1,6 +1,7 @@
 from flask.globals import g
 from flask_jwt_extended.view_decorators import jwt_optional
 from flask_restful import Resource, reqparse
+from app.models.PersonAliasModel import PersonAlias
 from app.models.ResultModel import Result
 from app.Responses import ApiResponse, ApiErrorResponse
 from app.models.PersonModel import Person
@@ -37,7 +38,7 @@ class PersonResource(Resource):
     
     @Person.from_request
     def get(self, id):
-        return ApiResponse(g.rider).response()
+        return ApiResponse(g.person).response()
     
     @jwt_required
     @Person.from_request
@@ -49,7 +50,7 @@ class PersonResource(Resource):
         except Exception as e:
             return ApiErrorResponse(str(e)).response()
         
-        return ApiResponse(g.rider).response()
+        return ApiResponse(g.person).response()
     
     @jwt_required
     @Person.from_request
@@ -74,3 +75,31 @@ class PersonResultsResource(Resource):
             return e.response()
 
         return ApiResponse(results).response()
+
+class PersonAliasesResource(Resource):
+    def __init__(self):
+        self.reqparse = reqparse.RequestParser()
+        self.reqparse.add_argument('alias', type=str, location='json', required=True)
+    
+    @Person.from_request
+    def get(self, id):
+        try:
+            aliases = Result.load_many(g.person.aliases)
+        except ApiErrorResponse as e:
+            return e.response()
+
+        return ApiResponse(aliases).response()
+
+    @jwt_required
+    @Person.from_request
+    def post(self, id):
+        args = self.reqparse.parse_args()
+        
+        try:
+            alias = PersonAlias(args['alias'])
+            g.person.aliases.append(alias)
+            alias.save()
+        except ApiErrorResponse as e:
+            return e.response()
+        
+        return ApiResponse(alias).response()

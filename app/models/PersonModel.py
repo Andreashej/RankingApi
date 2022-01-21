@@ -4,7 +4,7 @@ from .. import db
 from sqlalchemy.ext.hybrid import hybrid_property
 from flask import current_app
 
-from .RiderAliasModel import RiderAlias
+from .PersonAliasModel import PersonAlias
 from .ResultModel import Result
 from .TestModel import Test
 
@@ -21,7 +21,7 @@ class Person(db.Model, RestMixin):
     firstname = db.Column(db.String(250))
     lastname = db.Column(db.String(250))
     results = db.relationship("Result", backref="rider", lazy="dynamic")
-    aliases = db.relationship("RiderAlias", backref="person", lazy="dynamic")
+    aliases = db.relationship("PersonAlias", backref="person", lazy="dynamic")
 
     def __init__(self, first, last):
         exists = Person.query.with_entities(Person.id).filter_by(fullname = first + " " + last).scalar()
@@ -29,7 +29,7 @@ class Person(db.Model, RestMixin):
         if exists:
             raise Exception("A person with that name already exists")
 
-        alias = RiderAlias.query.with_entities(RiderAlias.id).filter_by(alias = first + " " + last).scalar()
+        alias = PersonAlias.query.with_entities(PersonAlias.id).filter_by(alias = first + " " + last).scalar()
 
         if alias:
             raise Exception("A person alias already exists with this name")
