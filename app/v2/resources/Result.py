@@ -3,7 +3,7 @@ from flask_restful import Resource, reqparse
 from app.Responses import ApiErrorResponse
 from app.models.ResultModel import Result
 from app.Responses import ApiResponse
-from app.models.RiderModel import Rider
+from app.models.PersonModel import Person
 from app.models.HorseModel import Horse
 from flask_jwt_extended.view_decorators import jwt_required
 
@@ -27,7 +27,7 @@ class ResultsResource(Resource):
 
         result = None
         try:
-            rider = Rider.load_one(args['riderId'])
+            rider = Person.load_one(args['riderId'])
             horse = Horse.load_one(args['horseId'])
             result = g.test.add_result(rider, horse, args['mark'], args['state'])
         except ApiErrorResponse as e:

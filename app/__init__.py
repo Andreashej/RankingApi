@@ -73,17 +73,14 @@ def create_app():
 
     with app.app_context():
         from app import models, commands
-        from app.v1 import routes as routes_v1
         from app.v2 import routes as routes_v2
+        # from app import events
 
         app.redis = Redis.from_url(app.config['REDIS_URL'])
         
         app.task_queue = rq.Queue(app.config['QUEUE'], connection=app.redis, default_timeout=-1)
-        # app.before_request(request_camel_to_snake)
         app.before_request(models.UserModel.User.load_profile)
-        app.register_blueprint(api_bp, url_prefix='/api')
         app.register_blueprint(api_v2_bp, url_prefix='/v2')
-        app.register_blueprint(graphql_bp, url_prefix='/graphql')
 
         os.makedirs(app.config['ISIRANK_FILES'], exist_ok=True)
         os.makedirs(app.config['IMAGE_FILES'], exist_ok=True)

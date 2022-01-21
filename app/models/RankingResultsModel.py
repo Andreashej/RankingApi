@@ -12,7 +12,7 @@ from .RestMixin import RestMixin
 
 rider_result = db.Table('rider_results', 
     db.Column('result_id', db.Integer, db.ForeignKey('results_cache.id', ondelete='CASCADE'), primary_key=True),
-    db.Column('rider_id', db.Integer, db.ForeignKey('riders.id', ondelete='CASCADE'), primary_key=True),
+    db.Column('rider_id', db.Integer, db.ForeignKey('persons.id', ondelete='CASCADE'), primary_key=True),
 )
 
 horse_result = db.Table('horse_results',
@@ -37,13 +37,13 @@ class RankingResults(db.Model, RestMixin):
     
     test_id = db.Column(db.Integer, db.ForeignKey('rankinglist_tests.id'), nullable=False, index=True)
 
-    rider_id = db.Column(db.Integer, db.ForeignKey('riders.id'), index=True)
-    rider = db.relationship("Rider")
+    rider_id = db.Column(db.Integer, db.ForeignKey('persons.id'), index=True)
+    rider = db.relationship("Person")
 
     horse_id = db.Column(db.Integer, db.ForeignKey('horses.id'), index=True)
     horse = db.relationship("Horse")
 
-    riders = db.relationship("Rider", secondary=rider_result, lazy='dynamic', backref=db.backref('ranking_results', lazy='dynamic'))
+    riders = db.relationship("Person", secondary=rider_result, lazy='dynamic', backref=db.backref('ranking_results', lazy='dynamic'))
     horses = db.relationship("Horse", secondary=horse_result, lazy='dynamic', backref=db.backref('ranking_results', lazy='dynamic'))
     marks = db.relationship("Result", secondary=cached_results_based_on, lazy='dynamic')
 
