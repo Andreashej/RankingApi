@@ -1,4 +1,5 @@
 
+from app.v2.resources.Search import SearchResultsResource
 from app.v2.resources.Result import ResultsResource, ResultResource
 from app.v2.resources.Task import TaskResource, TasksResource
 from app.v2.resources.Person import PersonsResource, PersonResource, PersonResultsResource, PersonAliasesResource
@@ -62,3 +63,5 @@ api.add_resource(UsersResource, '/users', endpoint='users')
 api.add_resource(UserResource, '/users/<int:id>', endpoint='user')
 
 api.add_resource(TestCatalogResource, '/test-catalog', endpoint='test_catalog')
+
+api.add_resource(SearchResultsResource, '/search', endpoint='search')

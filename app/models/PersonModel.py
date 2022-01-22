@@ -1,5 +1,7 @@
 import csv
 
+from app.Responses import ApiErrorResponse
+
 from .. import db
 from sqlalchemy.ext.hybrid import hybrid_property
 from flask import current_app
@@ -14,7 +16,7 @@ class Person(db.Model, RestMixin):
     RESOURCE_NAME = 'person'
     RESOURCE_NAME_PLURAL = 'persons'
 
-    INCLUDE_IN_JSON = ['fullname', 'email']
+    INCLUDE_IN_JSON = ['fullname', 'email', 'number_of_results']
     EXCLUDE_FROM_JSON = ['_email']
 
     __tablename__ = 'persons'
@@ -202,8 +204,33 @@ class Person(db.Model, RestMixin):
     #         )
     #     return query.as_scalar()
     
-    def add_alias(self, alias):
-        self.aliases.append(alias)
+    def add_alias(self, alias_name = None, person_id = None):
+        alias = None
+
+        if alias_name:
+            existing = Person.find_by_name(alias_name)
+            if existing:
+                raise ApiErrorResponse(f'Cannot create alias that already exists for person {existing.fullname} (ID: {existing.id}). Merge the riders instead by including an ID to merge from in the request body.', 409)
+            
+            alias = PersonAlias(alias_name)
+
+            self.aliases.append(alias)
+        
+        elif person_id:
+            merge = Person.query.get(person_id)
+
+            if not merge:
+                raise ApiErrorResponse(f'Could not find person with ID {person_id} to merge from.', 404)
+            
+            alias = PersonAlias(merge.fullname)
+            self.aliases.append(alias)
+
+            for result in merge.results:
+                result.rider_id = self.id
+        
+        if alias is None:
+            raise ApiErrorResponse("You must provide either an alias name or person ID to merge.", 400)
+        return alias
 
     def __repr__(self):
         return '<Person {} {}>'.format(self.firstname, self.lastname)

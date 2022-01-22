@@ -79,7 +79,8 @@ class PersonResultsResource(Resource):
 class PersonAliasesResource(Resource):
     def __init__(self):
         self.reqparse = reqparse.RequestParser()
-        self.reqparse.add_argument('alias', type=str, location='json', required=True)
+        self.reqparse.add_argument('alias', type=str, location='json', required=False)
+        self.reqparse.add_argument('personId', type=str, location='json', required=False)
     
     @Person.from_request
     def get(self, id):
@@ -96,8 +97,8 @@ class PersonAliasesResource(Resource):
         args = self.reqparse.parse_args()
         
         try:
-            alias = PersonAlias(args['alias'])
-            g.person.aliases.append(alias)
+            alias = g.person.add_alias(args['alias'], args['personId'])
+            
             alias.save()
         except ApiErrorResponse as e:
             return e.response()
