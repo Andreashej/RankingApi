@@ -1,0 +1,116 @@
+
+<!doctype html>
+<head>
+    <title>Icecompass Competition Created</title>
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+        }
+
+        .header {
+            background-image: url({{ url_for('static', filename='images/header-branding.jpg', _external=True) }}); 
+            background-repeat: no-repeat; 
+            background-size: cover;
+        }
+
+        .header img {
+            padding: 2rem;
+        }
+
+        .content {
+            padding: 1.5rem;
+        }
+
+        .extId {
+            padding: 1rem;
+            text-align: center;
+            background-color: #24305e;
+            border-radius: .25rem;
+            margin: 0 2rem;
+        }
+
+        .extId p {
+            color: white;
+            font-size: 1.5rem;
+            margin: 0;
+            margin-bottom: 1rem;
+        }
+
+        .extId p.big {
+            color: #f76c6c;
+            font-size: 3rem;
+            margin: 0;
+        }
+
+        table tr td.label {
+            padding-right: 1rem;
+            font-weight: bold; 
+        }
+        
+        table tr td {
+            padding-top: .25rem;
+            padding-bottom: .25rem;
+        }
+
+        .badge {
+            padding: .125rem .25rem;
+            border-radius: .125rem;
+            background-color: #24305e;
+            color: white;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="header">
+            <img src="{{ url_for('static', filename='images/icecompass_tiny.png', _external=True) }}" />
+    </div>
+    <div class="content">
+        <p>Hi {{ competition.contact_person.fullname }},</p>
+        
+        <p>
+            Your competition has been registered in IceCompass with the following information:
+        </p>
+        <table>
+            <tr>
+                <td class="label">Name</td>
+                <td colspan="2">{{ competition.name }}</td>
+            </tr>
+            <tr>
+                <td class="label">Date</td>
+                <td colspan="2">{{ competition.first_date }} - {{ competition.last_date }}</td>
+            </tr>
+            <tr>
+                <td class="label">Tests</td>
+                <td><i>Test</i></td>
+                <td colspan="2"><i>Rankinglists</i></td>
+            </tr>
+            {% for test in competition.tests %}
+            <tr>
+                <td></td>
+                <td>{{ test.testcode }}</td>
+                <td>
+                    {% for rankinglist in test.include_in_ranking %}
+                        <span class="badge">{{ rankinglist.shortname }}</span>
+                    {% endfor %}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        
+        <p>
+            When creating your competition in IcetestNG, you will need to fill out the following IceCompass ID, to enable automatic transferring of results. 
+            You will be asked to fill out the ID by Sporti, if you are using the automatic synchronisation feature.
+        </p>
+
+        <div class="extId">
+            <p>IceCompass ID</p>
+            <p class="big">{{ competition.ext_id }}</p>
+        </div>
+        
+        <p>
+            If the above information is incorrect please contact <a href="mailto:rangliste@islandshest.dk">rangliste@islandshest.dk</a>
+        </p>
+    </div>
+</body>

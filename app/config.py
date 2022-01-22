@@ -3,6 +3,8 @@ import os
 # Always supply secret key from environment var in production!
 SECRET_KEY = os.environ.get('SECRET_KEY') or "thisIs3xtremelyZcret"
 
+DEBUG = os.environ.get('FLASK_ENV') == 'development'
+
 JWT_SECRET_KEY = SECRET_KEY
 JWT_BLACKLIST_ENABLED = True
 JWT_BLACKLIST_TOKEN_CHECKS = ['access', 'refresh']
@@ -21,6 +23,12 @@ SQLALCHEMY_POOL_RECYCLE = 499
 SQLALCHEMY_POOL_TIMEOUT = 20
 
 SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://' + DB_USERNAME + ':' + DB_PASSWORD + '@' + DB_HOSTNAME + ':' + DB_PORT + '/' + DB_NAME
+
+MAIL_SERVER = os.environ.get("MAIL_SERVER")
+MAIL_PORT = os.environ.get("MAIL_PORT")
+MAIL_USE_TLS = os.environ.get("MAIL_USE_TLS") or 1
+MAIL_USERNAME = os.environ.get("MAIL_USERNAME")
+MAIL_PASSWORD = os.environ.get("MAIL_PASSWORD")
 
 ISIRANK_FILES = basedir + '/files/'
 IMAGE_FILES = basedir + '/static/images/'

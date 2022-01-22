@@ -1,8 +1,10 @@
 from rq import get_current_job
 
 from . import db, create_app
-from .models import Task, Test, Result, Rider, Horse, Competition, RankingListTest, RankingResults, RankingList, RiderAlias, TestCatalog
+from .models import Task, Test, Result, Person, Horse, Competition, RankingListTest, RankingResults, RankingList, PersonAlias, TestCatalog
 import datetime
+from flask_mail import Message
+from app import mail
 
 import requests
 
@@ -58,11 +60,11 @@ def import_competition(competition_id, lines):
                 # test = Test.create_from_catalog(fields[1])
                 # competition.tests.append(test)
 
-            rider = Rider.query.filter_by(fullname = fields[0]).first()
-            rider = Rider.find_by_name(fields[0])
+            rider = Person.query.filter_by(fullname = fields[0]).first()
+            rider = Person.find_by_name(fields[0])
 
             if not rider:
-                rider = Rider.create_by_name(fields[0])
+                rider = Person.create_by_name(fields[0])
                 try:
                     db.session.add(rider)
                 except:
@@ -211,16 +213,16 @@ def import_aliases(aliases):
 
         items = len(aliases)
         for i, alias in enumerate(aliases):
-            rider = Rider.query.filter_by(fullname = alias['real_name']).first()
+            rider = Person.query.filter_by(fullname = alias['real_name']).first()
 
             if not rider:
                 (fname, sep, lname) = alias['real_name'].rpartition(' ')
-                rider = Rider(fname, lname)
+                rider = Person(fname, lname)
                 db.session.add(rider)
 
-            a = RiderAlias.query.filter_by(alias = alias['alias']).first()
+            a = PersonAlias.query.filter_by(alias = alias['alias']).first()
             if not a:
-                a = RiderAlias(alias['alias'])
+                a = PersonAlias(alias['alias'])
 
                 rider.add_alias(a)
                 
@@ -252,5 +254,19 @@ def horse_lookup(horses = []):
         _set_task_progress(100)
     except Exception as e:
         db.session.rollback()
+        app.logger.error(e, exc_info=sys.exc_info())
+        _set_task_progress(100, True)
+
+def send_mail(subject, sender , recipients , text_body , html_body):
+    try:
+        _set_task_progress(0)
+        subject_prefix = "[DEV] " if app.config["DEBUG"] else ""
+        msg = Message(subject_prefix + subject, sender=sender, recipients=recipients)
+        msg.body = text_body
+        msg.html = html_body
+        mail.send(msg)
+        _set_task_progress(100)
+    except Exception as e:
+        print (e)
         app.logger.error(e, exc_info=sys.exc_info())
         _set_task_progress(100, True)

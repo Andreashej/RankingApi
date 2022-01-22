@@ -35,6 +35,7 @@ class PersonResource(Resource):
         self.reqparse = reqparse.RequestParser()
         self.reqparse.add_argument('firstname', type= str, required = False, location = 'json')
         self.reqparse.add_argument('lastname', type= str, required = False, location = 'json')
+        self.reqparse.add_argument('email', type=str, required=False, location='json')
     
     @Person.from_request
     def get(self, id):
@@ -43,12 +44,11 @@ class PersonResource(Resource):
     @jwt_required
     @Person.from_request
     def patch(self, id):
-        g.person.update(self.reqparse)
-
         try:
+            g.person.update(self.reqparse)
             g.person.save()
-        except Exception as e:
-            return ApiErrorResponse(str(e)).response()
+        except ApiErrorResponse as e:
+            return e.response()
         
         return ApiResponse(g.person).response()
     

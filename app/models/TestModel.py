@@ -29,10 +29,7 @@ class Test(db.Model, RestMixin):
     
     @hybrid_property
     def include_in_ranking(self):
-        if self._include_in_ranking.count() > 0: 
-            return self._include_in_ranking
-        
-        return self.competition.include_in_ranking
+        return self._include_in_ranking
     
     @include_in_ranking.expression
     def include_in_ranking(cls):

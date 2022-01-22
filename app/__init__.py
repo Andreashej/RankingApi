@@ -10,6 +10,7 @@ from flask_caching import Cache
 from flask_jwt_extended import JWTManager
 from flask_jwt_extended.exceptions import JWTExtendedException
 from jwt import PyJWTError
+from flask_mail import Mail
 from redis import Redis
 import rq
 import os
@@ -59,6 +60,8 @@ auth = HTTPBasicAuth()
 
 jwt = JWTManager()
 
+mail = Mail()
+
 def create_app():
     app = Flask(__name__, static_folder='static', static_url_path='')   
     app.config.from_object(config)
@@ -70,6 +73,7 @@ def create_app():
     ma.init_app(app)
     cors.init_app(app)
     jwt.init_app(app)
+    mail.init_app(app)
 
     with app.app_context():
         from app import models, commands

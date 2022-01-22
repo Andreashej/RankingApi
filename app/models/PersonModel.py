@@ -14,12 +14,16 @@ class Person(db.Model, RestMixin):
     RESOURCE_NAME = 'person'
     RESOURCE_NAME_PLURAL = 'persons'
 
-    INCLUDE_IN_JSON = ['fullname']
+    INCLUDE_IN_JSON = ['fullname', 'email']
+    EXCLUDE_FROM_JSON = ['_email']
 
     __tablename__ = 'persons'
     id = db.Column(db.Integer, primary_key=True)
     firstname = db.Column(db.String(250))
     lastname = db.Column(db.String(250))
+    _email = db.Column('email', db.String(128), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user = db.relationship('User', back_populates='person')
     results = db.relationship("Result", backref="rider", lazy="dynamic")
     aliases = db.relationship("PersonAlias", backref="person", lazy="dynamic")
 
@@ -40,6 +44,23 @@ class Person(db.Model, RestMixin):
     @hybrid_property
     def fullname(self):
         return self.firstname + ' ' + self.lastname
+    
+    @hybrid_property
+    def email(self):
+        if current_app.config['DEBUG'] and self._email:
+            return "andreas@hejndorf-foto.dk"
+        return self._email
+    
+    @email.setter
+    def email(self, email):
+        if '@' not in email and '.' not in email:
+            raise ValueError('An email address must contain both @ and .')
+        
+        self._email = email
+    
+    @email.expression
+    def email(cls):
+        return cls._email
 
     @hybrid_property
     def number_of_results(self):
