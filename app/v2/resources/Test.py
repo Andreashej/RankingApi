@@ -3,6 +3,7 @@ from flask_jwt_extended.view_decorators import jwt_required
 from flask_restful import Resource, reqparse
 from app.Responses import ApiResponse, ApiErrorResponse
 from app.models import Test, Result, Person, Horse, RankingList
+from app.models.TestModel import tests_rankinglists
 from app import db
 
 class TestsResource(Resource):
@@ -51,8 +52,13 @@ class TestResource(Resource):
             if args['rankinglists'] is not None:
                 for shortname in args['rankinglists']:
                     rankinglist = RankingList.query.filter_by(shortname=shortname).one()
-                    g.test.include_in_ranking.append(rankinglist)
+                    if rankinglist not in g.test.include_in_ranking.all():
+                        g.test.include_in_ranking.append(rankinglist)
                 
+                for ranking in g.test.include_in_ranking:
+                    if ranking.shortname not in args['rankinglists']:
+                        g.test.include_in_ranking.remove(ranking)
+
             g.test.save()
         except ApiErrorResponse as e:
             return e.response()
