@@ -2,7 +2,6 @@ from flask_restful import Resource
 from flask import request
 from app.Responses import ApiResponse
 from app.models.SearchResultViewModel import SearchResult
-from app import db
 
 class SearchResultsResource(Resource):
     def get(self):

@@ -1,3 +1,4 @@
+from socket import SocketIO
 from flask import Flask, g, request
 from flask import Blueprint
 from flask_cors import CORS
@@ -15,6 +16,7 @@ from redis import Redis
 import rq
 import os
 from app.utils import camel_to_snake
+from flask_socketio import SocketIO
 
 from . import config
 
@@ -22,6 +24,12 @@ import requests
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+
+def include_object(object, name, type_, reflected, compare_to):
+    if type_ == "table" and name == "search_results":
+        return False
+    else:
+        return True
 
 def request_camel_to_snake(*args, **kwargs):
   if request.json is not None:
@@ -46,13 +54,10 @@ ma = Marshmallow()
 cors = CORS()
 db = SQLAlchemy()
 
-api_bp = Blueprint('api', __name__)
-api = FixedApi(api_bp)
-
 api_v2_bp = Blueprint('v2', __name__)
 api_v2 = FixedApi(api_v2_bp)
 
-graphql_bp = Blueprint('graphql', __name__)
+socketio = SocketIO()
 
 cache = Cache()
 
@@ -69,16 +74,17 @@ def create_app():
     cache.init_app(app, config={'CACHE_TYPE': 'simple'})
 
     db.init_app(app)
-    migrate.init_app(app, db)
+    migrate.init_app(app, db, include_object = include_object)
     ma.init_app(app)
     cors.init_app(app)
     jwt.init_app(app)
     mail.init_app(app)
+    socketio.init_app(app, cors_allowed_origins='*')
 
     with app.app_context():
         from app import models, commands
         from app.v2 import routes as routes_v2
-        # from app import events
+        from app import events
 
         app.redis = Redis.from_url(app.config['REDIS_URL'])
         

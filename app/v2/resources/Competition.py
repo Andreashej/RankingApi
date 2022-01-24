@@ -1,6 +1,6 @@
 import datetime
 from flask.globals import g
-from flask_restful import Resource, reqparse, inputs
+from flask_restful import Resource, reqparse
 from app.Responses import ApiErrorResponse, ApiResponse
 from app import db
 from app.models import Competition, RankingList, Test

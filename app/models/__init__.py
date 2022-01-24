@@ -12,3 +12,5 @@ from .TestCatalogModel import TestCatalog
 from .PersonAliasModel import PersonAlias
 from .RevokedTokenModel import RevokedToken
 from .LogModel import Log
+from .ScreenGroupModel import ScreenGroup
+from .BigScreenModel import BigScreen
