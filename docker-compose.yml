@@ -3,13 +3,13 @@ services:
   icecompass-api-webservice:
     build: 
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.prod
     environment:
       RDS_DB_NAME: "${RDS_DB_NAME}"
       RDS_HOSTNAME: "${RDS_HOSTNAME}"
       RDS_USERNAME: "${RDS_USERNAME}"
       RDS_PASSWORD: "${RDS_PASSWORD}"
-      REDIS_URL: redis://localhost:6379/0
+      REDIS_URL: redis://redis:6379/0
       SECRET_KEY: "${SECRET_KEY}"
     ports:
       - "80:5050"
@@ -18,15 +18,15 @@ services:
   icecompass-api-rq-worker:
     build: 
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.prod
     environment:
       RDS_DB_NAME: "${RDS_DB_NAME}"
       RDS_HOSTNAME: "${RDS_HOSTNAME}"
       RDS_USERNAME: "${RDS_USERNAME}"
       RDS_PASSWORD: "${RDS_PASSWORD}"
-      REDIS_URL: "redis://localhost:6379/0"
+      REDIS_URL: "redis://redis:6379/0"
       SECRET_KEY: "${SECRET_KEY}"
-    command: ["venv/bin/rq", "worker", "-u", "redis://localhost:6379/0", "iceranking-tasks"]
+    entrypoint: [./rq-worker.sh]
     links:
       - redis
   redis:
