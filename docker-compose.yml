@@ -4,6 +4,12 @@ services:
     build: 
       context: .
       dockerfile: Dockerfile
+    env:
+      RDS_DB_NAME: "${RDS_DB_NAME}"
+      RDS_HOSTNAME: "${RDS_HOSTNAME}"
+      RDS_USERNAME: "${RDS_USERNAME}"
+      RDS_PASSWORD: "${RDS_PASSWORD}"
+      REDIS_URL: redis://localhost:6379/0
     ports:
       - "80:5050"
     links:
@@ -12,6 +18,12 @@ services:
     build: 
       context: .
       dockerfile: Dockerfile
+    env:
+      RDS_DB_NAME: "${RDS_DB_NAME}"
+      RDS_HOSTNAME: "${RDS_HOSTNAME}"
+      RDS_USERNAME: "${RDS_USERNAME}"
+      RDS_PASSWORD: "${RDS_PASSWORD}"
+      REDIS_URL: "redis://localhost:6379/0"
     command: ["venv/bin/rq", "worker", "-u", "redis://localhost:6379/0", "iceranking-tasks"]
     links:
       - redis
