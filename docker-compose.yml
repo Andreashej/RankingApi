@@ -1,7 +1,19 @@
 version: '2.4'
 services:
   icecompass-api-webservice:
+    build: 
+      context: .
+      dockerfile: Dockerfile
     ports:
       - "80:5050"
+    links:
+      - redis
   icecompass-api-rq-worker:
-    command: ["venv/bin/rq", "worker", "-u", "redis://icecompass-redis-ro.1ulmmw.ng.0001.euc1.cache.amazonaws.com:6379/0", "iceranking-tasks"]
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    command: ["venv/bin/rq", "worker", "-u", "redis://localhost:6379/0", "iceranking-tasks"]
+    links:
+      - redis
+  redis:
+    image: redis
