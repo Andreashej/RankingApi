@@ -10,6 +10,7 @@ services:
       RDS_USERNAME: "${RDS_USERNAME}"
       RDS_PASSWORD: "${RDS_PASSWORD}"
       REDIS_URL: redis://localhost:6379/0
+      SECRET_KEY: "${SECRET_KEY}"
     ports:
       - "80:5050"
     links:
@@ -24,6 +25,7 @@ services:
       RDS_USERNAME: "${RDS_USERNAME}"
       RDS_PASSWORD: "${RDS_PASSWORD}"
       REDIS_URL: "redis://localhost:6379/0"
+      SECRET_KEY: "${SECRET_KEY}"
     command: ["venv/bin/rq", "worker", "-u", "redis://localhost:6379/0", "iceranking-tasks"]
     links:
       - redis
