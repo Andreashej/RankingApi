@@ -1,13 +1,8 @@
-name: Deploy to ECR + EKS
+name: Deploy to EB
 
 on:
   push:
     branches: [ master ]
-
-env:
-  KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
-  KUBE_NAMESPACE: production
-  ECR_REPOSITORY: icecompass
 
 jobs:
   release:
@@ -21,36 +16,19 @@ jobs:
 
     - name: Check out code
       uses: actions/checkout@v2
-    
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
+
+    - name: Generate deployment package
+      run: zip -r deploy.zip . -x '*.git*'
+
+    - name: Deploy to EB
+      uses: einaregilsson/beanstalk-deploy@v20
       with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: eu-central-1
-
-    - name: Login to Amazon ECR
-      id: login-ecr
-      uses: aws-actions/amazon-ecr-login@v1
-
-    - name: Build, tag, and push image to Amazon ECR
-      env:
-        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        IMAGE_TAG: ${{ github.sha }}
-      run: |
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        application_name: icecompass
+        environment_name: Icecompass-prod
+        version_label: ${{ github.sha }}
+        region: eu-central-1
+        deployment_package: deploy.zip 
     
-    - name: Deploy API
-      uses: kodermax/kubectl-aws-eks@master                                                                         
-      env:                                                                                                          
-        RELEASE_IMAGE: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
-      with:                                                                                                         
-        args: set image deployment/icecompass-api icecompass-api=$RELEASE_IMAGE -n $KUBE_NAMESPACE
-
-    - name: Deploy RQ Worker
-      uses: kodermax/kubectl-aws-eks@master                                                                         
-      env:                                                                                                          
-        RELEASE_IMAGE: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
-      with:                                                                                                         
-        args: set image deployment/icecompass-api-rq-worker icecompass-api=$RELEASE_IMAGE -n $KUBE_NAMESPACE
+    
