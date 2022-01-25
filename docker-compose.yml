@@ -1,9 +1,7 @@
 version: '2.4'
 services:
   icecompass-api-webservice:
-    image: 670211327818.dkr.ecr.eu-central-1.amazonaws.com/icecompass:dcec4dbb35ef6db68a19eb838059930645bfd933
     ports:
       - "80:5050"
   icecompass-api-rq-worker:
-    image: 670211327818.dkr.ecr.eu-central-1.amazonaws.com/icecompass:dcec4dbb35ef6db68a19eb838059930645bfd933
     command: ["venv/bin/rq", "worker", "-u", "redis://icecompass-redis-ro.1ulmmw.ng.0001.euc1.cache.amazonaws.com:6379/0", "iceranking-tasks"]
