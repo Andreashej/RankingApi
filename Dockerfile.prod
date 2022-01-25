@@ -15,8 +15,8 @@ RUN venv/bin/pip install gunicorn
 
 COPY app app
 COPY migrations migrations
-COPY icecompass.py boot.sh ./
-RUN chmod +x boot.sh
+COPY icecompass.py rq-worker.sh start-webservice.sh ./
+RUN chmod +x rq-worker.sh start-webservice.sh
 
 ENV FLASK_APP app
 
@@ -24,4 +24,4 @@ RUN chown -R iceranking:iceranking ./
 USER iceranking
 
 EXPOSE 5050
-ENTRYPOINT ["./boot.sh"]
+ENTRYPOINT ["./start-webservice.sh"]

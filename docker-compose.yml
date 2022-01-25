@@ -1,0 +1,33 @@
+version: '2.4'
+services:
+  icecompass-api-webservice:
+    build: 
+      context: .
+      dockerfile: Dockerfile.prod
+    environment:
+      RDS_DB_NAME: "${RDS_DB_NAME}"
+      RDS_HOSTNAME: "${RDS_HOSTNAME}"
+      RDS_USERNAME: "${RDS_USERNAME}"
+      RDS_PASSWORD: "${RDS_PASSWORD}"
+      REDIS_URL: redis://redis:6379/0
+      SECRET_KEY: "${SECRET_KEY}"
+    ports:
+      - "80:5050"
+    links:
+      - redis
+  icecompass-api-rq-worker:
+    build: 
+      context: .
+      dockerfile: Dockerfile.prod
+    environment:
+      RDS_DB_NAME: "${RDS_DB_NAME}"
+      RDS_HOSTNAME: "${RDS_HOSTNAME}"
+      RDS_USERNAME: "${RDS_USERNAME}"
+      RDS_PASSWORD: "${RDS_PASSWORD}"
+      REDIS_URL: "redis://redis:6379/0"
+      SECRET_KEY: "${SECRET_KEY}"
+    entrypoint: [./rq-worker.sh]
+    links:
+      - redis
+  redis:
+    image: redis

@@ -96,7 +96,7 @@ def create_app():
         os.makedirs(app.config['IMAGE_FILES'], exist_ok=True)
 
         def healthcheck():
-            return "I am healthy :)"
+            return { "message": "I am healthy :)"}, 200
 
         app.add_url_rule('/', view_func=healthcheck)
           
