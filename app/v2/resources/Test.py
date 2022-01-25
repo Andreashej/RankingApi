@@ -2,7 +2,8 @@ from flask.globals import g
 from flask_jwt_extended.view_decorators import jwt_required
 from flask_restful import Resource, reqparse
 from app.Responses import ApiResponse, ApiErrorResponse
-from app.models import Test, Result, Rider, Horse
+from app.models import Test, Result, Person, Horse, RankingList
+from app.models.TestModel import tests_rankinglists
 from app import db
 
 class TestsResource(Resource):
@@ -34,6 +35,7 @@ class TestResource(Resource):
         self.reqparse.add_argument('order', type=str, required=False, location='json')
         self.reqparse.add_argument('markType', type=str, required=False, location='json')
         self.reqparse.add_argument('roundingPrecision', type=int, required=False, location='json')
+        self.reqparse.add_argument('rankinglists', type=str, required=False, location='json', action="append")
     
     @Test.from_request
     def get(self, id):
@@ -44,12 +46,22 @@ class TestResource(Resource):
     def patch(self, id):
         args = self.reqparse.parse_args()
 
-        g.test.update(self.reqparse)
-
         try:
+            g.test.update(self.reqparse)
+
+            if args['rankinglists'] is not None:
+                for shortname in args['rankinglists']:
+                    rankinglist = RankingList.query.filter_by(shortname=shortname).one()
+                    if rankinglist not in g.test.include_in_ranking.all():
+                        g.test.include_in_ranking.append(rankinglist)
+                
+                for ranking in g.test.include_in_ranking:
+                    if ranking.shortname not in args['rankinglists']:
+                        g.test.include_in_ranking.remove(ranking)
+
             g.test.save()
-        except Exception as e:
-            return ApiErrorResponse(str(e)).response()
+        except ApiErrorResponse as e:
+            return e.response()
         
         return ApiResponse(g.test).response()
     
@@ -88,7 +100,7 @@ class TestResultsResource(Resource):
 
         result = None
         try:
-            rider = Rider.load_one(args['riderId'])
+            rider = Person.load_one(args['riderId'])
             horse = Horse.load_one(args['horseId'])
             result = g.test.add_result(rider, horse, args['mark'], args['state'])
         except ApiErrorResponse as e:

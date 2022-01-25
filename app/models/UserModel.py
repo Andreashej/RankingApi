@@ -1,5 +1,6 @@
 from flask_jwt_extended.exceptions import WrongTokenError
 from flask_jwt_extended.view_decorators import jwt_optional, verify_jwt_in_request
+from sqlalchemy.orm import backref
 from .. import db
 from flask import current_app
 from sqlalchemy.ext.hybrid import hybrid_property
@@ -21,23 +22,8 @@ class User(db.Model, RestMixin):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(32), index=True)
-    _email = db.Column('email', db.String(128), nullable=False)
     password_hash = db.Column(db.String(128))
-
-    @hybrid_property
-    def email(self):
-        return self._email
-    
-    @email.setter
-    def email(self, email):
-        if '@' not in email and '.' not in email:
-            raise ValueError('An email address must contain both @ and .')
-        
-        self._email = email
-    
-    @email.expression
-    def email(cls):
-        return cls._email
+    person = db.relationship('Person', back_populates='user', uselist=False)
 
     @classmethod
     def find_by_username(cls, username):

@@ -279,6 +279,8 @@ class RestMixin():
             if value and hasattr(self, prop):
                 try:
                     setattr(self, prop, value)
+                except ValueError as e:
+                    raise ApiErrorResponse(str(e), 400)
                 except Exception as e:
                     raise ApiErrorResponse(str(e))
     

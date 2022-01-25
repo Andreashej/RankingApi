@@ -1,4 +1,4 @@
-from flask.globals import request, g
+from flask.globals import request, g, current_app
 from flask_jwt_extended.utils import create_access_token, get_jwt_identity
 from flask_restful import Resource, reqparse
 from flask_jwt_extended import jwt_required, jwt_refresh_token_required, get_raw_jwt
@@ -26,11 +26,18 @@ class UserLogin(Resource):
             return { 'message': f"User {username} does not exist" }, 404
 
         if current_user.verify_password(password):
-            return { 
+            auth_object = { 
                 'data': current_user.to_json(),
                 'accessToken': current_user.create_access_token(),
                 'refreshToken': current_user.create_refresh_token()
             }
+
+            if current_app.config['DEBUG']:
+                auth_object.update({
+                    'access_token': auth_object['accessToken']
+                })
+
+            return auth_object
         
         return { 'message': "Wrong credentials" }
 
@@ -99,7 +106,6 @@ class UserResource(Resource):
         self.reqparse = reqparse.RequestParser()
         self.reqparse.add_argument('username', type=str, required=False, location='json')
         self.reqparse.add_argument('password', type=str, required=False, location='json')
-        self.reqparse.add_argument('email', type=str, required=False, location='json')
 
     @User.from_request
     def get(self, id):

@@ -1,6 +1,8 @@
+
+from app.v2.resources.Search import SearchResultsResource
 from app.v2.resources.Result import ResultsResource, ResultResource
 from app.v2.resources.Task import TaskResource, TasksResource
-from app.v2.resources.Rider import RidersResource, RiderResource, RiderResultsResource
+from app.v2.resources.Person import PersonsResource, PersonResource, PersonResultsResource, PersonAliasesResource
 from app.v2.resources.Horse import HorsesResource, HorseResource, HorseResultsResource
 from app.v2.resources.Rankings import RankingsResource, RankingResource, RankingResultsRankingResource
 from app.v2.resources.RankingList import RankingListsResource, RankingListResource, RankingListTestsResource, RankingListTasksResource
@@ -36,9 +38,14 @@ api.add_resource(RankingResultsResource, '/rankingresults', endpoint='ranking_re
 api.add_resource(RankingResultResource, '/rankingresults/<int:id>', endpoint='ranking_result')
 api.add_resource(RankingResultMarksResource, '/rankingresults/<int:id>/marks', endpoint='ranking_result_marks')
 
-api.add_resource(RidersResource, '/riders', endpoint='riders')
-api.add_resource(RiderResource, '/riders/<int:id>', endpoint='rider')
-api.add_resource(RiderResultsResource, '/riders/<int:id>/results', endpoint='rider_results')
+api.add_resource(PersonsResource, '/riders', endpoint='riders')
+api.add_resource(PersonResource, '/riders/<int:id>', endpoint='rider')
+api.add_resource(PersonResultsResource, '/riders/<int:id>/results', endpoint='rider_results')
+
+api.add_resource(PersonsResource, '/persons', endpoint='persons')
+api.add_resource(PersonResource, '/persons/<int:id>', endpoint='person')
+api.add_resource(PersonResultsResource, '/persons/<int:id>/results', endpoint='person_results')
+api.add_resource(PersonAliasesResource, '/persons/<int:id>/aliases', endpoint='person_aliases')
 
 api.add_resource(HorsesResource, '/horses', endpoint='horses')
 api.add_resource(HorseResource, '/horses/<int:id>', endpoint='horse')
@@ -56,3 +63,5 @@ api.add_resource(UsersResource, '/users', endpoint='users')
 api.add_resource(UserResource, '/users/<int:id>', endpoint='user')
 
 api.add_resource(TestCatalogResource, '/test-catalog', endpoint='test_catalog')
+
+api.add_resource(SearchResultsResource, '/search', endpoint='search')

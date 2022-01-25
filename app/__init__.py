@@ -10,6 +10,7 @@ from flask_caching import Cache
 from flask_jwt_extended import JWTManager
 from flask_jwt_extended.exceptions import JWTExtendedException
 from jwt import PyJWTError
+from flask_mail import Mail
 from redis import Redis
 import rq
 import os
@@ -59,6 +60,8 @@ auth = HTTPBasicAuth()
 
 jwt = JWTManager()
 
+mail = Mail()
+
 def create_app():
     app = Flask(__name__, static_folder='static', static_url_path='')   
     app.config.from_object(config)
@@ -70,20 +73,18 @@ def create_app():
     ma.init_app(app)
     cors.init_app(app)
     jwt.init_app(app)
+    mail.init_app(app)
 
     with app.app_context():
         from app import models, commands
-        from app.v1 import routes as routes_v1
         from app.v2 import routes as routes_v2
+        # from app import events
 
         app.redis = Redis.from_url(app.config['REDIS_URL'])
         
         app.task_queue = rq.Queue(app.config['QUEUE'], connection=app.redis, default_timeout=-1)
-        # app.before_request(request_camel_to_snake)
         app.before_request(models.UserModel.User.load_profile)
-        app.register_blueprint(api_bp, url_prefix='/api')
         app.register_blueprint(api_v2_bp, url_prefix='/v2')
-        app.register_blueprint(graphql_bp, url_prefix='/graphql')
 
         os.makedirs(app.config['ISIRANK_FILES'], exist_ok=True)
         os.makedirs(app.config['IMAGE_FILES'], exist_ok=True)

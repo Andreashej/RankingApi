@@ -35,7 +35,7 @@ class RankingList(db.Model, RestMixin):
     @hybrid_property
     def logo_url(self):
         if self.branding_image:
-            return url_for('static', filename=f"/images/{self.branding_image}",_external=True)
+            return url_for('static', filename=f"/images/{self.branding_image}", _external=True)
     
         return 'https://via.placeholder.com/150'
 

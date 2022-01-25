@@ -1,0 +1,16 @@
+Hi {{ competition.contact_person.fullname }},
+
+Your competition has been registered in IceCompass with the following information:
+Name: {{ competition.name }}
+Date: {{ competition.first_date }} - {{ competition.last_date }}
+Tests:
+{% for test in competition.tests %}
+- {{ test.testcode }}: {% for rankinglist in test.include_in_ranking %}{{ rankinglist.shortname }},{% endfor %}
+{% endfor %}
+
+When creating your competition in IcetestNG, you will need to fill out the following IceCompass ID, to enable automatic transferring of results. 
+You will be asked to fill out the ID by Sporti, if you are using the automatic synchronisation feature.
+
+IceCompass ID: {{ competition.ext_id }}
+
+If the above information is incorrect, please contact rangliste@islandshest.dk

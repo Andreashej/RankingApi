@@ -14,6 +14,7 @@ class CompetitionsResource(Resource):
         self.reqparse.add_argument('firstDate', type=lambda x: datetime.datetime.strptime(x, '%Y-%m-%d'), required=True, location='json')
         self.reqparse.add_argument('lastDate', type=lambda x: datetime.datetime.strptime(x, '%Y-%m-%d'), required=True, location='json')
         self.reqparse.add_argument('country', type=str, location='json', required=True)
+        self.reqparse.add_argument('contactPersonId', type=int, location='json', required=True)
     
     @Competition.from_request(many=True)
     def get(self):
@@ -23,14 +24,12 @@ class CompetitionsResource(Resource):
     def post(self):        
         args = self.reqparse.parse_args()
 
-        competition = Competition(args['name'], args['firstDate'], args['lastDate'], args['isirank'], args['country'])
-
-        competition.update(self.reqparse)
-
         try:
+            competition = Competition(args['name'], args['firstDate'], args['lastDate'], args['isirank'], args['country'])
+            competition.update(self.reqparse)
             competition.save()
-        except Exception as e:
-            return ApiErrorResponse(str(e)).response()
+        except ApiErrorResponse as e:
+            return e.response()
         
         return ApiResponse(competition, 201).response()
     
@@ -55,6 +54,7 @@ class CompetitionResource(Resource):
         self.reqparse.add_argument('rankingScopes', type=str, action='append', location='json')
         self.reqparse.add_argument('country', type=str, location='json')
         self.reqparse.add_argument('state', type=str, location='json')
+        self.reqparse.add_argument('contactPersonId', type=int, location='json')
 
     @Competition.from_request
     def get(self, id):
@@ -63,18 +63,18 @@ class CompetitionResource(Resource):
     @jwt_required
     @Competition.from_request
     def patch(self, id):
-        g.competition.update(self.reqparse)
-        
-        args = self.reqparse.parse_args()
-        if args['rankingScopes'] is not None:
-            for ranking in args['rankingScopes']:
-                rankinglist = RankingList.query.filter_by(shortname=ranking).one()
-                g.competition.include_in_ranking.append(rankinglist)
-
         try:
+            g.competition.update(self.reqparse)
+            
+            args = self.reqparse.parse_args()
+            if args['rankingScopes'] is not None:
+                for ranking in args['rankingScopes']:
+                    rankinglist = RankingList.query.filter_by(shortname=ranking).one()
+                    g.competition.include_in_ranking.append(rankinglist)
+
             g.competition.save()
-        except Exception as e:
-            return ApiErrorResponse(str(e), 500).response()
+        except ApiErrorResponse as e:
+            return e.response()
         
         return ApiResponse(g.competition).response()
 
@@ -97,6 +97,7 @@ class CompetitionTestsResource(Resource):
         self.reqparse.add_argument('order', type=str, required=False, location='json')
         self.reqparse.add_argument('markType', type=str, required=False, location='json')
         self.reqparse.add_argument('roundingPrecision', type=str, required=False, location='json')
+        self.reqparse.add_argument('rankinglists', type=str, required=False, location='json', action="append")
 
     @Competition.from_request
     def get(self, id):
@@ -114,6 +115,11 @@ class CompetitionTestsResource(Resource):
 
         try:
             test = Test.create_from_catalog(args['testcode'])
+            if args['rankinglists'] is not None:
+                for shortname in args['rankinglists']:
+                    rankinglist = RankingList.query.filter_by(shortname=shortname).one()
+                    test.include_in_ranking.append(rankinglist)
+
             g.competition.add_test(test)
         except ValueError as e:
             return ApiErrorResponse(str(e), 400).response()
