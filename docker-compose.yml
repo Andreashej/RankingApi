@@ -4,7 +4,7 @@ services:
     build: 
       context: .
       dockerfile: Dockerfile
-    env:
+    environment:
       RDS_DB_NAME: "${RDS_DB_NAME}"
       RDS_HOSTNAME: "${RDS_HOSTNAME}"
       RDS_USERNAME: "${RDS_USERNAME}"
@@ -19,7 +19,7 @@ services:
     build: 
       context: .
       dockerfile: Dockerfile
-    env:
+    environment:
       RDS_DB_NAME: "${RDS_DB_NAME}"
       RDS_HOSTNAME: "${RDS_HOSTNAME}"
       RDS_USERNAME: "${RDS_USERNAME}"
