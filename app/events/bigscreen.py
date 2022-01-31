@@ -1,6 +1,6 @@
 from app import socketio
 from app.models import BigScreen, ScreenGroup
-from flask_socketio import emit, join_room, leave_room, send
+from flask_socketio import emit, join_room, leave_room
 from flask import request
 from sqlalchemy import event
 
@@ -17,7 +17,7 @@ def on_screen_connected(data):
 
     if screen.screen_group:
         join_room(screen.screen_group_id, namespace='/bigscreen')
-        emit('Screen.ScreenGroupChanged', screen.screen_group.to_json(), namespace='/bigscreen')
+        emit('Screen.ScreenGroupChanged', screen.screen_group.to_json(expand=['competition']), namespace='/bigscreen')
 
 @socketio.on('ScreenGroup.Joined', namespace='/bigscreen')
 def join_screengroup(data):

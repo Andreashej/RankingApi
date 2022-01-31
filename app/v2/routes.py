@@ -1,4 +1,5 @@
 
+from app.v2.resources.BigScreen import CollectingRingCallResource
 from app.v2.resources.BigScreen import ScreenGroupsResource, ScreenGroupResource, BigScreenResource, BigScreensResource
 from app.v2.resources.Search import SearchResultsResource
 from app.v2.resources.Result import ResultsResource, ResultResource
@@ -66,6 +67,8 @@ api.add_resource(UserResource, '/users/<int:id>', endpoint='user')
 api.add_resource(TestCatalogResource, '/test-catalog', endpoint='test_catalog')
 
 api.add_resource(SearchResultsResource, '/search', endpoint='search')
+
+api.add_resource(CollectingRingCallResource, '/bigscreens/collectingring', endpoint='collectingring')
 
 api.add_resource(ScreenGroupsResource, '/screengroups', endpoint='screengroups')
 api.add_resource(ScreenGroupResource, '/screengroups/<int:id>', endpoint='screengroup')

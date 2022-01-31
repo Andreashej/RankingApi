@@ -1,6 +1,5 @@
 from .. import db
 from .RestMixin import RestMixin
-from app import socketio
 
 class ScreenGroup(db.Model, RestMixin):
     RESOURCE_NAME = 'screengroup'

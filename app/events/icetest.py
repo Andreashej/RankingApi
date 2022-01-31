@@ -1,16 +1,95 @@
-from click.core import Command
-from kombu import Connection
-from kombu.entity import Queue
+from typing import ByteString
+from kombu import Connection, Exchange, Queue, Consumer, Message
+import socket
+import threading
+import json
+from sqlalchemy.orm.exc import NoResultFound
 
-connection = Connection(hostname="southpole.icetestng.com", userid="icecompass", password="n-6TaDR-zRErUBF7U@qQ", virtual_host="southpole")
+from app.models.CompetitionModel import Competition
+from app.models.PersonModel import Person
+from app.models.HorseModel import Horse
+from app.models.ResultModel import Result
+from app.models.TestModel import Test
+from app import db, create_app
+from flask import current_app
+
+connection = Connection(hostname="southpole.icetestng.com", userid="icecompass", password="n-6TaDR-zRErUBF7U@qQ", virtual_host="dev")
 
 connection.connect()
-print (f"Connected to RabbitMQ: {connection.connected}")
 
-def callback(body, message):
-    print (body, message)
+exchange = Exchange("-- default --", type="direct")
+queue = Queue(name="icecompass", exchange=exchange, routing_key="icecompass")
 
-with connection as connection:
-    queue = Queue('icecompass', routing_key='icecompass')
-    consumer = connection.Consumer(queue)
-    consumer.register_callback(callback)
+def process_message(body: ByteString, message: Message):
+    data = json.loads(body)['MESSAGE']
+
+    try:
+        competition = Competition.query.filter_by(ext_id = data['COMPASSID']).one()
+    except NoResultFound:
+        # The competition ID does not match anything we have - ignore the result
+        message.reject()
+        return
+    
+    try:
+        test = competition.tests.filter_by(testcode = data['TESTCODE']).one()
+    except NoResultFound:
+        test = Test.create_from_catalog(data['ORIGINALTESTCODE'])
+        competition.tests.append(test)
+        db.session.add(test)
+
+    try:
+        rider = Person.find_by_name(data['RIDER'])
+    except NoResultFound:
+        rider = Person.create_by_name(data['RIDER'])
+        db.session.add(rider)
+
+    try:
+        horse = Horse.query.filter_by(feif_id = data['FEIFID']).one()
+    except NoResultFound:
+        horse = Horse(data['FEIFID'], data['HORSE'])
+        db.session.add(horse)
+
+    try:
+        result = Result.query.filter_by(test_id=test.id, rider_id=rider.id, horse_id=horse.id).one()
+        result.mark = data['MARK']
+        result.state = data['STATE']
+    except NoResultFound:
+        result = Result(test, data['MARK'], rider, horse, data['STATE'])
+        db.session.add(result)
+
+    try:
+        db.session.commit()
+        message.ack()
+    except:
+        db.session.rollback()
+        message.reject(True)
+
+consumer = Consumer(connection, queues=queue, callbacks=[process_message])
+
+def establish_connection():
+    revived_connection = connection.clone()
+    revived_connection.ensure_connection(max_retries=3)
+    channel = revived_connection.channel()
+    consumer.revive(channel)
+    consumer.consume()
+    return revived_connection
+
+def consume():
+    new_conn = establish_connection()
+    while True:
+        try:
+            new_conn.drain_events(timeout=2)
+        except socket.timeout:
+            new_conn.heartbeat_check()
+
+def run():
+    app = create_app()
+    app.app_context().push()
+    while True:
+        try:
+            consume()
+        except connection.connection_errors:
+            print("connection revived")
+
+x = threading.Thread(target=run, daemon=True)
+x.start()

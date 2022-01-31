@@ -1,29 +1,24 @@
+from app.models.TestEntryModel import TestEntry
 from .. import db
 from flask import current_app
 from sqlalchemy.ext.hybrid import hybrid_property
 
-from .RestMixin import RestMixin
-
-class Result(db.Model, RestMixin):
+class Result(TestEntry):
     RESOURCE_NAME = 'result'
     RESOURCE_NAME_PLURAL = 'results'
 
     INCLUDE_IN_JSON = ['rank']
 
-    __tablename__ = 'results'
-    id = db.Column(db.Integer, primary_key=True)
-    mark = db.Column(db.Float)
-    state = db.Column(db.String(20), default="VALID")
     rider_id = db.Column(db.Integer, db.ForeignKey('persons.id', ondelete='CASCADE'),nullable=False)
     horse_id = db.Column(db.Integer, db.ForeignKey('horses.id', ondelete='CASCADE'), nullable=False)
     test_id = db.Column(db.Integer, db.ForeignKey('tests.id', ondelete='CASCADE'), nullable=False)
     
-    def __init__(self, test, mark):
+    def __init__(self, test, mark, rider, horse, state = "VALID"):
         self.test = test
         self.mark = mark
-    
-    def __repr__(self):
-        return '<Result {} {} {} >'.format(self.test.testcode, self.mark, self.rider.firstname)
+        self.rider = rider
+        self.horse = horse
+        self.state = state
     
     @hybrid_property
     def rank(self):

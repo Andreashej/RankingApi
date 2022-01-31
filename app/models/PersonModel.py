@@ -9,6 +9,7 @@ from flask import current_app
 from .PersonAliasModel import PersonAlias
 from .ResultModel import Result
 from .TestModel import Test
+from sqlalchemy.orm.exc import NoResultFound
 
 from .RestMixin import RestMixin
 
@@ -23,7 +24,7 @@ class Person(db.Model, RestMixin):
     id = db.Column(db.Integer, primary_key=True)
     firstname = db.Column(db.String(250))
     lastname = db.Column(db.String(250))
-    _email = db.Column('email', db.String(128), nullable=False)
+    _email = db.Column('email', db.String(128), nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     user = db.relationship('User', back_populates='person')
     results = db.relationship("Result", backref="rider", lazy="dynamic")
@@ -268,4 +269,4 @@ class Person(db.Model, RestMixin):
         if rider:
             return rider
 
-        return None
+        raise NoResultFound

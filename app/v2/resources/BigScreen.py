@@ -1,6 +1,8 @@
+from datetime import datetime, timedelta
 from flask_restful import Resource, reqparse
 from app.Responses import ApiErrorResponse, ApiResponse
-from flask import g
+from flask import g, request
+from app import socketio
 
 from app.models.BigScreenModel import BigScreen
 from app.models.ScreenGroupModel import ScreenGroup
@@ -68,3 +70,19 @@ class BigScreenResource(Resource):
             return e.response()
         
         return ApiResponse(g.bigscreen).response()
+
+class CollectingRingCallResource(Resource):
+    def post(self):
+        args = request.json
+        target_groups = ScreenGroup.query.filter_by(competition_id=args['competitionId'], template="collectingring").all()
+
+        end_time = datetime.now() + timedelta(seconds=args['time'])
+
+        for target_group in target_groups:
+            socketio.emit("CollectingRing.Call",{
+                "riders": args['riders'],
+                "endTime": end_time.isoformat(),
+                "competition": target_group.competition.to_json()
+            }, to=target_group.id, namespace="/bigscreen")
+
+        return None, 201
