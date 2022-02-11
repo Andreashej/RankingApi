@@ -11,6 +11,7 @@ class ScreenGroupsResource(Resource):
     def __init__(self):
         self.reqparse = reqparse.RequestParser()
         self.reqparse.add_argument('competitionId', type=int, location='json', required=True)
+        self.reqparse.add_argument('name', type=str, location='json', required=True)
     
     @ScreenGroup.from_request(many=True)
     def get(self):
@@ -19,7 +20,7 @@ class ScreenGroupsResource(Resource):
     def post(self):
         args = self.reqparse.parse_args()
 
-        group = ScreenGroup(competition_id=args['competitionId'])
+        group = ScreenGroup(competition_id=args['competitionId'], name=args['name'])
 
         try:
             group.save()
@@ -32,6 +33,7 @@ class ScreenGroupResource(Resource):
     def __init__(self):
         self.reqparse = reqparse.RequestParser()
         self.reqparse.add_argument('template', type=str, location='json')
+        self.reqparse.add_argument('testId', type=int, location='json')
 
     @ScreenGroup.from_request
     def get(self, id):

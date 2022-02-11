@@ -22,7 +22,7 @@ class Horse(db.Model, RestMixin):
     id = db.Column(db.Integer, primary_key=True)
     feif_id = db.Column(db.String(12), unique=True)
     horse_name = db.Column(db.String(250))
-    results = db.relationship("Result", backref="horse", lazy="dynamic")
+    results = db.relationship("Result", back_populates="horse", lazy="dynamic")
     last_lookup = db.Column(db.DateTime)
     log_items = db.relationship("Log", back_populates="horse")
     lookup_error = db.Column(db.Boolean, default=False)

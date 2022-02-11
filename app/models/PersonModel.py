@@ -1,4 +1,5 @@
 import csv
+from datetime import date
 
 from app.Responses import ApiErrorResponse
 
@@ -17,8 +18,8 @@ class Person(db.Model, RestMixin):
     RESOURCE_NAME = 'person'
     RESOURCE_NAME_PLURAL = 'persons'
 
-    INCLUDE_IN_JSON = ['fullname', 'email', 'number_of_results']
-    EXCLUDE_FROM_JSON = ['_email']
+    INCLUDE_IN_JSON = ['fullname', 'email', 'number_of_results','age_group']
+    EXCLUDE_FROM_JSON = ['_email', 'date_of_birth', 'age']
 
     __tablename__ = 'persons'
     id = db.Column(db.Integer, primary_key=True)
@@ -26,8 +27,9 @@ class Person(db.Model, RestMixin):
     lastname = db.Column(db.String(250))
     _email = db.Column('email', db.String(128), nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    date_of_birth = db.Column(db.Date)
     user = db.relationship('User', back_populates='person')
-    results = db.relationship("Result", backref="rider", lazy="dynamic")
+    results = db.relationship("Result", back_populates="rider", lazy="dynamic")
     aliases = db.relationship("PersonAlias", backref="person", lazy="dynamic")
 
     def __init__(self, first, last):
@@ -64,6 +66,20 @@ class Person(db.Model, RestMixin):
     @email.expression
     def email(cls):
         return cls._email
+    
+    @hybrid_property
+    def age(self):
+        if self.date_of_birth is None:
+            return None
+        return date.today().year - self.date_of_birth.year
+
+    @hybrid_property
+    def age_group(self):
+        if self.age < 16:
+            return 'Junior'
+        if self.age < 22:
+            return 'Young Rider'
+        return 'Senior'
 
     @hybrid_property
     def number_of_results(self):

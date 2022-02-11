@@ -4,6 +4,7 @@ from sqlalchemy.ext.hybrid import hybrid_property
 from .ResultModel import Result
 from .RestMixin import ApiErrorResponse, RestMixin
 from sqlalchemy.sql.functions import rank
+from sqlalchemy import case
 
 tests_rankinglists = db.Table('tests_ranking_association',
     db.Column('test_id', db.Integer, db.ForeignKey('tests.id'), primary_key=True),
@@ -17,15 +18,29 @@ class Test(db.Model, RestMixin):
     __tablename__ = 'tests'
     id = db.Column(db.Integer, primary_key=True)
     testcode = db.Column(db.String(3))
+    _test_name = db.Column("test_name", db.String(20))
     competition_id = db.Column(db.Integer, db.ForeignKey('competitions.id'), nullable=False)
     rounding_precision = db.Column(db.Integer, default=2)
     order = db.Column(db.String(4), default='desc')
     mark_type = db.Column(db.String(4), default='mark')
-    _results = db.relationship('Result', backref='test', lazy='dynamic')
+
+    _results = db.relationship('Result', back_populates='test', lazy='dynamic')
+    startlist = db.relationship('StartListEntry', back_populates='test', lazy='dynamic', order_by='StartListEntry.start_group')
     _include_in_ranking = db.relationship('RankingList', secondary=tests_rankinglists, lazy='dynamic')
 
     def __init__(self, testcode):
         self.testcode = testcode
+
+    @hybrid_property
+    def test_name(self):
+        if self._test_name is not None:
+            return self._test_name
+        
+        return self.testcode
+    
+    @test_name.setter
+    def test_name(self, test_name):
+        self._test_name = test_name
     
     @hybrid_property
     def include_in_ranking(self):

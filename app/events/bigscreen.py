@@ -1,5 +1,7 @@
+from datetime import datetime, timedelta
+from os import name
 from app import socketio
-from app.models import BigScreen, ScreenGroup
+from app.models import BigScreen, ScreenGroup, Test
 from flask_socketio import emit, join_room, leave_room
 from flask import request
 from sqlalchemy import event
@@ -28,8 +30,8 @@ def join_screengroup(data):
 @socketio.on('ScreenGroup.SetTemplate', namespace='/bigscreen')
 def change_template(updated_screengroup):
     screengroup = ScreenGroup.query.get(updated_screengroup['id'])
-    emit('ScreenGroup.SetPreview', screengroup.to_json(), namespace='/bigscreen')
     screengroup.template = updated_screengroup['template']
+    # emit('ScreenGroup.SetPreview', screengroup.to_json(), namespace='/bigscreen')
     screengroup.save()
 
 @socketio.on('Screen.SetScreenGroup', namespace='/bigscreen')
@@ -42,6 +44,20 @@ def set_screengroup(screen_id, new_screengroup):
     screen.screen_group_id = new_screengroup['id']
     screen.save()
     emit('Screen.ScreenGroupChanged', screen.screen_group.to_json(expand=['screens']), namespace='/bigscreen', include_self=True)
+
+@socketio.on('CollectingRing.Call', namespace='/bigscreen')
+def call_collectingring(screen_group_id, test_id, start_group):
+    
+    screen_group = ScreenGroup.query.get(screen_group_id)
+    test = Test.query.get(test_id)
+    start_list_entries = test.startlist.filter_by(start_group = start_group).all()
+
+    end_time = datetime.now() + timedelta(seconds=180)
+
+    emit('CollectingRing.ShowCall', {
+        'startListEntries': [entry.to_json(expand=['rider']) for entry in start_list_entries],
+        'endTime': end_time.isoformat()
+    }, namespace="/bigscreen", to=screen_group.id)
     
 
 @event.listens_for(ScreenGroup.template, 'set')

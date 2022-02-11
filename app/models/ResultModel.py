@@ -9,9 +9,13 @@ class Result(TestEntry):
 
     INCLUDE_IN_JSON = ['rank']
 
-    rider_id = db.Column(db.Integer, db.ForeignKey('persons.id', ondelete='CASCADE'),nullable=False)
-    horse_id = db.Column(db.Integer, db.ForeignKey('horses.id', ondelete='CASCADE'), nullable=False)
-    test_id = db.Column(db.Integer, db.ForeignKey('tests.id', ondelete='CASCADE'), nullable=False)
+    mark = db.Column(db.Float)
+    phase = db.Column(db.String(4))
+    rider_class = db.Column(db.String(20))
+    created_at = db.Column(db.DateTime)
+    updated_at = db.Column(db.DateTime)
+
+    marks = db.relationship("BaseMark", back_populates="result", lazy="dynamic")
     
     def __init__(self, test, mark, rider, horse, state = "VALID"):
         self.test = test
@@ -19,6 +23,9 @@ class Result(TestEntry):
         self.rider = rider
         self.horse = horse
         self.state = state
+    
+    def __repr__(self):
+        return '<Result {} {} {} >'.format(self.test.testcode, self.mark, self.rider.firstname)
     
     @hybrid_property
     def rank(self):

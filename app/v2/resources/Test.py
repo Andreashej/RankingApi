@@ -2,7 +2,7 @@ from flask.globals import g
 from flask_jwt_extended.view_decorators import jwt_required
 from flask_restful import Resource, reqparse
 from app.Responses import ApiResponse, ApiErrorResponse
-from app.models import Test, Result, Person, Horse, RankingList
+from app.models import Test, Result, Person, Horse, RankingList, StartListEntry
 from app.models.TestModel import tests_rankinglists
 from app import db
 
@@ -116,3 +116,12 @@ class TestResultsResource(Resource):
         return ApiResponse(result).response()
 
         
+class TestStartListResource(Resource):
+    @Test.from_request
+    def get(self, id):
+        try:
+            startlist = StartListEntry.load_many(g.test.startlist)
+        except ApiErrorResponse as e:
+            return e.response()
+        
+        return ApiResponse(startlist).response()

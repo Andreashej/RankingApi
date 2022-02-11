@@ -11,10 +11,11 @@ class TestEntry(db.Model, RestMixin):
     rider_id = db.Column(db.Integer, db.ForeignKey('persons.id', ondelete='CASCADE'),nullable=False)
     horse_id = db.Column(db.Integer, db.ForeignKey('horses.id', ondelete='CASCADE'), nullable=False)
     test_id = db.Column(db.Integer, db.ForeignKey('tests.id', ondelete='CASCADE'), nullable=False)
-    # phase = db.Column(db.String(4))
-    # start_group = db.Column(db.Integer)
-    # sta = db.Column(db.Integer)
-    # timestamp = db.Column(db.DateTime)
+    sta = db.Column(db.Integer)
+
+    rider = db.relationship('Person')
+    horse = db.relationship('Horse')
+    test = db.relationship('Test', back_populates='_results')
     
     def __repr__(self):
         return '<Result {} {} {} >'.format(self.test.testcode, self.mark, self.rider.firstname)
