@@ -44,6 +44,11 @@ class ResultsResource(Resource):
 
 class ResultResource(Resource):
 
-    @Result.from_request
+    # @Result.from_request
     def get(self, id):
-        return ApiResponse(g.result).response()
+        result = Result.query.filter(Result.state != 'NOT STARTED').filter_by(id=id).first()
+
+        if result is None:
+            return ApiErrorResponse('Result not found', 404).response()
+            
+        return ApiResponse(result).response()

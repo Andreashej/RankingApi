@@ -19,20 +19,23 @@ def on_screen_connected(data):
 
     if screen.screen_group:
         join_room(screen.screen_group_id, namespace='/bigscreen')
-        emit('Screen.ScreenGroupChanged', screen.screen_group.to_json(expand=['competition']), namespace='/bigscreen')
+        emit('Screen.ScreenGroupChanged', screen.screen_group.to_json(expand=['competition','test']), namespace='/bigscreen')
 
 @socketio.on('ScreenGroup.Joined', namespace='/bigscreen')
 def join_screengroup(data):
     join_room(data['id'], namespace='/bigscreen')
     screen_group = ScreenGroup.query.get(data['id'])
-    socketio.emit('ScreenGroup.TemplateChanged', screen_group.template, namespace="/bigscreen")
+    # socketio.emit('ScreenGroup.TemplateChanged', screen_group.template, namespace="/bigscreen")
 
 @socketio.on('ScreenGroup.SetTemplate', namespace='/bigscreen')
 def change_template(updated_screengroup):
-    screengroup = ScreenGroup.query.get(updated_screengroup['id'])
-    screengroup.template = updated_screengroup['template']
-    # emit('ScreenGroup.SetPreview', screengroup.to_json(), namespace='/bigscreen')
-    screengroup.save()
+    screen_group = ScreenGroup.query.get(updated_screengroup['id'])
+    screen_group.template = updated_screengroup['template']
+    emit('ScreenGroup.TemplateChanged', {
+        'template': updated_screengroup['template'],
+        'templateData': updated_screengroup['templateData']
+    }, namespace="/bigscreen", to=screen_group.id, include_self=True)
+    screen_group.save()
 
 @socketio.on('Screen.SetScreenGroup', namespace='/bigscreen')
 def set_screengroup(screen_id, new_screengroup):
@@ -58,8 +61,12 @@ def call_collectingring(screen_group_id, test_id, start_group):
         'startListEntries': [entry.to_json(expand=['rider']) for entry in start_list_entries],
         'endTime': end_time.isoformat()
     }, namespace="/bigscreen", to=screen_group.id)
-    
 
-@event.listens_for(ScreenGroup.template, 'set')
-def screen_template_change(screen_group, template, initiator, *args):
-    socketio.emit('ScreenGroup.TemplateChanged', template, namespace="/bigscreen", to=screen_group.id, include_self=True)
+@socketio.on('ScreenGroup.HideAll', namespace='/bigscreen')
+def hide_all(screen_group_id):
+    emit('ScreenGroup.HideAll', namespace="/bigscreen", to=screen_group_id)
+
+@event.listens_for(ScreenGroup.test_id, 'set')
+def screen_group_test_changed(screen_group, test_id, initiator, *args):
+    test = Test.query.get(test_id)
+    socketio.emit('ScreenGroup.TestChanged', test.to_json(), namespace="/bigscreen", to=screen_group.id, include_self=True)

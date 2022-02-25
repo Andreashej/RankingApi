@@ -75,6 +75,8 @@ class Person(db.Model, RestMixin):
 
     @hybrid_property
     def age_group(self):
+        if self.age is None: return None
+        
         if self.age < 16:
             return 'Junior'
         if self.age < 22:

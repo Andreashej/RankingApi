@@ -12,6 +12,7 @@ class TestEntry(db.Model, RestMixin):
     horse_id = db.Column(db.Integer, db.ForeignKey('horses.id', ondelete='CASCADE'), nullable=False)
     test_id = db.Column(db.Integer, db.ForeignKey('tests.id', ondelete='CASCADE'), nullable=False)
     sta = db.Column(db.Integer)
+    color = db.Column(db.String(12))
 
     rider = db.relationship('Person')
     horse = db.relationship('Horse')

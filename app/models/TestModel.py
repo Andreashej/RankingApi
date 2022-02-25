@@ -15,6 +15,9 @@ class Test(db.Model, RestMixin):
     RESOURCE_NAME = 'test'
     RESOURCE_NAME_PLURAL = 'tests'
 
+    BLOCK_FROM_JSON = ['_test_name']
+    INCLUDE_IN_JSON = ['test_name']
+
     __tablename__ = 'tests'
     id = db.Column(db.Integer, primary_key=True)
     testcode = db.Column(db.String(3))
@@ -54,7 +57,7 @@ class Test(db.Model, RestMixin):
 
     @hybrid_property
     def results(self):
-        query = self._results.join(Test)
+        query = self._results.join(Test).filter(Result.state != 'NOT STARTED')
         
         if self.order == 'asc':
             return query.filter(Result.mark > 0).order_by(Result.mark.asc())
