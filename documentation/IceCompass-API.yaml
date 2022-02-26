@@ -64,6 +64,7 @@ paths:
                   templateData:
                     test:
                       testName: F1
+                    phase: PREL
                     startList:
                       - id: 123
                         state: VALID
@@ -81,12 +82,14 @@ paths:
                   templateData:
                     test:
                       testName: F1
+                    phase: PREL
                     resultList:
                       - id: 123
                         state: VALID
                         rank: 1
                         mark: 5.67
                         color: red
+                        scope: AFIN
                         horse:
                           horseName: Bjartmar fra Nedre Sveen
                           feifId: NO2010104091
@@ -418,16 +421,6 @@ components:
     ScreenGroup:
       title: ScreenGroup
       type: object
-      examples:
-        - id: 1
-          template: startlist
-          name: Track 1
-          competitionId: 1450
-          testId: 6826
-          screens:
-            - id: 268
-              screenGroupId: 1
-              competitionId: 1450
       properties:
         id:
           type: integer
@@ -443,6 +436,16 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Screen'
+      examples:
+        - id: 1
+          template: startlist
+          name: Track 1
+          competitionId: 1450
+          testId: 6826
+          screens:
+            - id: 268
+              screenGroupId: 1
+              competitionId: 1450
     Screen:
       title: Screen
       type: object
