@@ -4,37 +4,38 @@ from sqlalchemy.orm import backref
 
 class BaseMark(db.Model):
     __tablename__ = "marks"
+    RESOURCE_NAME = "mark"
+    RESOURCE_NAME_PLURAL = "marks"
 
     id = db.Column(db.Integer, primary_key=True)
     mark_type = db.Column(db.String(4)) # mark, flag or time
+    type = db.Column(db.String(10), nullable=False)
+    
+    mark = db.Column(db.Float)
+    flag_ok = db.Column(db.Boolean)
 
     judge_no = db.Column(db.Integer)
     judge_id = db.Column(db.String(12))
-
-    result_id = db.Column(db.Integer, db.ForeignKey('results.id')) # if this is the parent, the mark is a judge mark
-    section_mark_id = db.Column(db.Integer, db.ForeignKey('marks.id')) # if this is the parent, the mark is a section mark
-
-    result = db.relationship("Result", back_populates="marks")
-
-    section_marks = db.relationship("BaseMark", backref=backref("judge_mark", remote_side=[id]))
 
     red_card = db.Column(db.Boolean)
     yellow_card = db.Column(db.Boolean)
     blue_card = db.Column(db.Boolean)
 
-    __mapper_args__ = { 'polymorphic_on': mark_type }
+    __mapper_args__ = { 'polymorphic_on': type }
 
-class Mark(BaseMark, RestMixin):
-    __mapper_args__ = { 'polymorphic_identity': 'mark' }
-    mark = db.Column(db.Float)
+class JudgeMark(BaseMark, RestMixin):
+    __mapper_args__ = { 'polymorphic_identity': 'judge' }
 
-class Flag(BaseMark, RestMixin):
-    __mapper_args__ = { 'polymorphic_identity': 'flag' }
+    result_id = db.Column(db.Integer, db.ForeignKey('results.id'))
+    
+    result = db.relationship("Result", back_populates="marks")
+    section_marks = db.relationship("SectionMark", lazy="dynamic")
 
-    is_ok = db.Column(db.Boolean)
+class SectionMark(BaseMark, RestMixin):
+    __mapper_args__ = { 'polymorphic_identity': 'section' }
 
-class Time(BaseMark, RestMixin):
-    __mapper_args__ = { 'polymorphic_identity': 'time' }
+    section_no = db.Column("section_no", db.Integer)
 
-    time = db.Column(db.Float)
+    judge_mark_id = db.Column("judge_mark_id", db.Integer, db.ForeignKey('marks.id'))
+    
 

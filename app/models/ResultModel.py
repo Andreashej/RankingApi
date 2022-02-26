@@ -10,12 +10,11 @@ class Result(TestEntry):
     INCLUDE_IN_JSON = ['rank']
 
     mark = db.Column(db.Float)
-    phase = db.Column(db.String(4))
     rider_class = db.Column(db.String(20))
     created_at = db.Column(db.DateTime)
     updated_at = db.Column(db.DateTime)
 
-    marks = db.relationship("BaseMark", back_populates="result", lazy="dynamic")
+    marks = db.relationship("JudgeMark", back_populates="result", lazy="dynamic")
     
     def __init__(self, test, mark, rider, horse, state = "VALID"):
         self.test = test

@@ -14,5 +14,6 @@ from .RevokedTokenModel import RevokedToken
 from .LogModel import Log
 from .ScreenGroupModel import ScreenGroup
 from .BigScreenModel import BigScreen
-from .MarkModel import Mark, Time, Flag
+from .MarkModel import JudgeMark, SectionMark
 from .StartListModel import StartListEntry
+from .TestSectionModel import TestSection

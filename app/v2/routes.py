@@ -1,14 +1,15 @@
+
 from app.v2.resources.BigScreen import CollectingRingCallResource
 from app.v2.resources.BigScreen import ScreenGroupsResource, ScreenGroupResource, BigScreenResource, BigScreensResource
 from app.v2.resources.Search import SearchResultsResource
-from app.v2.resources.Result import ResultsResource, ResultResource
+from app.v2.resources.Result import ResultsResource, ResultResource, ResultMarksResource, SectionMarksResource
 from app.v2.resources.Task import TaskResource, TasksResource
 from app.v2.resources.Person import PersonsResource, PersonResource, PersonResultsResource, PersonAliasesResource
 from app.v2.resources.Horse import HorsesResource, HorseResource, HorseResultsResource
 from app.v2.resources.Rankings import RankingsResource, RankingResource, RankingResultsRankingResource
 from app.v2.resources.RankingList import RankingListsResource, RankingListResource, RankingListTestsResource, RankingListTasksResource
 from app.v2.resources.Competition import CompetitionResource, CompetitionsResource, CompetitionTestsResource
-from app.v2.resources.Test import TestsResource, TestResource, TestResultsResource, TestStartListResource
+from app.v2.resources.Test import TestsResource, TestResource, TestResultsResource, TestStartListResource, TestSectionResultsResource
 from app.v2.resources.RankingResult import RankingResultResource, RankingResultMarksResource,RankingResultsResource
 from app.v2.resources.Auth import TokenRefresh, UserLogin, UserLogoutAccess, UserLogoutRefresh, ProfileResource, UsersResource, UserResource
 from app.v2.resources.TestCatalog import TestCatalogResource
@@ -23,9 +24,12 @@ api.add_resource(TestsResource, '/tests', endpoint='tests')
 api.add_resource(TestResource, '/tests/<int:id>', endpoint='test')
 api.add_resource(TestResultsResource, '/tests/<int:id>/results', endpoint='test_results')
 api.add_resource(TestStartListResource, '/tests/<int:id>/startlist', endpoint='test_startlist')
+api.add_resource(TestSectionResultsResource, '/tests/<int:id>/section/<int:section_no>/results', endpoint='test_section_results')
 
 api.add_resource(ResultsResource, '/results', endpoint="results")
 api.add_resource(ResultResource, '/results/<int:id>', endpoint="result")
+api.add_resource(ResultMarksResource, '/results/<int:id>/marks', endpoint="marks")
+api.add_resource(SectionMarksResource, '/marks/<int:id>/sections/<int:section_no>', endpoint="section_marks")
 
 api.add_resource(RankingListsResource, '/rankinglists', endpoint="rankinglists")
 api.add_resource(RankingListResource, '/rankinglists/<int:id>', endpoint="rankinglist")

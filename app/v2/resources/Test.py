@@ -1,9 +1,9 @@
 from flask.globals import g
 from flask_jwt_extended.view_decorators import jwt_required
 from flask_restful import Resource, reqparse
+from app.models.TestEntryModel import TestEntry
 from app.Responses import ApiResponse, ApiErrorResponse
 from app.models import Test, Result, Person, Horse, RankingList, StartListEntry
-from app.models.TestModel import tests_rankinglists
 from app import db
 
 class TestsResource(Resource):
@@ -125,3 +125,8 @@ class TestStartListResource(Resource):
             return e.response()
         
         return ApiResponse(startlist).response()
+
+class TestSectionResultsResource(Resource):
+    @Test.from_request
+    def get(self, id, section_no):
+        entries = TestEntry.query.filter_by(test_id = g.test.id)

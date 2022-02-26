@@ -33,6 +33,7 @@ class ScreenGroupResource(Resource):
     def __init__(self):
         self.reqparse = reqparse.RequestParser()
         self.reqparse.add_argument('template', type=str, location='json')
+        # self.reqparse.add_argument('templateData', type=dict, location='json')
         self.reqparse.add_argument('testId', type=int, location='json')
 
     @ScreenGroup.from_request
@@ -41,7 +42,16 @@ class ScreenGroupResource(Resource):
     
     @ScreenGroup.from_request
     def patch(self, id):
-        try:
+        try:    
+            template = request.json.get('template')
+            template_data = request.json.get('templateData')
+
+            if template is not None and template_data is not None:
+                socketio.emit('ScreenGroup.TemplateChanged', {
+                    'template': template,
+                    'templateData': template_data
+                }, namespace="/bigscreen", to=id)
+
             g.screengroup.update(self.reqparse)
             g.screengroup.save()
         except ApiErrorResponse as e:

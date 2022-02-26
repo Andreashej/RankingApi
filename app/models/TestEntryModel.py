@@ -1,6 +1,4 @@
 from .. import db
-from flask import current_app
-from sqlalchemy.ext.hybrid import hybrid_property
 
 from .RestMixin import RestMixin
 
@@ -13,6 +11,7 @@ class TestEntry(db.Model, RestMixin):
     test_id = db.Column(db.Integer, db.ForeignKey('tests.id', ondelete='CASCADE'), nullable=False)
     sta = db.Column(db.Integer)
     color = db.Column(db.String(12))
+    phase = db.Column(db.String(4))
 
     rider = db.relationship('Person')
     horse = db.relationship('Horse')

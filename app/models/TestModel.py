@@ -4,7 +4,7 @@ from sqlalchemy.ext.hybrid import hybrid_property
 from .ResultModel import Result
 from .RestMixin import ApiErrorResponse, RestMixin
 from sqlalchemy.sql.functions import rank
-from sqlalchemy import case
+from app.models.TestSectionModel import TestSection
 
 tests_rankinglists = db.Table('tests_ranking_association',
     db.Column('test_id', db.Integer, db.ForeignKey('tests.id'), primary_key=True),
@@ -77,6 +77,10 @@ class Test(db.Model, RestMixin):
             .filter(Result.test_id==self.id, Result.mark > 0)\
 
         return { id: rank for (id, rank) in query.all() }
+    
+    @hybrid_property
+    def sections(self):
+        return TestSection.query.filter_by(testcode=self.testcode).order_by(TestSection.section_no).all()
 
     def add_result(self, rider, horse, mark, state = None, **kwargs):
     

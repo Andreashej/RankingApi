@@ -10,7 +10,7 @@ from app.models.PersonModel import Person
 from app.models.HorseModel import Horse
 from app.models.ResultModel import Result
 from app.models.TestModel import Test
-from app.models.MarkModel import Mark, Time, Flag
+from app.models.MarkModel import JudgeMark
 from app import db, create_app
 from flask import current_app
 from datetime import datetime
@@ -69,7 +69,7 @@ def process_message(body: ByteString, message: Message):
 
         result.marks.delete()
         for mark_raw in data['MARKS']:
-            mark = Mark(mark = mark_raw['mark'], judge_no = int(mark_raw['judge']), judge_id=mark_raw['JUDGEID'])
+            mark = JudgeMark(mark = mark_raw['mark'], judge_no = int(mark_raw['judge']), judge_id=mark_raw['JUDGEID'])
 
             # Find cards associated with this mark
             for card in [card for card in data['CARDS'] if card['judge'] == mark.judge_no]:
