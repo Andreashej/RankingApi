@@ -11,7 +11,7 @@ RUN apt-get update && apt-get -y install gcc libffi-dev
 
 RUN venv/bin/pip install -r requirements.txt
 
-RUN venv/bin/pip install gunicorn
+RUN venv/bin/pip install gunicorn eventlet==0.30.2
 
 COPY app app
 COPY migrations migrations

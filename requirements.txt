@@ -6,6 +6,7 @@ attrs==20.3.0
 autopep8==1.6.0
 awsebcli==3.19.3
 bcrypt==3.2.0
+bidict==0.21.4
 blessed==1.17.12
 blinker==1.4
 botocore==1.19.63
@@ -17,6 +18,7 @@ chardet==3.0.4
 Click==7.0
 colorama==0.4.3
 cryptography==3.3.1
+dnspython==2.2.0
 docker==4.4.1
 docker-compose==1.25.5
 dockerpty==0.4.1
@@ -32,6 +34,7 @@ flask-marshmallow==0.13.0
 Flask-Migrate==2.1.1
 Flask-RESTful==0.3.6
 Flask-Script==2.0.6
+Flask-SocketIO==5.1.1
 Flask-SQLAlchemy==2.3.2
 future==0.16.0
 graphene==2.1.9
@@ -68,6 +71,8 @@ pyrsistent==0.17.3
 python-dateutil==2.8.0
 python-dotenv==0.10.3
 python-editor==1.0.4
+python-engineio==4.3.1
+python-socketio==5.5.1
 pytz==2019.2
 PyYAML==5.3.1
 redis==3.5.3

@@ -79,7 +79,7 @@ def create_app():
     cors.init_app(app)
     jwt.init_app(app)
     mail.init_app(app)
-    socketio.init_app(app, cors_allowed_origins='*')
+    socketio.init_app(app, cors_allowed_origins='*', message_queue=app.config['REDIS_URL'])
 
     with app.app_context():
         from app import models, commands
