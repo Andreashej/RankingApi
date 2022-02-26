@@ -62,6 +62,8 @@ paths:
                 value:
                   template: startlist
                   templateData:
+                    test:
+                      testName: F1
                     startList:
                       - id: 123
                         state: VALID
@@ -77,6 +79,8 @@ paths:
                 value:
                   template: resultlist
                   templateData:
+                    test:
+                      testName: F1
                     resultList:
                       - id: 123
                         state: VALID
@@ -169,6 +173,56 @@ paths:
                   templateData:
                     title: I am the title
                     subtitle: I am the subtitle
+              Section Marks:
+                value:
+                  template: sectionmarks
+                  templateData:
+                    section:
+                      sectionName: Tölt
+                      sectionNo: 1
+                      test:
+                        roundingPrecision: 2
+                    group:
+                      - id: 123
+                        mark: 5.67
+                        color: red
+                        horse:
+                          horseName: Bjartmar fra Nedre Sveen
+                          feifId: NO2010104091
+                        rider:
+                          fullname: Agnar Snorri Stefánsson
+                          ageGroup: Senior
+                        sectionMarks:
+                          - mark: 5
+                            judgeNo: 1
+                            judgeId: XX904
+                            redCard: false
+                            yellowCard: false
+                            blueCard: false
+                          - mark: 5.5
+                            judgeNo: 2
+                            judgeId: XX904
+                            redCard: false
+                            yellowCard: false
+                            blueCard: false
+                          - mark: 6
+                            judgeNo: 3
+                            judgeId: XX904
+                            redCard: false
+                            yellowCard: false
+                            blueCard: false
+                          - mark: 5.5
+                            judgeNo: 4
+                            judgeId: XX904
+                            redCard: false
+                            yellowCard: false
+                            blueCard: false
+                          - mark: 5.5
+                            judgeNo: 5
+                            judgeId: XX904
+                            redCard: false
+                            yellowCard: false
+                            blueCard: false
         description: ''
 components:
   schemas:
