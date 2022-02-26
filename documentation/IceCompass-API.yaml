@@ -1,0 +1,411 @@
+openapi: 3.1.0
+info:
+  title: IceCompass API
+  version: '1.0'
+  contact:
+    name: Andreas Hejndorf
+    url: icecompass.com
+    email: andreas@hejndorf-foto.dk
+servers:
+  - url: 'http://localhost:5000/v2'
+    description: Dev
+  - url: 'https://api.icecompass.com/v2'
+    description: Production
+paths:
+  '/screengroups/{screen_group_id}':
+    parameters:
+      - schema:
+          type: string
+        name: screen_group_id
+        in: path
+        required: true
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/ScreenGroup'
+      operationId: get-screengroup-screen_group_id
+    patch:
+      summary: Set ScreenGroup template
+      operationId: patch-screengroup-screen_group_id
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/ScreenGroup'
+      description: Push a template to a bigscreen group.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                template:
+                  type: string
+                templateData:
+                  type: object
+            examples:
+              StartList:
+                value:
+                  template: startlist
+                  templateData:
+                    startList:
+                      - id: 123
+                        state: VALID
+                        startGroup: 1
+                        color: red
+                        horse:
+                          horseName: Bjartmar fra Nedre Sveen
+                          feifId: NO2010104091
+                        rider:
+                          fullname: Agnar Snorri Stefánsson
+                          ageGroup: Senior
+              ResultList:
+                value:
+                  template: resultlist
+                  templateData:
+                    resultList:
+                      - id: 123
+                        state: VALID
+                        rank: 1
+                        mark: 5.67
+                        color: red
+                        horse:
+                          horseName: Bjartmar fra Nedre Sveen
+                          feifId: NO2010104091
+                        rider:
+                          fullname: Agnar Snorri Stefánsson
+                          ageGroup: Senior
+              Group Info:
+                value:
+                  template: groupinfo
+                  templateData:
+                    group:
+                      - id: 123
+                        state: VALID
+                        startGroup: 1
+                        color: red
+                        horse:
+                          horseName: Bjartmar fra Nedre Sveen
+                          feifId: NO2010104091
+                        rider:
+                          fullname: Agnar Snorri Stefánsson
+                          ageGroup: Senior
+              Equipage Info:
+                value:
+                  template: equipageinfo
+                  templateData:
+                    group:
+                      - id: 123
+                        state: VALID
+                        startGroup: 1
+                        color: red
+                        horse:
+                          horseName: Bjartmar fra Nedre Sveen
+                          feifId: NO2010104091
+                        rider:
+                          fullname: Agnar Snorri Stefánsson
+                          ageGroup: Senior
+              Equipage Results:
+                value:
+                  template: equipageresult
+                  templateData:
+                    test:
+                      testName: F1
+                      roundingPrecision: 2
+                    group:
+                      - id: 123
+                        state: VALID
+                        rank: 1
+                        mark: 5.67
+                        color: red
+                        marks:
+                          - id: 987
+                            judgeNo: 1
+                            mark: 5
+                            redCard: false
+                            yellowCard: true
+                            blueCard: false
+                        horse:
+                          horseName: Bjartmar fra Nedre Sveen
+                          feifId: NO2010104091
+                        rider:
+                          fullname: Agnar Snorri Stefánsson
+                          ageGroup: Senior
+              Collecting Ring:
+                value:
+                  template: collectingring
+                  templateData:
+                    test:
+                      testName: T1
+                    endTime: '2022-02-26T18:55:00Z'
+                    group:
+                      - id: 123
+                        state: VALID
+                        startGroup: 1
+                        color: red
+                        horse:
+                          horseName: Bjartmar fra Nedre Sveen
+                          feifId: NO2010104091
+                        rider:
+                          fullname: Agnar Snorri Stefánsson
+                          ageGroup: Senior
+              Custom Lower Third:
+                value:
+                  template: custom
+                  templateData:
+                    title: I am the title
+                    subtitle: I am the subtitle
+        description: ''
+components:
+  schemas:
+    Horse:
+      title: Horse
+      type: object
+      properties:
+        id:
+          type: integer
+        horseName:
+          type: string
+        feifId:
+          type: string
+      examples:
+        - id: 2
+          horseName: Bjartmar fra Nedre Sveen
+          feifId: NO2010104091
+    Person:
+      title: Person
+      type: object
+      examples:
+        - id: 4
+          firstname: Agnar Snorri
+          lastname: Stefánsson
+          fullname: Agnar Snorri Stefánsson
+          ageGroup: Senior
+      properties:
+        id:
+          type: integer
+        firstname:
+          type: string
+        lastname:
+          type: string
+        fullname:
+          type: string
+        ageGroup:
+          type: string
+    Test:
+      title: Test
+      type: object
+      properties:
+        id:
+          type: integer
+        testcode:
+          type: string
+        testName:
+          type: string
+      examples:
+        - id: 6826
+          testcode: F1
+          testName: F1.S
+    Result:
+      title: Result
+      type: object
+      examples:
+        - id: 130738
+          state: VALID
+          riderId: 3289
+          horseId: 4582
+          testId: 6826
+          sta: 2
+          color: red
+          phase: PREL
+          mark: 5.27
+          riderClass: Senior
+          rank: 2
+          marks:
+            - id: 31
+              markType: mark
+              type: judge
+              mark: 5
+              flagOk: null
+              judgeNo: '1'
+              judgeId: XX894
+              redCard: false
+              blueCard: false
+              yellowCard: false
+              resultId: 113279
+      properties:
+        id:
+          type: integer
+        state:
+          type: string
+        riderId:
+          type: number
+        horseId:
+          type: number
+        testId:
+          type: number
+        sta:
+          type: integer
+        color:
+          type: string
+        phase:
+          type: string
+        mark:
+          type: number
+        riderClass:
+          type: string
+        rank:
+          type: integer
+        marks:
+          type: array
+          items:
+            $ref: '#/components/schemas/Mark'
+        rider:
+          $ref: '#/components/schemas/Person'
+        horse:
+          $ref: '#/components/schemas/Horse'
+    Mark:
+      title: Mark
+      type: object
+      properties:
+        id:
+          type: integer
+        markType:
+          type: string
+        type:
+          type: string
+        mark:
+          type:
+            - number
+            - 'null'
+        flagOk:
+          type: boolean
+        judgeNo:
+          type: string
+        judgeId:
+          type: string
+        redCard:
+          type: boolean
+        blueCard:
+          type: boolean
+        yellowCard:
+          type: boolean
+        resultId:
+          type: integer
+      examples:
+        - id: 31
+          markType: mark
+          type: judge
+          mark: 5
+          flagOk: null
+          judgeNo: '1'
+          judgeId: XX894
+          redCard: false
+          blueCard: false
+          yellowCard: false
+          resultId: 113279
+    StartListEntry:
+      title: StartListEntry
+      type: object
+      properties:
+        id:
+          type: integer
+        state:
+          type: string
+        riderId:
+          type: integer
+        testId:
+          type: integer
+        sta:
+          type: integer
+        color:
+          type: string
+        phase:
+          type: string
+        startGroup:
+          type: integer
+        rider:
+          $ref: '#/components/schemas/Person'
+        horse:
+          $ref: '#/components/schemas/Horse'
+      examples:
+        - id: 113278
+          state: VALID
+          riderId: 2
+          testId: 6826
+          sta: 1
+          color: blue
+          phase: PREL
+          startGroup: 1
+          rider:
+            id: 4
+            firstname: Agnar Snorri
+            lastname: Stefánsson
+            fullname: Agnar Snorri Stefánsson
+            ageGroup: Senior
+          horse:
+            id: 2
+            horseName: Bjartmar fra Nedre Sveen
+            feifId: NO2010104091
+    ScreenGroup:
+      title: ScreenGroup
+      type: object
+      properties:
+        id:
+          type: integer
+        template:
+          type: string
+        name:
+          type: string
+        competitionId:
+          type: string
+        testId:
+          type: string
+        screens:
+          type: array
+          items:
+            $ref: '#/components/schemas/Screen'
+      examples:
+        - id: 1
+          template: startlist
+          name: Track 1
+          competitionId: 1450
+          testId: 6826
+          screens:
+            - id: 268
+              screenGroupId: 1
+              competitionId: 1450
+    Screen:
+      title: Screen
+      type: object
+      properties:
+        id:
+          type: integer
+        clientId:
+          type: string
+        screenGroupId:
+          type: integer
+        competitionId:
+          type: integer
+      examples:
+        - id: 268
+          screenGroupId: 1
+          competitionId: 1450
+  securitySchemes:
+    BearerToken:
+      type: http
+      scheme: bearer
