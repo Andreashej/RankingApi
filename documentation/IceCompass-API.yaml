@@ -11,6 +11,8 @@ servers:
     description: Dev
   - url: 'https://api.icecompass.com/v2'
     description: Production
+  - url: 'http://0.0.0.0:80/v2'
+    description: Local
 paths:
   '/screengroups/{screen_group_id}':
     parameters:
@@ -64,6 +66,7 @@ paths:
                   templateData:
                     test:
                       testName: F1
+                      sponsorLogo: 'https://domain.com/pull/path/to/image.png'
                     phase: PREL
                     startList:
                       - id: 123
@@ -82,6 +85,7 @@ paths:
                   templateData:
                     test:
                       testName: F1
+                      sponsorLogo: 'https://domain.com/full/path/to/image.png'
                     phase: PREL
                     resultList:
                       - id: 123
