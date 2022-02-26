@@ -364,6 +364,16 @@ components:
     ScreenGroup:
       title: ScreenGroup
       type: object
+      examples:
+        - id: 1
+          template: startlist
+          name: Track 1
+          competitionId: 1450
+          testId: 6826
+          screens:
+            - id: 268
+              screenGroupId: 1
+              competitionId: 1450
       properties:
         id:
           type: integer
@@ -379,16 +389,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Screen'
-      examples:
-        - id: 1
-          template: startlist
-          name: Track 1
-          competitionId: 1450
-          testId: 6826
-          screens:
-            - id: 268
-              screenGroupId: 1
-              competitionId: 1450
     Screen:
       title: Screen
       type: object
