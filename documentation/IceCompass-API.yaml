@@ -66,7 +66,7 @@ paths:
                   templateData:
                     test:
                       testName: F1
-                      sponsorLogo: 'https://domain.com/pull/path/to/image.png'
+                      sponsorLogo: 'https://domain.com/full/path/to/image.png'
                     phase: PREL
                     startList:
                       - id: 123
