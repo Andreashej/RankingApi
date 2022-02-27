@@ -2,7 +2,7 @@ from flask import current_app as app
 from . import db
 import click
 from .models import Horse, Task, RankingListTest
-from app import create_app
+from app.events import icetest
 
 # app = create_app()
 # app.app_context().push()
@@ -37,3 +37,7 @@ def recompute_rankings():
     test = RankingListTest.query.first()
 
     test.launch_task('recompute_ranking', 'Recalculating {} ranking for {}'.format(test.testcode, test.rankinglist.shortname))
+
+@app.cli.command()
+def icetest_listener():
+    icetest.run()

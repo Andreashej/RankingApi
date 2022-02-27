@@ -1,7 +1,6 @@
 from typing import ByteString
 from kombu import Connection, Exchange, Queue, Consumer, Message
 import socket
-import threading
 import json
 from sqlalchemy.orm.exc import NoResultFound
 
@@ -15,7 +14,13 @@ from app import db, create_app
 from flask import current_app
 from datetime import datetime
 
-connection = Connection(hostname="southpole.icetestng.com", userid="icecompass", password="n-6TaDR-zRErUBF7U@qQ", virtual_host="dev")
+# connection = Connection(hostname="southpole.icetestng.com", userid="icecompass", password="n-6TaDR-zRErUBF7U@qQ", virtual_host="dev")
+connection = Connection(
+    hostname=current_app.config['ICETEST_RABBIT_HOST'], 
+    userid=current_app.config['ICETEST_RABBIT_USER'], 
+    password=current_app.config['ICETEST_RABBIT_PASSWORD'], 
+    virtual_host=current_app.config['ICETEST_RABBIT_VHOST']
+)
 
 connection.connect()
 
@@ -55,7 +60,7 @@ def process_message(body: ByteString, message: Message):
             db.session.add(horse)
 
         try:
-            result = Result.query.filter_by(test_id=test.id, rider_id=rider.id, horse_id=horse.id).one()
+            result = Result.query.filter_by(test_id=test.id, rider_id=rider.id, horse_id=horse.id, phase="PREL").one()
             result.mark = data['MARK']
             result.state = data['STATE']
         except NoResultFound:
@@ -81,8 +86,10 @@ def process_message(body: ByteString, message: Message):
 
 
         db.session.commit()
+        print(f"Mark saved {mark}")
         message.ack()
     except Exception as e:
+        print (f"Error saving mark. Rolling back DB.", e)
         db.session.rollback()
         message.reject(True)
 
@@ -105,6 +112,7 @@ def consume():
             new_conn.heartbeat_check()
 
 def run():
+    print("Starting RabbitMQ listener...")
     app = create_app()
     app.app_context().push()
     while True:
@@ -112,6 +120,3 @@ def run():
             consume()
         except connection.connection_errors:
             print("connection revived")
-
-# x = threading.Thread(target=run, daemon=True)
-# x.start()

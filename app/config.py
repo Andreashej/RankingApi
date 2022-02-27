@@ -38,3 +38,8 @@ API_VERSION = "0.1.0"
 REDIS_URL = os.environ.get('REDIS_URL') or 'redis://'
 
 QUEUE = 'iceranking-tasks'
+
+ICETEST_RABBIT_HOST = os.environ.get('ICETEST_RABBIT_HOST')
+ICETEST_RABBIT_USER = os.environ.get('ICETEST_RABBIT_USER')
+ICETEST_RABBIT_PASSWORD = os.environ.get('ICETEST_RABBIT_PASSWORD')
+ICETEST_RABBIT_VHOST = os.environ.get('ICETEST_RABBIT_VHOST')

@@ -15,8 +15,8 @@ RUN venv/bin/pip install gunicorn eventlet==0.30.2
 
 COPY app app
 COPY migrations migrations
-COPY icecompass.py rq-worker.sh start-webservice.sh ./
-RUN chmod +x rq-worker.sh start-webservice.sh
+COPY icecompass.py rq-worker.sh start-webservice.sh rabbitmq-listener.sh ./
+RUN chmod +x rq-worker.sh start-webservice.sh rabbitmq-listener.sh
 
 ENV FLASK_APP app
 

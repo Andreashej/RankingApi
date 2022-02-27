@@ -15,6 +15,10 @@ services:
       MAIL_PORT: "${MAIL_PORT}"
       MAIL_USERNAME: "${MAIL_USERNAME}"
       MAIL_PASSWORD: "${MAIL_PASSWORD}"
+      ICETEST_RABBIT_HOST: "${ICETEST_RABBIT_HOST}"
+      ICETEST_RABBIT_USER: "${ICETEST_RABBIT_USER}"
+      ICETEST_RABBIT_PASSWORD: "${ICETEST_RABBIT_PASSWORD}"
+      ICETEST_RABBIT_VHOST: "${ICETEST_RABBIT_VHOST}"
     ports:
       - "80:5050"
     links:
@@ -34,7 +38,29 @@ services:
       MAIL_PORT: "${MAIL_PORT}"
       MAIL_USERNAME: "${MAIL_USERNAME}"
       MAIL_PASSWORD: "${MAIL_PASSWORD}"
+      ICETEST_RABBIT_HOST: "${ICETEST_RABBIT_HOST}"
+      ICETEST_RABBIT_USER: "${ICETEST_RABBIT_USER}"
+      ICETEST_RABBIT_PASSWORD: "${ICETEST_RABBIT_PASSWORD}"
+      ICETEST_RABBIT_VHOST: "${ICETEST_RABBIT_VHOST}"
     entrypoint: [./rq-worker.sh]
+    links:
+      - redis
+  icetest-rabbitmq-listener:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    environment:
+      RDS_DB_NAME: "${RDS_DB_NAME}"
+      RDS_HOSTNAME: "${RDS_HOSTNAME}"
+      RDS_USERNAME: "${RDS_USERNAME}"
+      RDS_PASSWORD: "${RDS_PASSWORD}"
+      REDIS_URL: "redis://redis:6379/0"
+      SECRET_KEY: "${SECRET_KEY}"
+      ICETEST_RABBIT_HOST: "${ICETEST_RABBIT_HOST}"
+      ICETEST_RABBIT_USER: "${ICETEST_RABBIT_USER}"
+      ICETEST_RABBIT_PASSWORD: "${ICETEST_RABBIT_PASSWORD}"
+      ICETEST_RABBIT_VHOST: "${ICETEST_RABBIT_VHOST}"
+    entrypoint: [./rabbitmq-listener.sh]
     links:
       - redis
   redis:
