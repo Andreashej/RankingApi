@@ -3,6 +3,7 @@ from flask_restful import Resource, reqparse
 from app.Responses import ApiErrorResponse, ApiResponse
 from flask import g, request
 from app import socketio
+from flask_jwt_extended import jwt_required
 
 from app.models.BigScreenModel import BigScreen
 from app.models.ScreenGroupModel import ScreenGroup
@@ -40,6 +41,7 @@ class ScreenGroupResource(Resource):
     def get(self, id):
         return ApiResponse(g.screengroup).response()
     
+    @jwt_required
     @ScreenGroup.from_request
     def patch(self, id):
         try:    
@@ -73,6 +75,7 @@ class BigScreenResource(Resource):
     def get(self, id):
         return ApiResponse(g.bigscreen).response()
     
+    @jwt_required
     @BigScreen.from_request
     def patch(self, id):
         try:
@@ -84,6 +87,7 @@ class BigScreenResource(Resource):
         return ApiResponse(g.bigscreen).response()
 
 class CollectingRingCallResource(Resource):
+    @jwt_required
     def post(self):
         args = request.json
         target_groups = ScreenGroup.query.filter_by(competition_id=args['competitionId'], template="collectingring").all()
