@@ -14,19 +14,6 @@ from app import db, create_app
 from flask import current_app
 from datetime import datetime
 
-# connection = Connection(hostname="southpole.icetestng.com", userid="icecompass", password="n-6TaDR-zRErUBF7U@qQ", virtual_host="dev")
-connection = Connection(
-    hostname=current_app.config['ICETEST_RABBIT_HOST'], 
-    userid=current_app.config['ICETEST_RABBIT_USER'], 
-    password=current_app.config['ICETEST_RABBIT_PASSWORD'], 
-    virtual_host=current_app.config['ICETEST_RABBIT_VHOST']
-)
-
-connection.connect()
-
-exchange = Exchange("-- default --", type="direct")
-queue = Queue(name="icecompass", exchange=exchange, routing_key="icecompass")
-
 def process_message(body: ByteString, message: Message):
     try:
         data = json.loads(body)['MESSAGE']
@@ -93,7 +80,7 @@ def process_message(body: ByteString, message: Message):
         db.session.rollback()
         message.reject(True)
 
-consumer = Consumer(connection, queues=queue, callbacks=[process_message])
+
 
 def establish_connection():
     revived_connection = connection.clone()
@@ -120,3 +107,20 @@ def run():
             consume()
         except connection.connection_errors:
             print("connection revived")
+
+try:
+    connection = Connection(
+        hostname=current_app.config['ICETEST_RABBIT_HOST'], 
+        userid=current_app.config['ICETEST_RABBIT_USER'], 
+        password=current_app.config['ICETEST_RABBIT_PASSWORD'], 
+        virtual_host=current_app.config['ICETEST_RABBIT_VHOST']
+    )
+    
+    connection.connect()
+
+    exchange = Exchange("-- default --", type="direct")
+    queue = Queue(name="icecompass", exchange=exchange, routing_key="icecompass")
+
+    consumer = Consumer(connection, queues=queue, callbacks=[process_message])
+except Exception:
+    print ("Could not connect to Rabbit")

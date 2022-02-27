@@ -10,6 +10,7 @@ class BigScreen(db.Model, RestMixin):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     client_id = db.Column(db.String(50))
+    role = db.Column(db.String(10), default="default")
     screen_group_id = db.Column(db.Integer, db.ForeignKey('screengroups.id'))
     screen_group = db.relationship("ScreenGroup")
 

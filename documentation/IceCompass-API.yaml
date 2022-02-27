@@ -35,6 +35,8 @@ paths:
                   data:
                     $ref: '#/components/schemas/ScreenGroup'
       operationId: get-screengroup-screen_group_id
+      security:
+        - BearerToken: []
     patch:
       summary: Set ScreenGroup template
       operationId: patch-screengroup-screen_group_id
@@ -230,6 +232,28 @@ paths:
                             redCard: false
                             yellowCard: false
                             blueCard: false
+        description: ''
+      security:
+        - BearerToken: []
+  /login:
+    post:
+      summary: Get bearer token
+      operationId: post-login
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Unauthorized
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
         description: ''
 components:
   schemas:
