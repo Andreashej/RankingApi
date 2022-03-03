@@ -242,19 +242,96 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                x-examples:
+                  example-1:
+                    data:
+                      id: 1
+                      username: andreashej
+                    accessToken: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NDYzNDg0MjYsIm5iZiI6MTY0NjM0ODQyNiwianRpIjoiZjdjNWY2ODEtOTZkYS00ZGVhLWJjZjQtMDg0YzU3YTQyMzg4IiwiZXhwIjoxNjQ2MzQ5MzI2LCJpZGVudGl0eSI6ImFuZHJlYXNoZWoiLCJmcmVzaCI6ZmFsc2UsInR5cGUiOiJhY2Nlc3MifQ.Fp-Eogekny1SJ-jHl2ECx1ngfX7U-tmv85SM3GAhV_0
+                    refreshToken: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NDYzNDg0MjYsIm5iZiI6MTY0NjM0ODQyNiwianRpIjoiZTU0Y2EzYmQtNzQwNC00ZDIxLThiNjEtNzM1MGY1N2E5MTQyIiwiZXhwIjoxNjQ4OTQwNDI2LCJpZGVudGl0eSI6ImFuZHJlYXNoZWoiLCJ0eXBlIjoicmVmcmVzaCJ9.vn8LutBlFnX14AJ4rzIqIUFehTN1IxLFuOITXV70b5w
+                    access_token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NDYzNDg0MjYsIm5iZiI6MTY0NjM0ODQyNiwianRpIjoiZjdjNWY2ODEtOTZkYS00ZGVhLWJjZjQtMDg0YzU3YTQyMzg4IiwiZXhwIjoxNjQ2MzQ5MzI2LCJpZGVudGl0eSI6ImFuZHJlYXNoZWoiLCJmcmVzaCI6ZmFsc2UsInR5cGUiOiJhY2Nlc3MifQ.Fp-Eogekny1SJ-jHl2ECx1ngfX7U-tmv85SM3GAhV_0
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                      username:
+                        type: string
+                        minLength: 1
+                  accessToken:
+                    type: string
+                    minLength: 1
+                  refreshToken:
+                    type: string
+                    minLength: 1
+                  access_token:
+                    type: string
+                    minLength: 1
+              examples:
+                Login Data:
+                  value:
+                    data:
+                      id: 1
+                      username: andreashej
+                    accessToken: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NDYzNDg2NjUsIm5iZiI6MTY0NjM0ODY2NSwianRpIjoiOTJkZGU1ZjEtYzY3Mi00OWFmLTgwZjctZGJhYzU0ZmMxNjExIiwiZXhwIjoxNjQ2MzQ5NTY1LCJpZGVudGl0eSI6ImFuZHJlYXNoZWoiLCJmcmVzaCI6ZmFsc2UsInR5cGUiOiJhY2Nlc3MifQ.KlG09kA0bwvs_W2fTk3ewdS8d6sJicwfPard3qhKBes
+                    refreshToken: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NDYzNDg2NjUsIm5iZiI6MTY0NjM0ODY2NSwianRpIjoiYzQzOGY1OWItYWZiMy00ODJiLWI4ZjktMzJkNTE4Mzg2YWIzIiwiZXhwIjoxNjQ4OTQwNjY1LCJpZGVudGl0eSI6ImFuZHJlYXNoZWoiLCJ0eXBlIjoicmVmcmVzaCJ9.ZmRocatXLtE_dWl0ZN0MdWwYe29oN93XwBbaCViaVlA
         '401':
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                Unauthorized:
+                  value:
+                    message: Wrong credentials
       requestBody:
         content:
           application/json:
             schema:
+              description: ''
               type: object
+              x-examples:
+                example-1:
+                  data:
+                    id: 1
+                    username: andreashej
+                  accessToken: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NDYzNDg0MjYsIm5iZiI6MTY0NjM0ODQyNiwianRpIjoiZjdjNWY2ODEtOTZkYS00ZGVhLWJjZjQtMDg0YzU3YTQyMzg4IiwiZXhwIjoxNjQ2MzQ5MzI2LCJpZGVudGl0eSI6ImFuZHJlYXNoZWoiLCJmcmVzaCI6ZmFsc2UsInR5cGUiOiJhY2Nlc3MifQ.Fp-Eogekny1SJ-jHl2ECx1ngfX7U-tmv85SM3GAhV_0
+                  refreshToken: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NDYzNDg0MjYsIm5iZiI6MTY0NjM0ODQyNiwianRpIjoiZTU0Y2EzYmQtNzQwNC00ZDIxLThiNjEtNzM1MGY1N2E5MTQyIiwiZXhwIjoxNjQ4OTQwNDI2LCJpZGVudGl0eSI6ImFuZHJlYXNoZWoiLCJ0eXBlIjoicmVmcmVzaCJ9.vn8LutBlFnX14AJ4rzIqIUFehTN1IxLFuOITXV70b5w
+                  access_token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NDYzNDg0MjYsIm5iZiI6MTY0NjM0ODQyNiwianRpIjoiZjdjNWY2ODEtOTZkYS00ZGVhLWJjZjQtMDg0YzU3YTQyMzg4IiwiZXhwIjoxNjQ2MzQ5MzI2LCJpZGVudGl0eSI6ImFuZHJlYXNoZWoiLCJmcmVzaCI6ZmFsc2UsInR5cGUiOiJhY2Nlc3MifQ.Fp-Eogekny1SJ-jHl2ECx1ngfX7U-tmv85SM3GAhV_0
               properties:
                 username:
                   type: string
                 password:
                   type: string
         description: ''
+  /token/refresh:
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+      operationId: get-token-refresh
+      security:
+        - BearerToken: []
+      description: Call this endpoing with a refresh token to retrieve a new access token.
 components:
   schemas:
     Horse:
