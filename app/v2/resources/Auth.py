@@ -85,7 +85,6 @@ class UsersResource(Resource):
         self.reqparse = reqparse.RequestParser()
         self.reqparse.add_argument('username', type=str, required=True, location='json')
         self.reqparse.add_argument('password', type=str, required=True, location='json')
-        self.reqparse.add_argument('email', type=str, required=True, location='json')
     
     @User.from_request(many=True)
     def get(self):
@@ -93,9 +92,11 @@ class UsersResource(Resource):
     
     @jwt_required
     def post(self):
-        user = User()
+        args = self.reqparse.parse_args()
         try:
-            user.update(self.reqparse)
+            user = User(username=args['username'])
+            user.hash_password(args['password'])
+            user.save()
         except ApiErrorResponse as e:
             return e.response()
 
