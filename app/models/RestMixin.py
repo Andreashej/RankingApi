@@ -133,6 +133,9 @@ class RestMixin():
             
             if (field.type == 'BOOL'):
                 value = value.lower() != 'true'
+            
+        if value == 'null':
+            value = None
         
         if operator == 'contains':
             query = query.filter(field.contains(value))
@@ -276,13 +279,14 @@ class RestMixin():
 
             prop = camel_to_snake(attr)
 
-            if value and hasattr(self, prop):
+            if value is not None and hasattr(self, prop):
                 try:
                     setattr(self, prop, value)
                 except ValueError as e:
                     raise ApiErrorResponse(str(e), 400)
                 except Exception as e:
                     raise ApiErrorResponse(str(e))
+        return args
     
     def save(self):
         try:

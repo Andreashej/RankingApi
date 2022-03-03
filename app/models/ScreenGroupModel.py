@@ -10,6 +10,7 @@ class ScreenGroup(db.Model, RestMixin):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     template = db.Column(db.String(50))
     name = db.Column(db.String(50))
+    show_osd = db.Column(db.Boolean)
 
     competition_id = db.Column(db.Integer, db.ForeignKey('competitions.id'), nullable=False)
     competition = db.relationship("Competition")

@@ -4,6 +4,7 @@ from app.Responses import ApiErrorResponse, ApiResponse
 from flask import g, request
 from app import socketio
 from flask_jwt_extended import jwt_required
+from sqlalchemy.orm.exc import NoResultFound
 
 from app.models.BigScreenModel import BigScreen
 from app.models.ScreenGroupModel import ScreenGroup
@@ -36,6 +37,7 @@ class ScreenGroupResource(Resource):
         self.reqparse.add_argument('template', type=str, location='json')
         # self.reqparse.add_argument('templateData', type=dict, location='json')
         self.reqparse.add_argument('testId', type=int, location='json')
+        self.reqparse.add_argument('showOsd', type=bool, location='json')
 
     @ScreenGroup.from_request
     def get(self, id):
@@ -70,6 +72,8 @@ class BigScreenResource(Resource):
     def __init__(self) -> None:
         self.reqparse = reqparse.RequestParser()
         self.reqparse.add_argument('screenGroupId', type=int, location='json')
+        self.reqparse.add_argument('competitionId', type=int, location='json')
+        self.reqparse.add_argument('role', type=str, location='json')
 
     @BigScreen.from_request
     def get(self, id):
@@ -80,11 +84,41 @@ class BigScreenResource(Resource):
     def patch(self, id):
         try:
             g.bigscreen.update(self.reqparse)
+
+            g.bigscreen.save()
+        except ApiErrorResponse as e:
+            return e.response()
+
+        
+        
+        if g.bigscreen.screen_group is None and g.bigscreen.competition is not None:
+            try:
+                unassigned_screen_group = g.bigscreen.competition.screen_groups.filter_by(name="Unassigned").one()
+            except NoResultFound:
+                unassigned_screen_group = ScreenGroup(name="Unassigned", competition_id=g.bigscreen.competition.id)
+                g.bigscreen.competition.screen_groups.append(unassigned_screen_group)
+            except ApiErrorResponse as e:
+                return e.response()
+            
+            unassigned_screen_group.screens.append(g.bigscreen)
+            try:
+                unassigned_screen_group.save()
+            except ApiErrorResponse as e:
+                return e.response()
+        
+        return ApiResponse(g.bigscreen).response()
+    
+    @jwt_required
+    @BigScreen.from_request
+    def delete(self, id):
+        try:
+            g.bigscreen.screen_group_id = None
+            g.bigscreen.competition_id = None
             g.bigscreen.save()
         except ApiErrorResponse as e:
             return e.response()
         
-        return ApiResponse(g.bigscreen).response()
+        return ApiResponse(response_code=204).response()
 
 class CollectingRingCallResource(Resource):
     @jwt_required

@@ -16,12 +16,13 @@ class Result(TestEntry):
 
     marks = db.relationship("JudgeMark", back_populates="result", lazy="dynamic")
     
-    def __init__(self, test, mark, rider, horse, state = "VALID"):
+    def __init__(self, test, mark, rider, horse, phase, state = "VALID"):
         self.test = test
         self.mark = mark
         self.rider = rider
         self.horse = horse
         self.state = state
+        self.phase = phase
     
     def __repr__(self):
         return '<Result {} {} {} >'.format(self.test.testcode, self.mark, self.rider.firstname)

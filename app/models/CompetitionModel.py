@@ -33,6 +33,7 @@ class Competition(db.Model, RestMixin):
     tasks = db.relationship("Task", backref="competition", lazy='dynamic')
     _contact_person_id = db.Column('contact_person_id', db.Integer, db.ForeignKey('persons.id'))
     contact_person = db.relationship("Person")
+    screen_groups = db.relationship("ScreenGroup", lazy="dynamic")
 
     def __init__(self, name='', startdate=None, enddate=None, isi_id = None, country='XX'):
         self.name = name

@@ -66,7 +66,15 @@ def call_collectingring(screen_group_id, test_id, start_group):
 def hide_all(screen_group_id):
     emit('ScreenGroup.HideAll', namespace="/bigscreen", to=screen_group_id)
 
-@event.listens_for(ScreenGroup.test_id, 'set')
-def screen_group_test_changed(screen_group, test_id, initiator, *args):
-    test = Test.query.get(test_id)
-    socketio.emit('ScreenGroup.TestChanged', test.to_json(), namespace="/bigscreen", to=screen_group.id, include_self=True)
+# @event.listens_for(ScreenGroup.test_id, 'set')
+# def screen_group_test_changed(screen_group, test_id, initiator, *args):
+#     test = Test.query.get(test_id)
+#     socketio.emit('ScreenGroup.TestChanged', test.to_json(), namespace="/bigscreen", to=screen_group.id, include_self=True)
+
+@event.listens_for(BigScreen, 'after_update')
+def screen_set_role(mapper, connection, screen):
+    socketio.emit('Screen.Updated', screen.to_json(expand=["screen_group"]), namespace="/bigscreen", to=screen.client_id)
+
+@event.listens_for(ScreenGroup, 'after_update')
+def screen_group_updated(mapper, connection, screen_group):
+    socketio.emit('ScreenGroup.Updated', screen_group.to_json(), namespace='/bigscreen', to=screen_group.id)
