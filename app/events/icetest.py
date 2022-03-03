@@ -47,11 +47,11 @@ def process_message(body: ByteString, message: Message):
             db.session.add(horse)
 
         try:
-            result = Result.query.filter_by(test_id=test.id, rider_id=rider.id, horse_id=horse.id, phase="PREL").one()
+            result = Result.query.filter_by(test_id=test.id, rider_id=rider.id, horse_id=horse.id, phase=data["PHASE"]).one()
             result.mark = data['MARK']
             result.state = data['STATE']
         except NoResultFound:
-            result = Result(test, data['MARK'], rider, horse, data['STATE'])
+            result = Result(test, data['MARK'], rider, horse, data['PHASE'], data['STATE'])
             result.created_at = datetime.fromtimestamp(data['TIMESTAMP'])
             db.session.add(result)
         
@@ -61,7 +61,7 @@ def process_message(body: ByteString, message: Message):
 
         result.marks.delete()
         for mark_raw in data['MARKS']:
-            mark = JudgeMark(mark = mark_raw['mark'], judge_no = int(mark_raw['judge']), judge_id=mark_raw['JUDGEID'])
+            mark = JudgeMark(mark = mark_raw['mark'], judge_no = int(mark_raw['judge']), judge_id=mark_raw['JUDGEID'], mark_type="mark")
 
             # Find cards associated with this mark
             for card in [card for card in data['CARDS'] if card['judge'] == mark.judge_no]:
