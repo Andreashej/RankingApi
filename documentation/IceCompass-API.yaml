@@ -315,12 +315,13 @@ paths:
                   type: string
         description: ''
   /token/refresh:
-    get:
-      summary: Your GET endpoint
-      tags: []
+    post:
+      summary: ''
+      operationId: post-token-refresh
       responses:
         '200':
           description: OK
+          headers: {}
           content:
             application/json:
               schema:
@@ -328,10 +329,8 @@ paths:
                 properties:
                   accessToken:
                     type: string
-      operationId: get-token-refresh
       security:
         - BearerToken: []
-      description: Call this endpoing with a refresh token to retrieve a new access token.
 components:
   schemas:
     Horse:
