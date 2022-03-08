@@ -7,7 +7,7 @@ info:
     url: icecompass.com
     email: andreas@hejndorf-foto.dk
 servers:
-  - url: 'http://localhost:5000/v2'
+  - url: 'http://localhost:5050/v2'
     description: Dev
   - url: 'https://api.icecompass.com/v2'
     description: Production
