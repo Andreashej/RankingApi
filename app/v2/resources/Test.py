@@ -1,4 +1,4 @@
-from flask.globals import g
+from flask.globals import g, request
 from flask_jwt_extended.view_decorators import jwt_required
 from flask_restful import Resource, reqparse
 from app.models.TestEntryModel import TestEntry
@@ -49,15 +49,16 @@ class TestResource(Resource):
         try:
             g.test.update(self.reqparse)
 
-            if args['rankinglists'] is not None:
-                for shortname in args['rankinglists']:
-                    rankinglist = RankingList.query.filter_by(shortname=shortname).one()
-                    if rankinglist not in g.test.include_in_ranking.all():
-                        g.test.include_in_ranking.append(rankinglist)
+            if 'rankinglists' in request.json:
+                if args['rankinglists'] is not None:
+                    for shortname in args['rankinglists']:
+                        rankinglist = RankingList.query.filter_by(shortname=shortname).one()
+                        if rankinglist not in g.test.include_in_ranking.all():
+                            g.test.add_rankinglist(rankinglist)
                 
                 for ranking in g.test.include_in_ranking:
-                    if ranking.shortname not in args['rankinglists']:
-                        g.test.include_in_ranking.remove(ranking)
+                    if args['rankinglists'] is None or ranking.shortname not in args['rankinglists']:
+                        g.test.remove_rankinglist(ranking)
 
             g.test.save()
         except ApiErrorResponse as e:

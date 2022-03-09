@@ -29,7 +29,7 @@ class Test(db.Model, RestMixin):
 
     _results = db.relationship('Result', back_populates='test', lazy='dynamic')
     startlist = db.relationship('StartListEntry', back_populates='test', lazy='dynamic', order_by='StartListEntry.start_group')
-    _include_in_ranking = db.relationship('RankingList', secondary=tests_rankinglists, lazy='dynamic')
+    include_in_ranking = db.relationship('RankingList', secondary=tests_rankinglists, lazy='dynamic')
 
     def __init__(self, testcode):
         self.testcode = testcode
@@ -45,15 +45,21 @@ class Test(db.Model, RestMixin):
     def test_name(self, test_name):
         self._test_name = test_name
     
-    @hybrid_property
-    def include_in_ranking(self):
-        return self._include_in_ranking
+    def add_rankinglist(self, ranking_list):
+        if ranking_list not in self.include_in_ranking:
+            self.include_in_ranking.append(ranking_list)
+        
+        if ranking_list not in self.competition.include_in_ranking:
+            self.competition.include_in_ranking.append(ranking_list)
     
-    @include_in_ranking.expression
-    def include_in_ranking(cls):
-        # print(db.session.query(cls, func.count(RankingList.id)).join(Competition).join(Competition.include_in_ranking).all())
-        # return Competition.query.join(Test).filter(Test.id==cls.id).join(RankingList, Test.include_in_ranking)
-        return cls._include_in_ranking
+    def remove_rankinglist(self, ranking_list):
+        self.include_in_ranking.remove(ranking_list)
+
+        for test in self.competition.tests:
+            if ranking_list in test.include_in_ranking:
+                return
+        
+        self.competition.include_in_ranking.remove(ranking_list)
 
     @hybrid_property
     def results(self):
