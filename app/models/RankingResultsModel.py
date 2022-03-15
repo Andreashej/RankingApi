@@ -78,14 +78,14 @@ class RankingResults(db.Model, RestMixin):
     
     def calculate_mark(self):
         valid_marks_query = self.marks\
-            .filter(Result.mark > self.test.min_mark)\
             .join(Result.test)\
             .join(Test.competition)\
             .filter(Competition.last_date >= (datetime.now() - timedelta(days=self.test.rankinglist.results_valid_days)))
 
         ordering = Result.mark if self.test.order == 'asc' else Result.mark.desc()
+        filter_clause = Result.mark < self.test.min_mark if self.test.order == 'asc' else Result.mark > self.test.min_mark
 
-        valid_marks_query = valid_marks_query.order_by(ordering)
+        valid_marks_query = valid_marks_query.filter(filter_clause).order_by(ordering)
 
         valid_group_marks = None
         for testgroup in self.test.testgroups:
