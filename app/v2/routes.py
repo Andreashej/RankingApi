@@ -3,7 +3,7 @@ from app.v2.resources.BigScreen import CollectingRingCallResource
 from app.v2.resources.BigScreen import ScreenGroupsResource, ScreenGroupResource, BigScreenResource, BigScreensResource
 from app.v2.resources.Search import SearchResultsResource
 from app.v2.resources.Result import ResultsResource, ResultResource, ResultMarksResource, SectionMarksResource
-from app.v2.resources.Task import TaskResource, TasksResource
+from app.v2.resources.Task import TaskResource, TasksResource, JobResource, JobsResource
 from app.v2.resources.Person import PersonsResource, PersonResource, PersonResultsResource, PersonAliasesResource
 from app.v2.resources.Horse import HorsesResource, HorseResource, HorseResultsResource
 from app.v2.resources.Rankings import RankingsResource, RankingResource, RankingResultsRankingResource
@@ -59,6 +59,8 @@ api.add_resource(HorseResultsResource, '/horses/<int:id>/results', endpoint='hor
 
 api.add_resource(TasksResource, '/tasks', endpoint='tasks')
 api.add_resource(TaskResource, '/tasks/<string:id>', endpoint='task')
+api.add_resource(JobsResource, '/jobs', endpoint='jobs')
+api.add_resource(JobResource, '/jobs/<string:id>', endpoint='job')
 
 api.add_resource(UserLogin, '/login', endpoint='login')
 api.add_resource(UserLogoutAccess, '/logout/access', endpoint='logoutaccess')

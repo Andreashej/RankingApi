@@ -1,12 +1,10 @@
 from rq import get_current_job
 
-from . import db, create_app
-from .models import Task, Test, Result, Person, Horse, Competition, RankingListTest, RankingResults, RankingList, PersonAlias, TestCatalog
+from app import db, create_app
+from app.models import Task, Test, Result, Person, Horse, Competition, RankingListTest, RankingResults, RankingList, PersonAlias
 import datetime
 from flask_mail import Message
 from app import mail
-
-import requests
 
 import sys
 
@@ -23,11 +21,20 @@ def _set_task_progress(progress, error = False):
         if not task.started_at:
             task.started_at = datetime.datetime.utcnow()
 
+            if task.job is not None:
+                task.job.last_run_at = datetime.datetime.utcnow()
+
         if progress >= 100:
             task.completed_at = datetime.datetime.utcnow()
             task.complete = True
             task.error = error
-        
+
+            if task.job is not None:
+                if error:
+                    task.job._stop()
+                else:
+                    task.job.queue_next()
+ 
         try:
             db.session.commit()
         except Exception as e:
@@ -269,4 +276,27 @@ def send_mail(subject, sender , recipients , text_body , html_body):
     except Exception as e:
         print (e)
         app.logger.error(e, exc_info=sys.exc_info())
+        _set_task_progress(100, True)
+
+def recompute_all():
+    try:
+        _set_task_progress(0)
+
+        rankings = RankingListTest.query.all()
+
+        for i, ranking in enumerate(rankings):
+            ranking.recompute()
+            _set_task_progress(i / len(rankings) * 100)
+
+    except Exception as e:
+        db.session.rollback()
+        app.logger.error(e, exc_info=sys.exc_info())
+        _set_task_progress(100, True)
+
+def test_scheduler():
+    try:
+        print("Task started!")
+        for i in range(0, 11):
+            _set_task_progress(i * 10)
+    except Exception:
         _set_task_progress(100, True)

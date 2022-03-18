@@ -1,5 +1,4 @@
 from datetime import datetime, timedelta
-from os import name
 from app import socketio
 from app.models import BigScreen, ScreenGroup, Test
 from flask_socketio import emit, join_room, leave_room

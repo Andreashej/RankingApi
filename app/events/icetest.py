@@ -82,7 +82,7 @@ def process_message(body: ByteString, message: Message):
 
 
 
-def establish_connection():
+def establish_connection(connection, consumer):
     revived_connection = connection.clone()
     revived_connection.ensure_connection(max_retries=3)
     channel = revived_connection.channel()
@@ -90,8 +90,8 @@ def establish_connection():
     consumer.consume()
     return revived_connection
 
-def consume():
-    new_conn = establish_connection()
+def consume(connection, consumer):
+    new_conn = establish_connection(connection, consumer)
     while True:
         try:
             new_conn.drain_events(timeout=2)
@@ -100,27 +100,24 @@ def consume():
 
 def run():
     print("Starting RabbitMQ listener...")
-    app = create_app()
-    app.app_context().push()
-    while True:
-        try:
-            consume()
-        except connection.connection_errors:
-            print("connection revived")
-
-try:
     connection = Connection(
         hostname=current_app.config['ICETEST_RABBIT_HOST'], 
         userid=current_app.config['ICETEST_RABBIT_USER'], 
         password=current_app.config['ICETEST_RABBIT_PASSWORD'], 
         virtual_host=current_app.config['ICETEST_RABBIT_VHOST']
     )
-    
-    connection.connect()
 
     exchange = Exchange("-- default --", type="direct")
     queue = Queue(name="icecompass", exchange=exchange, routing_key="icecompass")
 
     consumer = Consumer(connection, queues=queue, callbacks=[process_message])
-except Exception:
-    print ("Could not connect to Rabbit")
+
+    connection.connect()
+
+    app = create_app()
+    app.app_context().push()
+    while True:
+        try:
+            consume(connection, consumer)
+        except connection.connection_errors:
+            print("connection revived")

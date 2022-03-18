@@ -4,9 +4,6 @@ import click
 from .models import Horse, Task, RankingListTest
 from app.events import icetest
 
-# app = create_app()
-# app.app_context().push()
-
 @app.cli.command()
 @click.option('--limit')
 def lookup_horse(limit = 500):
@@ -30,7 +27,6 @@ def flush_rankings():
     test = RankingListTest.query.first()
 
     test.launch_task('flush_ranking', 'Flushing {} ranking for {}'.format(test.testcode, test.rankinglist.shortname))
-    # for test in tests:
 
 @app.cli.command()
 def recompute_rankings():

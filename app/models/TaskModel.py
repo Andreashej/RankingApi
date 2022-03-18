@@ -1,9 +1,8 @@
-from flask_restful import Resource
 import redis
 import rq
 import datetime
 
-from sqlalchemy.ext.hybrid import hybrid_property, hybrid_method
+from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy import case, and_, not_
 
 from .. import db
@@ -28,6 +27,8 @@ class Task(db.Model, RestMixin):
     started_at = db.Column(db.DateTime)
     completed_at = db.Column(db.DateTime)
     error = db.Column(db.Boolean, default=False)
+
+    job_id = db.Column(db.Integer, db.ForeignKey('jobs.id'), default=None)
 
     def get_rq_job(self):
         try:
