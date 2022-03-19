@@ -7,6 +7,7 @@ from app.models import Task
 from croniter import croniter
 from rq.job import Job as RQJob
 from rq import get_current_job
+from rq.exceptions import NoSuchJobError
 
 class Job(db.Model, RestMixin):
     RESOURCE_NAME = 'job'
@@ -80,8 +81,12 @@ class Job(db.Model, RestMixin):
         tasks = self.tasks.filter_by(complete=0).all()
 
         for task in tasks:
-            job = RQJob.fetch(task.id, connection=current_app.redis)
-            job.cancel()
+            try:
+                job = RQJob.fetch(task.id, connection=current_app.redis)
+                job.cancel()
+            except NoSuchJobError:
+                pass
+
             task.complete = True
             task.completed_at = datetime.utcnow()
             

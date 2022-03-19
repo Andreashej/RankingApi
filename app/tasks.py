@@ -288,6 +288,7 @@ def recompute_all():
             ranking.recompute()
             _set_task_progress(i / len(rankings) * 100)
 
+        _set_task_progress(100)
     except Exception as e:
         db.session.rollback()
         app.logger.error(e, exc_info=sys.exc_info())
