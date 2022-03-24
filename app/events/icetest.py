@@ -71,6 +71,8 @@ def process_message(body: ByteString, message: Message):
 
             result.marks.append(mark)
 
+        for ranking in result.test.include_in_ranking.all():
+            ranking.propagate_result(result)
 
         db.session.commit()
         print(f"Mark saved {mark}")
