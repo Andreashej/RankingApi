@@ -49,12 +49,16 @@ class ScreenGroupResource(Resource):
         try:    
             template = request.json.get('template')
             template_data = request.json.get('templateData')
+            hide = request.json.get('hide', False)
 
             if template is not None and template_data is not None:
                 socketio.emit('ScreenGroup.TemplateChanged', {
                     'template': template,
                     'templateData': template_data
                 }, namespace="/bigscreen", to=id)
+            
+            if hide:
+                socketio.emit('ScreenGroup.HideAll', namespace="/bigscreen", to=id)
 
             g.screengroup.update(self.reqparse)
             g.screengroup.save()
