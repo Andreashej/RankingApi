@@ -1,3 +1,4 @@
+import sentry_sdk
 from socket import SocketIO
 from flask import Flask, g, request
 from flask import Blueprint
@@ -17,8 +18,20 @@ import rq
 import os
 from app.utils import camel_to_snake
 from flask_socketio import SocketIO
-
+from sentry_sdk.integrations.flask import FlaskIntegration
 from . import config
+
+if config.SENTRY_DSN is not None:
+  sentry_sdk.init(
+      dsn=config.SENTRY_DSN,
+      integrations=[FlaskIntegration()],
+
+      # Set traces_sample_rate to 1.0 to capture 100%
+      # of transactions for performance monitoring.
+      # We recommend adjusting this value in production.
+      traces_sample_rate=0.2
+  )
+
 
 import requests
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
@@ -96,7 +109,7 @@ def create_app():
         os.makedirs(app.config['IMAGE_FILES'], exist_ok=True)
 
         def healthcheck():
-            return { "message": "I am healthy :)"}, 200
+          return { "message": "I am healthy :)"}, 200
 
         app.add_url_rule('/', view_func=healthcheck)
           
