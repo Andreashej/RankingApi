@@ -13,6 +13,7 @@ class BigScreen(db.Model, RestMixin):
     role = db.Column(db.String(10), default="default")
     screen_group_id = db.Column(db.Integer, db.ForeignKey('screengroups.id'))
     screen_group = db.relationship("ScreenGroup")
+    root_font_size = db.Column(db.String(20))
 
     competition_id = db.Column(db.Integer, db.ForeignKey('competitions.id'))
     competition = db.relationship("Competition")
