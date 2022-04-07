@@ -288,6 +288,49 @@ def recompute_all():
             ranking.recompute()
             _set_task_progress(i / len(rankings) * 100)
 
+        _set_task_progress(100)
+    except Exception as e:
+        db.session.rollback()
+        app.logger.error(e, exc_info=sys.exc_info())
+        _set_task_progress(100, True)
+
+def set_test_ranking_link():
+    try:
+        _set_task_progress(0)
+
+        competitions = Competition.query.filter(Competition.first_date < datetime.datetime(2021, 12, 31)).all()
+
+        for i, competition in enumerate(competitions):
+            for test in competition.tests:
+                test.include_in_ranking = competition.include_in_ranking.all()
+                            
+            _set_task_progress(i / len(competitions) * 100)
+
+        db.session.commit()
+
+        _set_task_progress(100)
+    except Exception as e:
+        db.session.rollback()
+        app.logger.error(e, exc_info=sys.exc_info())
+        _set_task_progress(100, True)
+
+def set_competition_ranking_link():
+    try:
+        _set_task_progress(0)
+
+        tests = Test.query.filter(Test.include_in_ranking.any()).all()
+            
+        for i, test in enumerate(tests):
+            for ranking in test.include_in_ranking:
+                if ranking in test.competition.include_in_ranking.all():
+                    continue
+                
+                test.competition.include_in_ranking.append(ranking)
+
+            _set_task_progress(i / len(tests) * 100)
+
+        db.session.commit()
+        _set_task_progress(100)
     except Exception as e:
         db.session.rollback()
         app.logger.error(e, exc_info=sys.exc_info())

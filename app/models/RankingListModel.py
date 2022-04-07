@@ -103,6 +103,9 @@ class RankingList(db.Model, RestMixin):
         self.tests.append(test)
     
     def propagate_result(self, result):
+        if self not in result.test.include_in_ranking.all():
+            return
+
         for test in self.tests:
             if result.test.testcode in test.included_tests:
                 test.register_result(result)

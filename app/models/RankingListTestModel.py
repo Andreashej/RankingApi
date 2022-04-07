@@ -149,13 +149,12 @@ class RankingListTest(db.Model, RestMixin):
     @hybrid_property
     def valid_competition_results(self):
         base_query = Result.query.join(Result.test).filter(Test.testcode.in_(self.included_tests))
-        tests_query = base_query.join(RankingList, Test.include_in_ranking)
-        competitions_query = base_query.join(Competition).join(RankingList, Competition.include_in_ranking)\
+        query = base_query.join(RankingList, Test.include_in_ranking)
+        # competitions_query = base_query.join(Competition).join(RankingList, Competition.include_in_ranking)\
         
-        query = tests_query.union(competitions_query)
+        # query = tests_query.union(competitions_query)
 
         results = query.filter(RankingList.shortname==self.rankinglist.shortname).all()
-        print (len(results))
         return results
     
     def flush(self):

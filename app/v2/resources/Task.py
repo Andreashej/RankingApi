@@ -11,7 +11,8 @@ class TasksResource(Resource):
     def __init__(self):
         self.reqparse = reqparse.RequestParser()
         self.reqparse.add_argument('rankingId', type=int, required=False, location="json")
-        self.reqparse.add_argument('taskName', type=str, required=False, location="json")
+        self.reqparse.add_argument('taskName', type=str, required=True, location="json")
+        self.reqparse.add_argument('taskDescription', type=str, required=False, location="json")
 
     @Task.from_request(many=True)
     def get(self):
@@ -23,7 +24,7 @@ class TasksResource(Resource):
 
         task = None
 
-        if 'rankingId' in args:
+        if args['rankingId'] is not None:
             ranking = RankingListTest.query.get(args['rankingId'])
 
             if ranking is None:
@@ -36,6 +37,12 @@ class TasksResource(Resource):
             
             if task is None:
                 return ApiErrorResponse(f"Task with name {args['taskName']} does not exist for rankings").response()
+        else:
+            if args['taskDescription'] is None:
+                return ApiErrorResponse("Cannot start a named task without a description", 400).response()
+                
+            task = Task.start(args['taskName'], args['taskDescription'])
+            task.save()
         
         return ApiResponse(task, 201).response()
     
