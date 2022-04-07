@@ -232,6 +232,9 @@ paths:
                             redCard: false
                             yellowCard: false
                             blueCard: false
+              Hide:
+                value:
+                  hide: true
         description: ''
       security:
         - BearerToken: []
