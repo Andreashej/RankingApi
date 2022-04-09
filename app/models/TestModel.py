@@ -1,3 +1,4 @@
+
 from app.utils import cached_hybrid_property
 from .. import db
 from sqlalchemy.ext.hybrid import hybrid_property
@@ -5,6 +6,7 @@ from .ResultModel import Result
 from .RestMixin import ApiErrorResponse, RestMixin
 from sqlalchemy.sql.functions import rank
 from app.models.TestSectionModel import TestSection
+from sqlalchemy import case
 
 tests_rankinglists = db.Table('tests_ranking_association',
     db.Column('test_id', db.Integer, db.ForeignKey('tests.id'), primary_key=True),
@@ -36,10 +38,16 @@ class Test(db.Model, RestMixin):
 
     @hybrid_property
     def test_name(self):
-        if self._test_name is not None:
-            return self._test_name
+        # if self._test_name is not None:
+        #     return self._test_name
         
-        return self.testcode
+        # return self.testcode
+        return case(
+            [
+                (self._test_name == '', self.testcode),
+                (self._test_name.is_(None), self.testcode)
+            ], else_=self._test_name
+        )
     
     @test_name.setter
     def test_name(self, test_name):

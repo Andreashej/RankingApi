@@ -3,6 +3,7 @@ from kombu import Connection, Exchange, Queue, Consumer, Message
 import socket
 import json
 from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy import or_
 
 from app.models.CompetitionModel import Competition
 from app.models.PersonModel import Person
@@ -13,6 +14,7 @@ from app.models.MarkModel import JudgeMark
 from app import db, create_app
 from flask import current_app
 from datetime import datetime
+from sentry_sdk import capture_exception
 
 def process_message(body: ByteString, message: Message):
     try:
@@ -28,10 +30,21 @@ def process_message(body: ByteString, message: Message):
         try:
             test = competition.tests.filter(Test.test_name == data['TESTCODE']).one()
         except NoResultFound:
-            test = Test.create_from_catalog(data['ORIGINALTESTCODE'])
-            test.test_name = data['TESTCODE']
-            competition.tests.append(test)
-            db.session.add(test)
+            try:
+                test = competition.tests.filter(Test.testcode == data['ORIGINALTESTCODE'], or_(Test._test_name.is_(None), Test._test_name == '')).one()
+                test.test_name = data['TESTCODE']
+            except NoResultFound:
+
+                test = Test.create_from_catalog(data['ORIGINALTESTCODE'])
+                test.test_name = data['TESTCODE']
+                competition.tests.append(test)
+
+                rank_test = competition.tests.filter(Test.testcode == data['ORIGINALTESTCODE']).first()
+
+                if rank_test is not None:
+                    test.include_in_ranking = rank_test.include_in_ranking
+
+                db.session.add(test)
 
         try:
             rider = Person.find_by_name(data['RIDER'])
@@ -61,7 +74,14 @@ def process_message(body: ByteString, message: Message):
 
         result.marks.delete()
         for mark_raw in data['MARKS']:
-            mark = JudgeMark(mark = mark_raw['mark'], judge_no = int(mark_raw['judge']), judge_id=mark_raw['JUDGEID'], mark_type="mark")
+            try:
+                m = mark_raw['MARK']
+                judge_no = mark_raw['JUDGE']
+            except KeyError:
+                m = mark_raw['mark']
+                judge_no = mark_raw['judge']
+
+            mark = JudgeMark(mark = m, judge_no = int(judge_no), judge_id=mark_raw['JUDGEID'], mark_type="mark")
 
             # Find cards associated with this mark
             for card in [card for card in data['CARDS'] if card['judge'] == mark.judge_no]:
@@ -72,12 +92,14 @@ def process_message(body: ByteString, message: Message):
             result.marks.append(mark)
 
         for ranking in result.test.include_in_ranking.all():
-            ranking.propagate_result(result)
+            if result.state == 'VALID':
+                ranking.propagate_result(result)
 
         db.session.commit()
         print(f"Mark saved {mark}")
         message.ack()
     except Exception as e:
+        capture_exception(e)
         print (f"Error saving mark. Rolling back DB.", e)
         db.session.rollback()
         message.reject(True)
