@@ -119,10 +119,14 @@ class RankingListTest(db.Model, RestMixin):
                     .one()
             except NoResultFound as e:
                 ranking_result = RankingResults(self)
-        
-        ranking_result.add_result(result)
-        ranking_result.calculate_mark()
-        db.session.add(ranking_result)
+
+        if result.state == 'VALID':
+            ranking_result.add_result(result)
+            ranking_result.calculate_mark()
+            db.session.add(ranking_result)
+        else:
+            ranking_result.remove_result(result)
+            ranking_result.calculate_mark()
     
     @cached_hybrid_property
     def ranks(self):

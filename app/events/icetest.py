@@ -92,11 +92,14 @@ def process_message(body: ByteString, message: Message):
             result.marks.append(mark)
 
         for ranking in result.test.include_in_ranking.all():
-            if result.state == 'VALID':
+            try:
                 ranking.propagate_result(result)
+            except Exception as e:
+                print(e)
+                capture_exception(e)
 
         db.session.commit()
-        print(f"Mark saved {mark}")
+        print(f"Result saved {result}")
         message.ack()
     except Exception as e:
         capture_exception(e)

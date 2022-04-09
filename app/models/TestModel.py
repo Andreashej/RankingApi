@@ -38,10 +38,13 @@ class Test(db.Model, RestMixin):
 
     @hybrid_property
     def test_name(self):
-        # if self._test_name is not None:
-        #     return self._test_name
+        if self._test_name is None or self._test_name == '':
+            return self.testcode
         
-        # return self.testcode
+        return self._test_name
+
+    @test_name.expression
+    def test_name(self):
         return case(
             [
                 (self._test_name == '', self.testcode),
