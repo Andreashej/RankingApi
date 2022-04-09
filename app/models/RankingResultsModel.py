@@ -74,13 +74,27 @@ class RankingResults(db.Model, RestMixin):
                 self.horse_id = result.horse.id
 
             self.horses.append(result.horse)
+    
+    def remove_result(self, result):
+        if result in self.marks:
+            self.marks.remove(result)
+
+            rider_marks_left = self.marks.filter_by(rider_id=result.rider_id).count()
+
+            if rider_marks_left == 0:
+                self.riders.remove(result.rider)
             
+            horse_marks_left = self.marks.filter_by(horse_id=result.horse_id).count()
+
+            if horse_marks_left == 0:
+                self.horses.remove(result.horse)
     
     def calculate_mark(self):
         valid_marks_query = self.marks\
             .join(Result.test)\
             .join(Test.competition)\
-            .filter(Competition.last_date >= (datetime.now() - timedelta(days=self.test.rankinglist.results_valid_days)))
+            .filter(Competition.last_date >= (datetime.now() - timedelta(days=self.test.rankinglist.results_valid_days)))\
+            .filter(Result.state == 'VALID')
 
         ordering = Result.mark if self.test.order == 'asc' else Result.mark.desc()
         filter_clause = Result.mark < self.test.min_mark if self.test.order == 'asc' else Result.mark > self.test.min_mark
