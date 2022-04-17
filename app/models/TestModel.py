@@ -6,7 +6,7 @@ from .ResultModel import Result
 from .RestMixin import ApiErrorResponse, RestMixin
 from sqlalchemy.sql.functions import rank
 from app.models.TestSectionModel import TestSection
-from sqlalchemy import case
+from sqlalchemy import case, func
 
 tests_rankinglists = db.Table('tests_ranking_association',
     db.Column('test_id', db.Integer, db.ForeignKey('tests.id'), primary_key=True),
@@ -74,12 +74,16 @@ class Test(db.Model, RestMixin):
 
     @hybrid_property
     def results(self):
-        query = self._results.join(Test).filter(Result.state != 'NOT STARTED')
+        query = self._results.join(Test)\
+            .filter(Result.state != 'NOT STARTED')\
+            .order_by(func.field(Result.state, "NOSHOW", "DISQ", "ELIM", "RESIGN", "PENDING", "VALID").desc())
         
         if self.order == 'asc':
-            return query.filter(Result.mark > 0).order_by(Result.mark.asc())
+            query = query.filter(Result.mark > 0).order_by(Result.mark.asc())
         else:
-            return query.order_by(Result.mark.desc())
+            query = query.order_by(Result.mark.desc())
+
+        return query
     
     @cached_hybrid_property
     def ranks(self):
@@ -92,6 +96,7 @@ class Test(db.Model, RestMixin):
                 order_by=ordering
             ).label('rank'))\
             .filter(Result.test_id==self.id, Result.mark > 0)\
+            .filter(Result.state == 'VALID')
 
         return { id: rank for (id, rank) in query.all() }
     
