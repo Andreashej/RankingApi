@@ -59,6 +59,9 @@ class RankingResults(db.Model, RestMixin):
         return rank
 
     def add_result(self, result):
+        if result in self.marks:
+            return
+            
         self.marks.append(result)
 
         if result.rider not in self.riders:
