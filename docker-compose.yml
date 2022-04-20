@@ -19,6 +19,7 @@ services:
       ICETEST_RABBIT_USER: "${ICETEST_RABBIT_USER}"
       ICETEST_RABBIT_PASSWORD: "${ICETEST_RABBIT_PASSWORD}"
       ICETEST_RABBIT_VHOST: "${ICETEST_RABBIT_VHOST}"
+      SENTRY_DSN: "${SENTRY_DSN}"
     ports:
       - "80:5050"
     links:
@@ -42,6 +43,7 @@ services:
       ICETEST_RABBIT_USER: "${ICETEST_RABBIT_USER}"
       ICETEST_RABBIT_PASSWORD: "${ICETEST_RABBIT_PASSWORD}"
       ICETEST_RABBIT_VHOST: "${ICETEST_RABBIT_VHOST}"
+      SENTRY_DSN: "${SENTRY_DSN}"
     entrypoint: [./rq-worker.sh]
     links:
       - redis
@@ -60,6 +62,7 @@ services:
       ICETEST_RABBIT_USER: "${ICETEST_RABBIT_USER}"
       ICETEST_RABBIT_PASSWORD: "${ICETEST_RABBIT_PASSWORD}"
       ICETEST_RABBIT_VHOST: "${ICETEST_RABBIT_VHOST}"
+      SENTRY_DSN: "${SENTRY_DSN}"
     entrypoint: [./rabbitmq-listener.sh]
     links:
       - redis
