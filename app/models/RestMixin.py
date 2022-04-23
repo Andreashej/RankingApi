@@ -143,6 +143,10 @@ class RestMixin():
             query = query.filter(field < value)
         elif operator == '>' :
             query = query.filter(field > value)
+        elif operator == '<=':
+            query = query.filter(field <= value)
+        elif operator == '>=':
+            query = query.filter(field >= value)
         elif operator == 'eq' or operator == '==':
             query = query.filter(field == value)
         elif operator == 'like':
