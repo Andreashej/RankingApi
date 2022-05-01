@@ -84,7 +84,15 @@ def process_message(body: ByteString, message: Message):
             mark = JudgeMark(mark = m, judge_no = int(judge_no), judge_id=mark_raw['JUDGEID'], mark_type="mark")
 
             # Find cards associated with this mark
-            for card in [card for card in data['CARDS'] if card['judge'] == mark.judge_no]:
+            for card in data['CARDS']:
+                try:
+                    card_judge = card['judge']
+                except KeyError:
+                    card_judge = card['JUDGE']
+                
+                if card_judge != mark.judge_no:
+                    continue
+
                 mark.red_card = card['color'] == 'R'
                 mark.yellow_card = card['color'] == 'Y'
                 mark.blue_card = card['color'] == 'B'
