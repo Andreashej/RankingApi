@@ -93,9 +93,14 @@ def process_message(body: ByteString, message: Message):
                 if card_judge != mark.judge_no:
                     continue
 
-                mark.red_card = card['color'] == 'R'
-                mark.yellow_card = card['color'] == 'Y'
-                mark.blue_card = card['color'] == 'B'
+                try:
+                    card_color = card['color']
+                except KeyError:
+                    card_color = card['COLOR']
+
+                mark.red_card = card_color == 'R'
+                mark.yellow_card = card_color == 'Y'
+                mark.blue_card = card_color == 'B'
 
             result.marks.append(mark)
 
