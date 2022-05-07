@@ -68,9 +68,30 @@ class ScreenGroupResource(Resource):
         return ApiResponse(g.screengroup).response()
 
 class BigScreensResource(Resource):
+    def __init__(self):
+        self.reqparse = reqparse.RequestParser()
+        self.reqparse.add_argument('screenGroupId', type=int, location='json', required=True)
+
     @BigScreen.from_request(many=True)
     def get(self):
         return ApiResponse(g.bigscreens).response()
+
+    @jwt_required
+    def post(self):
+        args = self.reqparse.parse_args()
+        try:
+            screen_group = ScreenGroup.query.get(args['screenGroupId'])
+        except NoResultFound:
+            return ApiErrorResponse('Screengroup not found', 400).response()
+
+        screen = BigScreen(screen_group_id=args['screenGroupId'], competition_id=screen_group.competition_id)
+
+        try:
+            screen.save()
+        except ApiErrorResponse as e:
+            return e.response()
+        
+        return ApiResponse(screen).response()
 
 class BigScreenResource(Resource):
     def __init__(self) -> None:
@@ -78,6 +99,7 @@ class BigScreenResource(Resource):
         self.reqparse.add_argument('screenGroupId', type=int, location='json')
         self.reqparse.add_argument('competitionId', type=int, location='json')
         self.reqparse.add_argument('role', type=str, location='json')
+        self.reqparse.add_argument('rootFontSize', type=str, location='json')
 
     @BigScreen.from_request
     def get(self, id):
