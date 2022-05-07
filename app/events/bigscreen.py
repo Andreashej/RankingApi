@@ -4,12 +4,17 @@ from app.models import BigScreen, ScreenGroup, Test
 from flask_socketio import emit, join_room, leave_room
 from flask import request
 from sqlalchemy import event
+from app import db
 
 @socketio.on('Screen.Connected', namespace='/bigscreen')
 def on_screen_connected(data):
     screen = BigScreen.query.get(data['screenId']) if data['screenId'] is not None else None
         
-    if screen is None:
+    if screen is None and data['screenId'] is not None:
+        screen = BigScreen(id=data['screenId'])
+        db.session.add(screen)
+        db.session.flush()
+    elif screen is None:
         screen = BigScreen()
     
     screen.client_id = request.sid
