@@ -108,11 +108,13 @@ class TestResultsResource(Resource):
             data = []
             
             for i, row in content.iterrows():
+                score = row['SCORE'].strip('"')
+
                 result = {
                     'RIDER': row['FULLNAME'],
                     'HORSE': row['NAME_HORSE'],
                     'FEIFID': row['FEIFID_HORSE'],
-                    'MARK': float(row['SCORE'].replace(',', '.')),
+                    'MARK': float(score.replace(',', '.')),
                     'STATE': row['RESULT_STATE'],
                     'PHASE': row['PHASE'],
                     'TIMESTAMP': row['MODIFIED'],

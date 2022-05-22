@@ -100,7 +100,7 @@ class Competition(db.Model, RestMixin):
         return f'{self.country}{self.last_date.year}{self.id:06}'
     
     def add_test(self, test):
-        if test.testcode in [test.testcode for test in self.tests]:
+        if test.test_name in [test.test_name for test in self.tests]:
             raise ValueError(f"Duplicate testcode {test.testcode} for competition")
             
         self.tests.append(test)
