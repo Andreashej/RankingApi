@@ -45,71 +45,73 @@ def process_message(body: ByteString, message: Message):
                     test.include_in_ranking = rank_test.include_in_ranking
 
                 db.session.add(test)
+            
+        result = test.add_icetest_result(data)
 
-        try:
-            rider = Person.find_by_name(data['RIDER'])
-            rider.date_of_birth = datetime.strptime(data['BIRTHDAY'], "%Y-%m-%d")
-        except NoResultFound:
-            rider = Person.create_by_name(data['RIDER'])
-            db.session.add(rider)
+        # try:
+        #     rider = Person.find_by_name(data['RIDER'])
+        #     rider.date_of_birth = datetime.strptime(data['BIRTHDAY'], "%Y-%m-%d")
+        # except NoResultFound:
+        #     rider = Person.create_by_name(data['RIDER'])
+        #     db.session.add(rider)
 
-        try:
-            horse = Horse.query.filter_by(feif_id = data['FEIFID']).one()
-        except NoResultFound:
-            horse = Horse(data['FEIFID'], data['HORSE'])
-            db.session.add(horse)
+        # try:
+        #     horse = Horse.query.filter_by(feif_id = data['FEIFID']).one()
+        # except NoResultFound:
+        #     horse = Horse(data['FEIFID'], data['HORSE'])
+        #     db.session.add(horse)
 
-        try:
-            result = Result.query.filter_by(test_id=test.id, rider_id=rider.id, horse_id=horse.id, phase=data["PHASE"]).one()
-            result.mark = data['MARK']
-            result.state = data['STATE']
-        except NoResultFound:
-            result = Result(test, data['MARK'], rider, horse, data['PHASE'], data['STATE'])
-            result.created_at = datetime.fromtimestamp(data['TIMESTAMP'])
-            db.session.add(result)
+        # try:
+        #     result = Result.query.filter_by(test_id=test.id, rider_id=rider.id, horse_id=horse.id, phase=data["PHASE"]).one()
+        #     result.mark = data['MARK']
+        #     result.state = data['STATE']
+        # except NoResultFound:
+        #     result = Result(test, data['MARK'], rider, horse, data['PHASE'], data['STATE'])
+        #     result.created_at = datetime.fromtimestamp(data['TIMESTAMP'])
+        #     db.session.add(result)
         
-        result.sta = data['STA']
-        result.rider_class = data['CLASS']
-        result.updated_at = datetime.fromtimestamp(data['TIMESTAMP'])
+        # result.sta = data['STA']
+        # result.rider_class = data['CLASS']
+        # result.updated_at = datetime.fromtimestamp(data['TIMESTAMP'])
 
-        result.marks.delete()
-        for mark_raw in data['MARKS']:
-            try:
-                m = mark_raw['MARK']
-                judge_no = mark_raw['JUDGE']
-            except KeyError:
-                m = mark_raw['mark']
-                judge_no = mark_raw['judge']
+        # result.marks.delete()
+        # for mark_raw in data['MARKS']:
+        #     try:
+        #         m = mark_raw['MARK']
+        #         judge_no = mark_raw['JUDGE']
+        #     except KeyError:
+        #         m = mark_raw['mark']
+        #         judge_no = mark_raw['judge']
 
-            mark = JudgeMark(mark = m, judge_no = int(judge_no), judge_id=mark_raw['JUDGEID'], mark_type="mark")
+        #     mark = JudgeMark(mark = m, judge_no = int(judge_no), judge_id=mark_raw['JUDGEID'], mark_type="mark")
 
-            # Find cards associated with this mark
-            for card in data['CARDS']:
-                try:
-                    card_judge = card['judge']
-                except KeyError:
-                    card_judge = card['JUDGE']
+        #     # Find cards associated with this mark
+        #     for card in data['CARDS']:
+        #         try:
+        #             card_judge = card['judge']
+        #         except KeyError:
+        #             card_judge = card['JUDGE']
                 
-                if card_judge != mark.judge_no:
-                    continue
+        #         if card_judge != mark.judge_no:
+        #             continue
 
-                try:
-                    card_color = card['color']
-                except KeyError:
-                    card_color = card['COLOR']
+        #         try:
+        #             card_color = card['color']
+        #         except KeyError:
+        #             card_color = card['COLOR']
 
-                mark.red_card = card_color == 'R'
-                mark.yellow_card = card_color == 'Y'
-                mark.blue_card = card_color == 'B'
+        #         mark.red_card = card_color == 'R'
+        #         mark.yellow_card = card_color == 'Y'
+        #         mark.blue_card = card_color == 'B'
 
-            result.marks.append(mark)
+        #     result.marks.append(mark)
 
-        for ranking in result.test.include_in_ranking.all():
-            try:
-                ranking.propagate_result(result)
-            except Exception as e:
-                print(e)
-                capture_exception(e)
+        # for ranking in result.test.include_in_ranking.all():
+        #     try:
+        #         ranking.propagate_result(result)
+        #     except Exception as e:
+        #         print(e)
+        #         capture_exception(e)
 
         db.session.commit()
         print(f"Result saved {result}")

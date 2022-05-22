@@ -68,8 +68,8 @@ class Task(db.Model, RestMixin):
         return job.meta.get('progress', 0) if job is not None else 100
     
     @classmethod
-    def start(cls, task_name, description, **kwargs):
-        rq_job = current_app.task_queue.enqueue('app.tasks.' + task_name)
+    def start(cls, task_name, description, *args, **kwargs):
+        rq_job = current_app.task_queue.enqueue('app.tasks.' + task_name, *args)
         
         task = cls(id=rq_job.get_id(), name=task_name, description=description, **kwargs)
         db.session.add(task)

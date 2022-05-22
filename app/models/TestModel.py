@@ -1,12 +1,15 @@
 
+from sentry_sdk import capture_exception
 from app.utils import cached_hybrid_property
 from .. import db
 from sqlalchemy.ext.hybrid import hybrid_property
 from .ResultModel import Result
-from .RestMixin import ApiErrorResponse, RestMixin
+from .RestMixin import RestMixin
 from sqlalchemy.sql.functions import rank
 from app.models.TestSectionModel import TestSection
 from sqlalchemy import case, func
+from sqlalchemy.orm.exc import NoResultFound
+from datetime import datetime
 
 tests_rankinglists = db.Table('tests_ranking_association',
     db.Column('test_id', db.Integer, db.ForeignKey('tests.id'), primary_key=True),
@@ -104,20 +107,23 @@ class Test(db.Model, RestMixin):
     def sections(self):
         return TestSection.query.filter_by(testcode=self.testcode).order_by(TestSection.section_no).all()
 
-    def add_result(self, rider, horse, mark, state = None, **kwargs):
-    
-        if (not kwargs.get('skip_check', False)):
-            exists = Result.query.with_entities(Result.id).filter(Result.rider_id == rider.id, Result.horse_id == horse.id, Result.test_id==self.id).scalar()
-
-            if exists:
-                raise ApiErrorResponse("A combination cannot have more than one result per test", 400)
-
-        result = Result(self, mark)
-        result.rider = rider
-        result.horse = horse
-
-        if state is not None:
+    def add_result(self, rider, horse, mark, *, state = None, sta = None, marks = None, phase=None, rider_class=None, updated_at=None, **kwargs):
+        try:
+            result = Result.query.filter_by(test_id=self.id, rider_id=rider.id, horse_id=horse.id, phase=phase).one()
+            result.mark = mark
             result.state = state
+        except NoResultFound:
+            result = Result(self, mark, rider, horse, phase, state)
+            result.created_at = updated_at
+            db.session.add(result)
+
+        result.rider_class = rider_class
+        result.updated_at = updated_at
+
+        result.sta = sta
+
+        if marks is not None:
+            result.marks = marks
         
         for rankinglist in self.include_in_ranking:
             rankinglist.propagate_result(result)
@@ -140,3 +146,73 @@ class Test(db.Model, RestMixin):
             raise ValueError(f"Testcode {testcode} does not exist in catalog")
 
         return test
+    
+    def add_icetest_result(self, result):
+        from app.models import Person, Horse, JudgeMark
+        try:
+            rider = Person.find_by_name(result['RIDER'])
+        except NoResultFound:
+            rider = Person.create_by_name(result['RIDER'])
+            db.session.add(rider)
+        
+        if 'BIRTHDAY' in result:
+            birthday = result['BIRTHDAY']
+            if hasattr(birthday, 'to_pydatetime'): birthday = birthday.to_pydatetime()
+
+            rider.date_of_birth = datetime.strptime(birthday, "%Y-%m-%d")
+
+        try:
+            horse = Horse.query.filter_by(feif_id = result['FEIFID']).one()
+        except NoResultFound:
+            horse = Horse(result['FEIFID'], result['HORSE'])
+            db.session.add(horse)
+
+        marks = []
+        if 'MARKS' in result:
+            for mark_raw in result['MARKS']:
+                try:
+                    m = mark_raw['MARK']
+                    judge_no = mark_raw['JUDGE']
+                except KeyError:
+                    m = mark_raw['mark']
+                    judge_no = mark_raw['judge']
+
+                mark = JudgeMark(mark = m, judge_no = int(judge_no), judge_id=mark_raw['JUDGEID'], mark_type="mark")
+
+                # Find cards associated with this mark
+                for card in result['CARDS']:
+                    try:
+                        card_judge = card['judge']
+                    except KeyError:
+                        card_judge = card['JUDGE']
+                    
+                    if card_judge != mark.judge_no:
+                        continue
+
+                    try:
+                        card_color = card['color']
+                    except KeyError:
+                        card_color = card['COLOR']
+
+                    mark.red_card = card_color == 'R'
+                    mark.yellow_card = card_color == 'Y'
+                    mark.blue_card = card_color == 'B'
+
+                marks.append(mark)
+        
+        try:
+            updated_at = datetime.fromtimestamp(result['TIMESTAMP'])
+        except TypeError:
+            if hasattr(result['TIMESTAMP'], 'to_pydatetime'): updated_at = result['TIMESTAMP'].to_pydatetime()
+
+        return self.add_result(
+            rider, 
+            horse, 
+            result['MARK'], 
+            state=result['STATE'], 
+            sta=result['STA'],
+            marks=marks,
+            phase=result['PHASE'],
+            rider_class=result['CLASS'],
+            updated_at=updated_at
+        )

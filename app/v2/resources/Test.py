@@ -1,10 +1,11 @@
-from flask.globals import g, request
+from flask.globals import g, request, current_app
 from flask_jwt_extended.view_decorators import jwt_required
 from flask_restful import Resource, reqparse
 from app.models.TestEntryModel import TestEntry
 from app.Responses import ApiResponse, ApiErrorResponse
-from app.models import Test, Result, Person, Horse, RankingList, StartListEntry
+from app.models import Test, Result, Person, Horse, RankingList, StartListEntry, Task
 from app import db
+import pandas as pd
 
 class TestsResource(Resource):
     def __init__(self):
@@ -32,6 +33,7 @@ class TestResource(Resource):
     def __init__(self):
         self.reqparse = reqparse.RequestParser()
         self.reqparse.add_argument('testcode', type=str, required=False, location='json')
+        self.reqparse.add_argument('testName', type=str, required=False, location='json')
         self.reqparse.add_argument('order', type=str, required=False, location='json')
         self.reqparse.add_argument('markType', type=str, required=False, location='json')
         self.reqparse.add_argument('roundingPrecision', type=int, required=False, location='json')
@@ -96,6 +98,33 @@ class TestResultsResource(Resource):
     @jwt_required
     @Test.from_request    
     def post(self, id):
+
+        if 'file' in request.files:
+            file = request.files['file']
+
+            content = pd.read_excel(file)
+            content = content.reset_index()
+
+            data = []
+            
+            for i, row in content.iterrows():
+                result = {
+                    'RIDER': row['FULLNAME'],
+                    'HORSE': row['NAME_HORSE'],
+                    'FEIFID': row['FEIFID_HORSE'],
+                    'MARK': float(row['SCORE'].replace(',', '.')),
+                    'STATE': row['RESULT_STATE'],
+                    'PHASE': row['PHASE'],
+                    'TIMESTAMP': row['MODIFIED'],
+                    'STA': row['STA'],
+                    'CLASS': row['CLASS']
+                }
+                data.append(result)
+            
+            task = Task.start('create_results_from_icetest', f'Import results to {g.test.testcode} for competition {g.test.competition.id}', g.test.id, data)
+            task.save()
+
+            return ApiResponse(task=task, response_code=202).response()
 
         args = self.reqparse.parse_args()
 

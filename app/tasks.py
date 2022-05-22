@@ -1,10 +1,13 @@
 from rq import get_current_job
+from sentry_sdk import capture_exception
 
 from app import db, create_app
-from app.models import Task, Test, Result, Person, Horse, Competition, RankingListTest, RankingResults, RankingList, PersonAlias
+from app.models import Task, Test, Result, Person, Horse, Competition, RankingListTest, RankingResults, RankingList, PersonAlias, JudgeMark
 import datetime
 from flask_mail import Message
 from app import mail
+from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy import or_
 
 import sys
 
@@ -342,4 +345,22 @@ def test_scheduler():
         for i in range(0, 11):
             _set_task_progress(i * 10)
     except Exception:
+        _set_task_progress(100, True)
+
+def create_results_from_icetest(test_id, data):
+    try:
+        _set_task_progress(0)
+        test = Test.query.get(test_id)
+
+        for i, result_raw in enumerate(data):
+            result = test.add_icetest_result(result_raw)
+            
+            print(f"Result saved {result}")
+            _set_task_progress(i * len(data))
+
+        db.session.commit()
+        _set_task_progress(100)
+    except Exception as e:
+        raise e
+        capture_exception(e)
         _set_task_progress(100, True)
