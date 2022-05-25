@@ -89,4 +89,10 @@ class Job(db.Model, RestMixin):
 
             task.complete = True
             task.completed_at = datetime.utcnow()
-            
+    
+    @classmethod
+    def start_active(cls):
+        active_jobs = cls.query.filter_by(active=True).all()
+
+        for job in active_jobs:
+            job.queue_next()

@@ -17,3 +17,4 @@ from .BigScreenModel import BigScreen
 from .MarkModel import JudgeMark, SectionMark
 from .StartListModel import StartListEntry
 from .TestSectionModel import TestSection
+from .CompetitionAccessModel import CompetitionAccess

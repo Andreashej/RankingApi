@@ -32,7 +32,7 @@ class Person(db.Model, RestMixin):
     results = db.relationship("Result", back_populates="rider", lazy="dynamic")
     aliases = db.relationship("PersonAlias", backref="person", lazy="dynamic")
 
-    def __init__(self, first, last):
+    def __init__(self, first, last, email=None):
         exists = Person.query.with_entities(Person.id).filter_by(fullname = first + " " + last).scalar()
 
         if exists:
@@ -45,6 +45,7 @@ class Person(db.Model, RestMixin):
 
         self.firstname = first
         self.lastname = last
+        self.email = email
 
     @hybrid_property
     def fullname(self):

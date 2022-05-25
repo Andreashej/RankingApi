@@ -21,9 +21,10 @@ class User(db.Model, RestMixin):
 
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(32), index=True)
+    username = db.Column(db.String(32), index=True, unique=True)
     password_hash = db.Column(db.String(128))
     person = db.relationship('Person', back_populates='user', uselist=False)
+    super_user = db.Column(db.Boolean, default=False)
 
     @classmethod
     def find_by_username(cls, username):
