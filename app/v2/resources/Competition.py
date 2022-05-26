@@ -1,9 +1,10 @@
 import datetime
+import re
 from flask.globals import g
 from flask_restful import Resource, reqparse
 from app.Responses import ApiErrorResponse, ApiResponse
 from app import db
-from app.models import Competition, RankingList, Test
+from app.models import Competition, RankingList, Test, User
 from flask_jwt_extended import jwt_required
 
 class CompetitionsResource(Resource):
@@ -134,3 +135,40 @@ class CompetitionTestsResource(Resource):
 
         return ApiResponse(test).response()
 
+class CompetitionAdminUsersResource(Resource):
+    def __init__(self):
+        self.reqparse = reqparse.RequestParser()
+        self.reqparse.add_argument('username', type=str, location='json', required=True)
+
+    @jwt_required
+    @Competition.from_request
+    def post(self, id):
+        if not g.competition.is_admin:
+            return ApiErrorResponse('You are not an admin of this competition', response_code=401).response()
+        
+        args = self.reqparse.parse_args()
+
+        user_to_add = User.query.filter_by(username=args['username']).first()
+
+        if user_to_add is None:
+            return ApiErrorResponse(f"A user with username {args['username']} does not exist", 400).response()
+        
+        g.competition.admin_users.append(user_to_add)
+        g.competition.save()
+
+        return ApiResponse(user_to_add).response()
+
+class CompetitionAdminUserResource(Resource):
+
+    @jwt_required
+    @Competition.from_request
+    def delete(self, id, user_id):
+        if not g.competition.is_admin:
+            return ApiErrorResponse('You are not an admin of this competition', response_code=401).response()
+        
+        user_to_remove = User.query.get(user_id)
+
+        g.competition.admin_users.remove(user_to_remove)
+        g.competition.save()
+
+        return ApiResponse(response_code=204).response()

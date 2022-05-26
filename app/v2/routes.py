@@ -8,7 +8,7 @@ from app.v2.resources.Person import PersonsResource, PersonResource, PersonResul
 from app.v2.resources.Horse import HorsesResource, HorseResource, HorseResultsResource
 from app.v2.resources.Rankings import RankingsResource, RankingResource, RankingResultsRankingResource
 from app.v2.resources.RankingList import RankingListsResource, RankingListResource, RankingListTestsResource, RankingListTasksResource
-from app.v2.resources.Competition import CompetitionResource, CompetitionsResource, CompetitionTestsResource
+from app.v2.resources.Competition import CompetitionResource, CompetitionsResource, CompetitionTestsResource, CompetitionAdminUserResource, CompetitionAdminUsersResource
 from app.v2.resources.Test import TestsResource, TestResource, TestResultsResource, TestStartListResource, TestSectionResultsResource
 from app.v2.resources.RankingResult import RankingResultResource, RankingResultMarksResource,RankingResultsResource
 from app.v2.resources.Auth import TokenRefresh, UserLogin, UserLogoutAccess, UserLogoutRefresh, ProfileResource, UsersResource, UserResource
@@ -19,6 +19,8 @@ from app import api_v2 as api
 api.add_resource(CompetitionsResource, '/competitions', endpoint='competitions')
 api.add_resource(CompetitionResource, '/competitions/<int:id>', endpoint='competition')
 api.add_resource(CompetitionTestsResource, '/competitions/<int:id>/tests', endpoint='competition_tests')
+api.add_resource(CompetitionAdminUsersResource, '/competitions/<int:id>/users', endpoint='competition_users')
+api.add_resource(CompetitionAdminUserResource, '/competitions/<int:id>/users/<int:user_id>', endpoint='competition_user')
 
 api.add_resource(TestsResource, '/tests', endpoint='tests')
 api.add_resource(TestResource, '/tests/<int:id>', endpoint='test')
