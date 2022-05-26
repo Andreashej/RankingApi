@@ -1,10 +1,9 @@
 import datetime
-import re
 from flask.globals import g
 from flask_restful import Resource, reqparse
 from app.Responses import ApiErrorResponse, ApiResponse
 from app import db
-from app.models import Competition, RankingList, Test, User
+from app.models import Competition, RankingList, Test, User, CompetitionAccess
 from flask_jwt_extended import jwt_required
 
 class CompetitionsResource(Resource):
@@ -38,16 +37,18 @@ class CompetitionsResource(Resource):
         
         return ApiResponse(competition, 201).response()
     
-    @jwt_required
-    @Competition.from_request(many=True)
-    def delete(self):
-        try:
-            g.competitions.delete()
-            db.session.commit()
-        except Exception as e:
-            return ApiErrorResponse(str(e)).response()
+    # @jwt_required
+    # @Competition.from_request(many=True)
+    # def delete(self):
+    #     try:
+    #         if g.is
+    #         g.competitions.delete()
+
+    #         db.session.commit()
+    #     except Exception as e:
+    #         return ApiErrorResponse(str(e)).response()
         
-        return ApiResponse(response_code=204).response()
+    #     return ApiResponse(response_code=204).response()
 
 class CompetitionResource(Resource):
     def __init__(self):
@@ -89,6 +90,10 @@ class CompetitionResource(Resource):
     def delete(self, id):
         try:
             db.session.delete(g.competition)
+
+            admin_users = CompetitionAccess.query.filter(competition_id=id).all()
+            db.session.delete(admin_users)
+
             db.session.commit()
         except Exception as e:
             return ApiErrorResponse(str(e)).response()

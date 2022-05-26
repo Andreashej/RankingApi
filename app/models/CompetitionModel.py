@@ -34,7 +34,7 @@ class Competition(db.Model, RestMixin):
     _contact_person_id = db.Column('contact_person_id', db.Integer, db.ForeignKey('persons.id'))
     contact_person = db.relationship("Person")
     screen_groups = db.relationship("ScreenGroup", lazy="dynamic")
-    admin_users = db.relationship("User", lazy="dynamic", secondary='competition_access', ondelete='CASCADE')
+    admin_users = db.relationship("User", lazy="dynamic", secondary='competition_access')
 
     def __init__(self, name='', startdate=None, enddate=None, isi_id = None, country='XX'):
         self.name = name
