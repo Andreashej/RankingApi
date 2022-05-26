@@ -2,7 +2,7 @@ from app.models.PersonModel import Person
 from .. import db
 from sqlalchemy.ext.hybrid import hybrid_property
 
-from flask import current_app, render_template
+from flask import current_app, render_template, g
 
 from .TaskModel import Task
 
@@ -18,7 +18,7 @@ class Competition(db.Model, RestMixin):
     RESOURCE_NAME_PLURAL = 'competitions'
 
     EXCLUDE_FROM_JSON = ['_contact_person_id', '_state']
-    INCLUDE_IN_JSON = ['contact_person_id', 'state']
+    INCLUDE_IN_JSON = ['contact_person_id', 'state', 'is_admin']
 
     __tablename__ = 'competitions'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -34,6 +34,7 @@ class Competition(db.Model, RestMixin):
     _contact_person_id = db.Column('contact_person_id', db.Integer, db.ForeignKey('persons.id'))
     contact_person = db.relationship("Person")
     screen_groups = db.relationship("ScreenGroup", lazy="dynamic")
+    admin_users = db.relationship("User", lazy="dynamic", secondary='competition_access', ondelete='CASCADE')
 
     def __init__(self, name='', startdate=None, enddate=None, isi_id = None, country='XX'):
         self.name = name
@@ -115,8 +116,6 @@ class Competition(db.Model, RestMixin):
         if self.contact_person is None or not self.contact_person.email:
             return
 
-        html = render_template("emails/competition_create.html", competition=self)
-
         rq_job = current_app.task_queue.enqueue('app.tasks.send_mail',
             **{
                 'subject': "Your competition was created",
@@ -140,3 +139,18 @@ class Competition(db.Model, RestMixin):
             db.session.commit()
         except:
             db.session.rollback()
+
+    @hybrid_property
+    def is_admin(self):
+        if not hasattr(g, 'profile') or g.profile is None:
+            return False
+        
+        if g.profile.super_user:
+            return True
+
+        user = self.admin_users.filter_by(id=g.profile.id).first()
+
+        if user is not None:
+            return True
+
+        return False

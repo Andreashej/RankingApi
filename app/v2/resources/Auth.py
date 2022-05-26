@@ -3,8 +3,10 @@ from flask_jwt_extended.utils import create_access_token, get_jwt_identity
 from flask_restful import Resource, reqparse
 from flask_jwt_extended import jwt_required, jwt_refresh_token_required, get_raw_jwt
 from app.Responses import ApiErrorResponse, ApiResponse
+from sqlalchemy.orm.exc import NoResultFound
+from pymysql.err import IntegrityError
 
-from app.models import User, RevokedToken
+from app.models import User, RevokedToken, Person
 
 class UserLogin(Resource):
     def __init__(self):
@@ -85,17 +87,32 @@ class UsersResource(Resource):
         self.reqparse = reqparse.RequestParser()
         self.reqparse.add_argument('username', type=str, required=True, location='json')
         self.reqparse.add_argument('password', type=str, required=True, location='json')
+        self.reqparse.add_argument('firstName', type=str, required=True, location='json')
+        self.reqparse.add_argument('lastName', type=str, required=True, location='json')
+        self.reqparse.add_argument('email', type=str, required=True, location='json')
     
     @User.from_request(many=True)
     def get(self):
         return ApiResponse(g.users).response()
     
-    @jwt_required
     def post(self):
         args = self.reqparse.parse_args()
         try:
+            exists = User.query.filter_by(username=args['username']).count()
+            if exists:
+                return ApiErrorResponse(f"Username {args['username']} already taken.", 400).response()
+
             user = User(username=args['username'])
             user.hash_password(args['password'])
+
+            try:
+                person = Person.find_by_name(f"{args['firstName']} {args['lastName']}")
+            except NoResultFound:
+                person = Person(args['firstName'], args['lastName'], args['email'])
+            
+            if person.user is None:
+                person.user = user
+
             user.save()
         except ApiErrorResponse as e:
             return e.response()

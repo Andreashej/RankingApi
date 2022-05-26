@@ -112,6 +112,8 @@ def create_app():
           return { "message": "I am healthy :)"}, 200
 
         app.add_url_rule('/', view_func=healthcheck)
+
+        models.JobModel.Job.start_active()
           
         return app
 
