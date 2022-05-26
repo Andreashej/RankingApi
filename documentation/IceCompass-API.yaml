@@ -235,6 +235,130 @@ paths:
               Hide:
                 value:
                   hide: true
+              PP1 Equipage Result:
+                value:
+                  template: equipageresult
+                  templateData:
+                    test:
+                      testName: PP1
+                      roundingPrecision: 2
+                    group:
+                      - id: 123
+                        state: VALID
+                        rank: 1
+                        mark: 5.67
+                        color: red
+                        marks:
+                          - markType: mark
+                            id: 987
+                            judgeNo: 1
+                            mark: 5
+                            redCard: false
+                            yellowCard: false
+                            blueCard: false
+                          - markType: flag
+                            id: 988
+                            judgeNo: 1
+                            flagOk: true
+                            redCard: false
+                            yellowCard: false
+                            blueCard: false
+                          - markType: mark
+                            id: 989
+                            judgeNo: 1
+                            mark: 5
+                            redCard: false
+                            yellowCard: false
+                            blueCard: false
+                          - markType: mark
+                            id: 986
+                            judgeNo: 1
+                            mark: 5
+                            redCard: false
+                            yellowCard: false
+                            blueCard: false
+                          - markType: flag
+                            id: 985
+                            judgeNo: 1
+                            flagOk: true
+                            redCard: false
+                            yellowCard: false
+                            blueCard: false
+                          - markType: time
+                            id: 984
+                            judgeNo: 1
+                            mark: 9.2
+                            redCard: false
+                            yellowCard: false
+                            blueCard: false
+                          - markType: mark
+                            id: 983
+                            judgeNo: 1
+                            mark: 5
+                            redCard: false
+                            yellowCard: false
+                            blueCard: false
+                        horse:
+                          horseName: Bjartmar fra Nedre Sveen
+                          feifId: NO2010104091
+                        rider:
+                          fullname: Agnar Snorri Stefánsson
+                          ageGroup: Senior
+              Timed Test Equipage result:
+                value:
+                  template: equipageresult
+                  templateData:
+                    test:
+                      testName: P2
+                      roundingPrecision: 2
+                    group:
+                      - id: 123
+                        state: VALID
+                        rank: 1
+                        mark: 9.18
+                        color: red
+                        marks:
+                          - markType: flag
+                            id: 988
+                            judgeNo: 1
+                            flagOk: true
+                            redCard: false
+                            yellowCard: false
+                            blueCard: false
+                          - markType: flag
+                            id: 985
+                            judgeNo: 1
+                            flagOk: true
+                            redCard: false
+                            yellowCard: false
+                            blueCard: false
+                          - markType: flag
+                            id: 986
+                            judgeNo: 1
+                            flagOk: true
+                            redCard: false
+                            yellowCard: false
+                            blueCard: false
+                          - markType: flag
+                            id: 987
+                            judgeNo: 1
+                            flagOk: true
+                            redCard: false
+                            yellowCard: false
+                            blueCard: false
+                          - markType: time
+                            id: 984
+                            judgeNo: 1
+                            mark: 9.18
+                            redCard: false
+                            yellowCard: false
+                            blueCard: false
+                        horse:
+                          horseName: Bjartmar fra Nedre Sveen
+                          feifId: NO2010104091
+                        rider:
+                          fullname: Agnar Snorri Stefánsson
+                          ageGroup: Senior
         description: ''
       security:
         - BearerToken: []
