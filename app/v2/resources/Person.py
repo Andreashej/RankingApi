@@ -1,7 +1,5 @@
 from flask.globals import g
-from flask_jwt_extended.view_decorators import jwt_optional
 from flask_restful import Resource, reqparse
-from app.models.PersonAliasModel import PersonAlias
 from app.models.ResultModel import Result
 from app.Responses import ApiResponse, ApiErrorResponse
 from app.models.PersonModel import Person

@@ -19,3 +19,4 @@ class ScreenGroup(db.Model, RestMixin):
     test = db.relationship("Test")
 
     screens = db.relationship("BigScreen")
+    routes = db.relationship('BigScreenRoute', back_populates="screen_group")

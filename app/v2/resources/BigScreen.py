@@ -1,11 +1,12 @@
-from datetime import datetime, timedelta
+from operator import or_
 from flask_restful import Resource, reqparse
 from app.Responses import ApiErrorResponse, ApiResponse
 from flask import g, request
-from app import socketio
+from app import socketio, db
 from flask_jwt_extended import jwt_required
 from sqlalchemy.orm.exc import NoResultFound
 
+from app.models import Competition, BigScreenRoute, Test
 from app.models.BigScreenModel import BigScreen
 from app.models.ScreenGroupModel import ScreenGroup
 
@@ -146,19 +147,158 @@ class BigScreenResource(Resource):
         
         return ApiResponse(response_code=204).response()
 
-class CollectingRingCallResource(Resource):
+class BigScreenRoutesResource(Resource):
+    def __init__(self):
+        self.reqparse = reqparse.RequestParser()
+        self.reqparse.add_argument('priority', type=int, location='json', required=True)
+        self.reqparse.add_argument('screenGroupId', type=int, location='json', required=True)
+        self.reqparse.add_argument('tests', type=int, action='append', location='json')
+        self.reqparse.add_argument('templates', type=str, action='append', location='json')
+    
     @jwt_required
-    def post(self):
-        args = request.json
-        target_groups = ScreenGroup.query.filter_by(competition_id=args['competitionId'], template="collectingring").all()
+    @Competition.from_request
+    def get(self, id):
+        return ApiResponse(BigScreenRoute.load_many(g.competition.bigscreen_routes)).response()
+    
+    @jwt_required
+    def post(self, id):
+        args = self.reqparse.parse_args()
+        competition = Competition.query.get(id)
 
-        end_time = datetime.now() + timedelta(seconds=args['time'])
+        if not competition.is_admin:
+            return ApiErrorResponse('You are not an admin of this competition', 401).response()
 
-        for target_group in target_groups:
-            socketio.emit("CollectingRing.Call",{
-                "riders": args['riders'],
-                "endTime": end_time.isoformat(),
-                "competition": target_group.competition.to_json()
-            }, to=target_group.id, namespace="/bigscreen")
+        if competition is None:
+            return ApiErrorResponse('Competition not found', 404).response()
+        
+        if not competition.is_admin:
+            return ApiErrorResponse('You are not an admin of this competition', 401).response()
+        
+        route_exists = competition.bigscreen_routes.filter_by(screen_group_id = args['screenGroupId']).first()
 
-        return None, 201
+        if route_exists is not None:
+            return ApiErrorResponse(f"Route for screen group {args['screenGroupId']} already exists for this competition", 400).response()
+
+        screen_group = ScreenGroup.query.get(args['screenGroupId'])
+
+        if screen_group is None:
+            return ApiErrorResponse('Screen Group not found', 404).response()
+
+        if screen_group.competition.id != competition.id:
+            return ApiErrorResponse('Screen Group is not a child of this competition', 400).response()
+        
+        route = BigScreenRoute(priority=args['priority'], screen_group=screen_group, competition=competition, templates=args['templates'])
+
+        for test_id in args['tests']:
+            test = Test.query.get(test_id)
+
+            if test is None:
+                continue
+            
+            route.tests.append(test)
+        
+        # for template in args['templates']:
+        #     template_route = TemplateRoute(template_name=template)
+        #     db.session.add(template_route)
+        #     route.templates.append(template_route)
+        
+        route.save()
+
+        return ApiResponse(route).response()
+
+class BigScreenRouteResource(Resource):
+    def __init__(self):
+        self.reqparse = reqparse.RequestParser()
+        self.reqparse.add_argument('priority', type=int, location='json', required=False)
+        self.reqparse.add_argument('screenGroupId', type=int, location='json', required=False)
+        self.reqparse.add_argument('tests', type=int, action='append', location='json')
+        self.reqparse.add_argument('templates', type=str, action='append', location='json')
+
+    @jwt_required
+    @Competition.from_request
+    def patch(self, id, route_id):
+        if not g.competition.is_admin:
+            return ApiErrorResponse('You are not an admin of this competition', 401).response()
+
+        route = g.competition.bigscreen_routes.filter_by(id=route_id).first()
+
+        if route is None:
+            return ApiErrorResponse('Route not found', 404).response()
+
+        args = self.reqparse.parse_args()
+
+        if args['priority'] is not None:
+            route.priority = args['priority']
+        
+        if args['screenGroupId'] is not None:
+            route.screenGroupId = args['screenGroupId']
+
+        route.tests = []
+
+        for test_id in args['tests']:
+            test = Test.query.get(test_id)
+
+            if test is None:
+                continue
+            
+            route.tests.append(test)
+
+        route.templates = args['templates']
+        
+        route.save()
+
+        return ApiResponse(route).response()
+    
+    @jwt_required
+    @Competition.from_request
+    def delete(self, id, route_id):
+        if not g.competition.is_admin:
+            return ApiErrorResponse('You are not an admin of this competition', 401).response()
+
+        route = g.competition.bigscreen_routes.filter_by(id=route_id).first()
+
+        if route is None:
+            return ApiErrorResponse('Route not found', 404).response()
+
+        db.session.delete(route)
+        db.session.commit()
+
+        return ApiResponse(response_code=204).response()
+
+
+
+class CompetitionBigScreenRouterResource(Resource):
+    @jwt_required
+    def post(self, id):
+        try:
+            competition = Competition.query.filter(or_(Competition.id == id, Competition.ext_id == id)).first()
+
+            if competition is None:
+                return ApiErrorResponse('Competition not found', 404).response()
+
+            template = request.json.get('template')
+            template_data = request.json.get('templateData')
+            hide = request.json.get('hide', False)
+
+            matched_route = competition.bigscreen_routes\
+                .filter(BigScreenRoute.templates.like(f'%{template}%'))\
+                .filter(BigScreenRoute.tests.any(Test.test_name == template_data['test']['testName']))\
+                .order_by(BigScreenRoute.priority.asc())\
+                .first()
+            
+            if not matched_route:
+                # Should this just fail silently?
+                return ApiErrorResponse(f"No route exists for test {template_data['test']['testName']} and template {template}", 400).response()
+
+            if template is not None and template_data is not None:
+                socketio.emit('ScreenGroup.TemplateChanged', {
+                    'template': template,
+                    'templateData': template_data
+                }, namespace="/bigscreen", to=matched_route.screen_group_id)
+            
+            if hide:
+                socketio.emit('ScreenGroup.HideAll', namespace="/bigscreen", to=matched_route.screen_group_id)
+        except ApiErrorResponse as e:
+            return e.response()
+
+        return ApiResponse(matched_route.screen_group).response()

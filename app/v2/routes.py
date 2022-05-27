@@ -1,6 +1,5 @@
 
-from app.v2.resources.BigScreen import CollectingRingCallResource
-from app.v2.resources.BigScreen import ScreenGroupsResource, ScreenGroupResource, BigScreenResource, BigScreensResource
+from app.v2.resources.BigScreen import ScreenGroupsResource, ScreenGroupResource, BigScreenResource, BigScreensResource, BigScreenRoutesResource, CompetitionBigScreenRouterResource, BigScreenRouteResource
 from app.v2.resources.Search import SearchResultsResource
 from app.v2.resources.Result import ResultsResource, ResultResource, ResultMarksResource, SectionMarksResource
 from app.v2.resources.Task import TaskResource, TasksResource, JobResource, JobsResource
@@ -21,6 +20,9 @@ api.add_resource(CompetitionResource, '/competitions/<int:id>', endpoint='compet
 api.add_resource(CompetitionTestsResource, '/competitions/<int:id>/tests', endpoint='competition_tests')
 api.add_resource(CompetitionAdminUsersResource, '/competitions/<int:id>/users', endpoint='competition_users')
 api.add_resource(CompetitionAdminUserResource, '/competitions/<int:id>/users/<int:user_id>', endpoint='competition_user')
+api.add_resource(BigScreenRoutesResource, '/competitions/<int:id>/bigscreen-routes', endpoint='competition_bigscreen_routes')
+api.add_resource(CompetitionBigScreenRouterResource, '/competitions/<string:id>/bigscreen-routes/template', endpoint='competition_bigscreen_routes_template')
+api.add_resource(BigScreenRouteResource, '/competitions/<int:id>/bigscreen-routes/<int:route_id>', endpoint='competition_bigscreen_route')
 
 api.add_resource(TestsResource, '/tests', endpoint='tests')
 api.add_resource(TestResource, '/tests/<int:id>', endpoint='test')
@@ -75,8 +77,6 @@ api.add_resource(UserResource, '/users/<int:id>', endpoint='user')
 api.add_resource(TestCatalogResource, '/test-catalog', endpoint='test_catalog')
 
 api.add_resource(SearchResultsResource, '/search', endpoint='search')
-
-api.add_resource(CollectingRingCallResource, '/bigscreens/collectingring', endpoint='collectingring')
 
 api.add_resource(ScreenGroupsResource, '/screengroups', endpoint='screengroups')
 api.add_resource(ScreenGroupResource, '/screengroups/<int:id>', endpoint='screengroup')

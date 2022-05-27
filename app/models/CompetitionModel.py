@@ -35,6 +35,7 @@ class Competition(db.Model, RestMixin):
     contact_person = db.relationship("Person")
     screen_groups = db.relationship("ScreenGroup", lazy="dynamic")
     admin_users = db.relationship("User", lazy="dynamic", secondary='competition_access')
+    bigscreen_routes = db.relationship("BigScreenRoute", lazy="dynamic")
 
     def __init__(self, name='', startdate=None, enddate=None, isi_id = None, country='XX'):
         self.name = name
