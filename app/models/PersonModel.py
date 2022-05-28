@@ -59,6 +59,9 @@ class Person(db.Model, RestMixin):
     
     @email.setter
     def email(self, email):
+        if email is None:
+            return
+            
         if '@' not in email and '.' not in email:
             raise ValueError('An email address must contain both @ and .')
         
