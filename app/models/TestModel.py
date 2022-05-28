@@ -168,7 +168,7 @@ class Test(db.Model, RestMixin):
             db.session.add(horse)
 
         marks = []
-        if 'MARKS' in result:
+        if 'MARKS' in result and result['MARKS'] is not None:
             for mark_raw in result['MARKS']:
                 try:
                     m = mark_raw['MARK']
