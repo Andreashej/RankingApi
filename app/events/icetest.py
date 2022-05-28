@@ -15,6 +15,7 @@ from app import db, create_app
 from flask import current_app
 from datetime import datetime
 from sentry_sdk import capture_exception
+import traceback
 
 def process_message(body: ByteString, message: Message):
     try:
@@ -118,7 +119,8 @@ def process_message(body: ByteString, message: Message):
         message.ack()
     except Exception as e:
         capture_exception(e)
-        print (f"Error saving mark. Rolling back DB.", e)
+        print (f"Error saving mark. Rolling back DB.")
+        traceback.print_exc(e)
         db.session.rollback()
         message.reject(True)
 
