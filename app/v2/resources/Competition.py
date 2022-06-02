@@ -28,7 +28,7 @@ class CompetitionsResource(Resource):
             competition = Competition(args['name'], args['firstDate'], args['lastDate'], args['isirank'], args['country'])
             competition.update(self.reqparse)
 
-            if not g.profile.super_admin:
+            if not g.profile.super_user:
                 competition.admin_users.append(g.profile)
 
             competition.save()
