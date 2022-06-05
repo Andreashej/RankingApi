@@ -45,3 +45,8 @@ ICETEST_RABBIT_PASSWORD = os.environ.get('ICETEST_RABBIT_PASSWORD')
 ICETEST_RABBIT_VHOST = os.environ.get('ICETEST_RABBIT_VHOST')
 
 SENTRY_DSN = os.environ.get("SENTRY_DSN")
+
+SQLALCHEMY_ENGINE_OPTIONS = {
+    "pool_pre_ping": True,
+    "pool_recycle": 300,
+}
