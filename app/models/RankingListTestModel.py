@@ -83,7 +83,7 @@ class RankingListTest(db.Model, RestMixin):
     def launch_task(self, name, description, *args, **kwargs):
         rq_job = current_app.task_queue.enqueue('app.tasks.' + name, self.id, *args, **kwargs)
 
-        task = Task(id=rq_job.get_id(), name=name, description=description, test=self)
+        task = Task(id=rq_job.get_id(), name=name, description=description, test=self, job_id=kwargs.get('job_id'))
         db.session.add(task)
 
         try:
@@ -164,5 +164,5 @@ class RankingListTest(db.Model, RestMixin):
     def flush(self):
         return self.launch_task('flush_ranking', 'Flushing {} ranking for {}'.format(self.testcode, self.rankinglist.shortname))
 
-    def recompute(self):
-        return self.launch_task('recompute_ranking', 'Recomputing {} ranking for {}'.format(self.testcode, self.rankinglist.shortname))
+    def recompute(self, job_id=None):
+        return self.launch_task('recompute_ranking', 'Recomputing {} ranking for {}'.format(self.testcode, self.rankinglist.shortname), job_id=job_id)

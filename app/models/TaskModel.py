@@ -7,6 +7,7 @@ from sqlalchemy import case, and_, not_
 
 from .. import db
 from flask import current_app
+from rq.job import Job as RQJob
 
 from .RestMixin import RestMixin
 
@@ -75,3 +76,13 @@ class Task(db.Model, RestMixin):
         db.session.add(task)
          
         return task
+
+    @classmethod
+    def cleanup(cls):
+        uncompleted_tasks = Task.query.filter_by(complete=False).all()
+
+        for task in uncompleted_tasks:
+            if task.get_rq_job() is None:
+                task.complete = True
+        
+        db.session.commit()

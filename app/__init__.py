@@ -113,6 +113,7 @@ def create_app():
 
         app.add_url_rule('/', view_func=healthcheck)
 
+        models.TaskModel.Task.cleanup() # Cleanup old tasks before starting all jobs again
         models.JobModel.Job.start_active()
           
         return app

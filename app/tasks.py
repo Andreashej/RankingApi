@@ -281,14 +281,14 @@ def send_mail(subject, sender , recipients , text_body , html_body):
         app.logger.error(e, exc_info=sys.exc_info())
         _set_task_progress(100, True)
 
-def recompute_all():
+def recompute_all(**kwargs):
     try:
         _set_task_progress(0)
 
         rankings = RankingListTest.query.all()
 
         for i, ranking in enumerate(rankings):
-            ranking.recompute()
+            ranking.recompute(job_id=kwargs.get('job_id'))
             _set_task_progress(i / len(rankings) * 100)
 
         _set_task_progress(100)
@@ -339,9 +339,10 @@ def set_competition_ranking_link():
         app.logger.error(e, exc_info=sys.exc_info())
         _set_task_progress(100, True)
 
-def test_scheduler():
+def test_scheduler(**kwargs):
     try:
         print("Task started!")
+        print(f"Originates from Job ID: {kwargs.get('job_id', None)}")
         for i in range(0, 11):
             _set_task_progress(i * 10)
     except Exception:
@@ -361,6 +362,5 @@ def create_results_from_icetest(test_id, data):
         db.session.commit()
         _set_task_progress(100)
     except Exception as e:
-        raise e
         capture_exception(e)
         _set_task_progress(100, True)
