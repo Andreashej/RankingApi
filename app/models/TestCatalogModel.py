@@ -7,7 +7,7 @@ class TestCatalog(db.Model, RestMixin):
 
     __tablename__ = 'test_catalog'
     id = db.Column(db.Integer, primary_key=True)
-    testcode = db.Column(db.String(3), unique=True, index=True)
+    testcode = db.Column(db.String(5), unique=True, index=True)
     rounding_precision = db.Column(db.Integer, default=2)
     order = db.Column(db.String(4), default='desc')
     mark_type = db.Column(db.String(4), default='mark')

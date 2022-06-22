@@ -25,7 +25,7 @@ class Test(db.Model, RestMixin):
 
     __tablename__ = 'tests'
     id = db.Column(db.Integer, primary_key=True)
-    testcode = db.Column(db.String(3))
+    testcode = db.Column(db.String(5))
     _test_name = db.Column("test_name", db.String(20))
     competition_id = db.Column(db.Integer, db.ForeignKey('competitions.id'), nullable=False)
     rounding_precision = db.Column(db.Integer, default=2)
