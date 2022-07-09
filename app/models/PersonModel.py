@@ -226,33 +226,64 @@ class Person(db.Model, RestMixin):
     #             )
     #         )
     #     return query.as_scalar()
+
+    def merge(self, person_id):
+        from .RankingResultsModel import RankingResults
+
+        if person_id is None:
+            raise ApiErrorResponse('You must provide a person ID to merge from', 400)
+
+        merge_source = Person.query.get(person_id)
+
+        if not merge_source:
+            raise ApiErrorResponse(f'Could not find person with ID {person_id} to merge from.', 404)
+        
+        alias = PersonAlias(merge_source.fullname)
+        self.aliases.append(alias)
+
+        while merge_source.aliases.count() > 0:
+            alias = merge_source.aliases.pop()
+            self.aliases.append(alias)
+        
+        ranking_results = RankingResults.query.filter_by(rider_id=merge_source.id).all()
+
+        for ranking_result in ranking_results:
+            try:
+                existing_ranking_result = RankingResults.query.filter_by(rider_id=self.id, test=ranking_result.test).one()
+            except NoResultFound:
+                ranking_result.rider_id = self.id
+                continue
+            
+            count = ranking_result.marks.count()
+            while count > 0:
+                mark = ranking_result.marks[-1]
+                ranking_result.remove_result(mark)
+                mark.rider = self
+                existing_ranking_result.add_result(mark)
+                count = ranking_result.marks.count()
+            
+            existing_ranking_result.calculate_mark()
+            db.session.delete(ranking_result)
+        
+        for result in merge_source.results:
+            result.rider = self
+        
+        db.session.delete(merge_source)
+        
+        return alias
     
-    def add_alias(self, alias_name = None, person_id = None):
-        alias = None
-
-        if alias_name:
-            existing = Person.find_by_name(alias_name)
-            if existing:
-                raise ApiErrorResponse(f'Cannot create alias that already exists for person {existing.fullname} (ID: {existing.id}). Merge the riders instead by including an ID to merge from in the request body.', 409)
-            
-            alias = PersonAlias(alias_name)
-
-            self.aliases.append(alias)
-        
-        elif person_id:
-            merge = Person.query.get(person_id)
-
-            if not merge:
-                raise ApiErrorResponse(f'Could not find person with ID {person_id} to merge from.', 404)
-            
-            alias = PersonAlias(merge.fullname)
-            self.aliases.append(alias)
-
-            for result in merge.results:
-                result.rider_id = self.id
-        
+    def add_alias(self, alias_name):
         if alias is None:
-            raise ApiErrorResponse("You must provide either an alias name or person ID to merge.", 400)
+            raise ApiErrorResponse("You must provide an alias name.", 400)
+
+        existing = Person.find_by_name(alias_name)
+        if existing:
+            raise ApiErrorResponse(f'Cannot create alias that already exists for person {existing.fullname} (ID: {existing.id}). Merge the riders instead by including an ID to merge from in the request body.', 409)
+        
+        alias = PersonAlias(alias_name)
+
+        self.aliases.append(alias)
+        
         return alias
 
     def __repr__(self):

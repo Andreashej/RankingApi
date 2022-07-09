@@ -95,7 +95,10 @@ class PersonAliasesResource(Resource):
         args = self.reqparse.parse_args()
         
         try:
-            alias = g.person.add_alias(args['alias'], args['personId'])
+            if args['alias'] is not None:
+                alias = g.person.add_alias(args['alias'])
+            elif args['personId'] is not None:
+                alias = g.person.merge(args['personId'])
             
             alias.save()
         except ApiErrorResponse as e:
