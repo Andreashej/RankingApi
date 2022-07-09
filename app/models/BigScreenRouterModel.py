@@ -37,10 +37,17 @@ class BigScreenRoute(db.Model, RestMixin):
 
     @hybrid_property
     def templates(self):
+        if self._templates is None:
+            return []
+
         return self._templates.split(',')
     
     @templates.setter
     def templates(self, new_value):
+        if new_value is None:
+            self._templates = None
+            return
+
         self._templates = ','.join(new_value)
     
     @templates.expression

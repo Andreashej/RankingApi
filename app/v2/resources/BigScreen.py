@@ -5,6 +5,7 @@ from flask import g, request
 from app import socketio, db
 from flask_jwt_extended import jwt_required
 from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy import not_
 
 from app.models import Competition, BigScreenRoute, Test
 from app.models.BigScreenModel import BigScreen
@@ -189,13 +190,14 @@ class BigScreenRoutesResource(Resource):
         
         route = BigScreenRoute(priority=args['priority'], screen_group=screen_group, competition=competition, templates=args['templates'])
 
-        for test_id in args['tests']:
-            test = Test.query.get(test_id)
+        if args['tests'] is not None:
+            for test_id in args['tests']:
+                test = Test.query.get(test_id)
 
-            if test is None:
-                continue
-            
-            route.tests.append(test)
+                if test is None:
+                    continue
+                
+                route.tests.append(test)
         
         # for template in args['templates']:
         #     template_route = TemplateRoute(template_name=template)
@@ -235,13 +237,16 @@ class BigScreenRouteResource(Resource):
 
         route.tests = []
 
-        for test_id in args['tests']:
-            test = Test.query.get(test_id)
+        if args['tests'] is None:
+            route.tests = []
+        else:
+            for test_id in args['tests']:
+                test = Test.query.get(test_id)
 
-            if test is None:
-                continue
-            
-            route.tests.append(test)
+                if test is None:
+                    continue
+                
+                route.tests.append(test)
 
         route.templates = args['templates']
         
@@ -280,12 +285,39 @@ class CompetitionBigScreenRouterResource(Resource):
             template_data = request.json.get('templateData')
             hide = request.json.get('hide', False)
 
+            # 1. Check if the a route matches test and template
             matched_route = competition.bigscreen_routes\
-                .filter(BigScreenRoute.templates.like(f'%{template}%'))\
-                .filter(BigScreenRoute.tests.any(Test.test_name == template_data['test']['testName']))\
+                .filter(
+                    (
+                        BigScreenRoute.templates.like(f'%{template}%') 
+                        & 
+                        BigScreenRoute.tests.any(Test.test_name == template_data['test']['testName'])
+                    )
+                )\
                 .order_by(BigScreenRoute.priority.asc())\
                 .first()
+
+            # 2. Check if a route matches only the test
+            if matched_route is None:
+                matched_route = competition.bigscreen_routes\
+                    .filter(BigScreenRoute.tests.any(Test.test_name == template_data['test']['testName']) & BigScreenRoute.templates == None)\
+                    .order_by(BigScreenRoute.priority.asc())\
+                    .first()
             
+            # 3. Check if a route matches only the template
+            if matched_route is None:
+                matched_route = competition.bigscreen_routes\
+                    .filter(BigScreenRoute.templates.like(f'%{template}%') & not_(BigScreenRoute.tests.any()))\
+                    .order_by(BigScreenRoute.priority.asc())\
+                    .first()
+
+            # 4. Check if there is a default route
+            if matched_route is None:
+                matched_route = competition.bigscreen_routes\
+                    .filter((BigScreenRoute.templates == None) & not_(BigScreenRoute.tests.any()))\
+                    .order_by(BigScreenRoute.priority.asc())\
+                    .first()
+
             if not matched_route:
                 # Should this just fail silently?
                 return ApiErrorResponse(f"No route exists for test {template_data['test']['testName']} and template {template}", 400).response()
