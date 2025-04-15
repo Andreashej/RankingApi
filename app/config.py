@@ -3,6 +3,8 @@ import os
 # Always supply secret key from environment var in production!
 SECRET_KEY = os.environ.get('SECRET_KEY') or "thisIs3xtremelyZcret"
 
+# SERVER_NAME = os.environ.get('SERVER_NAME')
+
 DEBUG = os.environ.get('FLASK_ENV') == 'development'
 
 JWT_SECRET_KEY = SECRET_KEY

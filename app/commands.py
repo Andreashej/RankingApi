@@ -30,9 +30,10 @@ def flush_rankings():
 
 @app.cli.command()
 def recompute_rankings():
-    test = RankingListTest.query.first()
+    tests = RankingListTest.query.all()
 
-    test.launch_task('recompute_ranking', 'Recalculating {} ranking for {}'.format(test.testcode, test.rankinglist.shortname))
+    for test in tests:
+        test.recompute()
 
 @app.cli.command()
 def icetest_listener():

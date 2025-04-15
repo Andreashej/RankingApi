@@ -18,6 +18,7 @@ from sentry_sdk import capture_exception
 import traceback
 
 def process_message(body: ByteString, message: Message):
+    print(f"Received message: {body}")
     try:
         data = json.loads(body)['MESSAGE']
 
@@ -151,10 +152,9 @@ def run():
         virtual_host=current_app.config['ICETEST_RABBIT_VHOST']
     )
 
-    exchange = Exchange("-- default --", type="direct")
-    queue = Queue(name="icecompass", exchange=exchange, routing_key="icecompass")
+    queue = Queue(name="icecompass")
 
-    consumer = Consumer(connection, queues=queue, callbacks=[process_message])
+    consumer = Consumer(connection, queues=[queue], callbacks=[process_message])
 
     connection.connect()
 

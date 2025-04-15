@@ -1,0 +1,6 @@
+encryptionsalt: v1:vzyldnL7wnY=:v1:wn7djnqx4ldfF2qv:g+h84ToBHMx6nALRn5t9mJK3QwALCQ==
+config:
+  aws:region: eu-central-1
+  icecompass:certificateArn: arn:aws:acm:eu-central-1:670211327818:certificate/f3eb57a8-c0ee-4f9e-a6fc-472667fa990c
+  icecompass:hostedZoneId: Z019773222MCVYDZ8VIM6
+  icecompass:dnsName: api.icecompass.com

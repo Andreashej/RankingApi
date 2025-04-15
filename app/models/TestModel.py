@@ -155,7 +155,7 @@ class Test(db.Model, RestMixin):
             rider = Person.create_by_name(result['RIDER'])
             db.session.add(rider)
         
-        if 'BIRTHDAY' in result:
+        if 'BIRTHDAY' in result and result['BIRTHDAY'] != '':
             birthday = result['BIRTHDAY']
             if hasattr(birthday, 'to_pydatetime'): birthday = birthday.to_pydatetime()
 

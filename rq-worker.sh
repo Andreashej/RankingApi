@@ -2,4 +2,4 @@
 
 source venv/bin/activate
 
-exec rq worker -u redis://redis:6379/0 iceranking-tasks --with-scheduler
+exec rq worker -u $REDIS_URL iceranking-tasks --with-scheduler

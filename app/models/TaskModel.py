@@ -82,7 +82,10 @@ class Task(db.Model, RestMixin):
         uncompleted_tasks = Task.query.filter_by(complete=False).all()
 
         for task in uncompleted_tasks:
-            if task.get_rq_job() is None:
-                task.complete = True
+            job = task.get_rq_job()
+
+            if job is not None:
+                job.cancel()
+            task.complete = True
         
         db.session.commit()

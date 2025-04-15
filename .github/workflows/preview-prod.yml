@@ -1,14 +1,14 @@
-name: Pulumi
+name: Pulumi Preview
 on:
-  push:
-    branches:
-      - master
+  pull_request:
+    branches: [ master ]
 permissions:
-  id-token: write
-  contents: read    # This is required for actions/checkout
+      id-token: write
+      contents: read    # This is required for actions/checkout
+en
 jobs:
-  deploy:
-    name: Update
+  preview:
+    name: Preview
     runs-on: ubuntu-latest
     environment: production
     steps:
@@ -26,8 +26,9 @@ jobs:
         working-directory: deployment
       - uses: pulumi/actions@v3
         with:
-          command: up
-          stack-name: dev
+          command: preview
+          stack-name: prod
           work-dir: deployment
         env:
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+          PULUMI_CONFIG_PASSPHRASE: ''
