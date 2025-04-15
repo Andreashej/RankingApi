@@ -1,4 +1,4 @@
-FROM python:3.9
+FROM --platform=amd64 python:3.9
 
 RUN useradd iceranking
 
@@ -18,7 +18,7 @@ COPY migrations migrations
 COPY icecompass.py rq-worker.sh start-webservice.sh rabbitmq-listener.sh recompute-rankings-job.sh ./
 RUN chmod +x rq-worker.sh start-webservice.sh rabbitmq-listener.sh recompute-rankings-job.sh
 
-ENV FLASK_APP app
+ENV FLASK_APP=app
 
 RUN chown -R iceranking:iceranking ./
 USER iceranking
